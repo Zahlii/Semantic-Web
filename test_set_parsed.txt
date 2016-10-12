@@ -78,6 +78,13 @@ cars that are produced in Germany
 
 People that were born in Vienna and died in Berlin
 (TOP (NP (NP (NNS People)) (SBAR (WHNP (WDT that)) (S (VP (VP (VBD were) (VP (VBN born) (PP (IN in) (NP (NNP Vienna))))) (CC and) (VP (VBD died) (PP (IN in) (NP (NNP Berlin)))))))))
+	SELECT ?x,?p WHERE {
+	?x rdf:type dbo:Person .
+	?p rdfs:label "Vienna"@en.
+	?q rdfs:label "Berlin"@en.
+	?x dbo:birthPlace ?p .
+	?x dbo:deathPlace ?q .
+	}
 
 Mother and father of Prince Harry and Prince William 
 (TOP (NP (NP (NP (NN Mother) (CC and) (NN father)) (PP (IN of) (NP (NNP Prince) (NNP Harry)))) (CC and) (NP (NNP Prince) (NNP William)) ))
