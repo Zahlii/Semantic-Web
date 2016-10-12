@@ -57,14 +57,14 @@ public class ESWC2015Solver
 		doc.getDocumentElement().normalize();
 		NodeList nList = doc.getElementsByTagName("query");
 
-		for (int temp = 0; temp < Math.min(200,nList.getLength()); temp++) {
+		for (int temp = 0; temp < Math.min(20,nList.getLength()); temp++) {
 			Node nNode = nList.item(temp);
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement = (Element) nNode;
 				String query = eElement.getElementsByTagName("keyword_query").item(0).getTextContent();
 				
 				TextAnalyzer t = new TextAnalyzer(query);
-				t.tagSentence();
+				t.parseSentence();
 			}
 		}
     }

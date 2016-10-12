@@ -39,18 +39,42 @@ band leaders that play trumpet
 
 countries have more than ten caves
 (TOP (S (NP (NNS countries)) (VP (VBP have) (NP (QP (JJR more) (IN than) (CD ten)) (NNS caves)))))
+	SELECT ?cn,COUNT(?c) AS ?count WHERE {
+	?c rdf:type dbo:Cave .
+	?c dbo:location ?cn .
+	?cn rdf:type dbo:Country .
+	} 
+	GROUP BY ?cn
+	HAVING(count(?c)>10)
 
 Formula 1 driver with the most races
 (TOP (NP (NP (NNP Formula) (CD 1) (NN driver)) (PP (IN with) (NP (DT the) (JJS most) (NNS races)))))
+	SELECT ?x,?r WHERE {
+	?x rdf:type dbo:FormulaOneRacer .
+	?x dbpedia2:races ?r .
+	} ORDER BY DESC(?r)
 
 youngest player in the Premier League
 (TOP (NP (NP (JJS youngest) (NN player)) (PP (IN in) (NP (DT the) (NNP Premier) (NNP League)))))
+	SELECT ?x,?d WHERE {
+	?x rdf:type yago:PremierLeaguePlayers .
+	?x dbo:birthDate ?d .
+	} ORDER BY DESC(?d)
+	LIMIT 1
 
 longest river
 (TOP (NP (JJS longest) (NN river)))
+	SELECT ?x,?d WHERE {
+	?x rdf:type dbo:River .
+	?x dbp:length ?d .
+	} ORDER BY DESC(?d) LIMIT 10
 
 cars that are produced in Germany
 (TOP (NP (NP (NNS cars)) (SBAR (WHNP (WDT that)) (S (VP (VBP are) (VP (VBN produced) (PP (IN in) (NP (NNP Germany)))))))))
+	SELECT ?x WHERE {
+	?x rdf:type dbo:Automobile .
+	?x dbo:assembly dbr:Germany .
+	}
 
 People that were born in Vienna and died in Berlin
 (TOP (NP (NP (NNS People)) (SBAR (WHNP (WDT that)) (S (VP (VP (VBD were) (VP (VBN born) (PP (IN in) (NP (NNP Vienna))))) (CC and) (VP (VBD died) (PP (IN in) (NP (NNP Berlin)))))))))
