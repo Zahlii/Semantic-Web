@@ -88,55 +88,128 @@ People that were born in Vienna and died in Berlin
 
 Mother and father of Prince Harry and Prince William 
 (TOP (NP (NP (NP (NN Mother) (CC and) (NN father)) (PP (IN of) (NP (NNP Prince) (NNP Harry)))) (CC and) (NP (NNP Prince) (NNP William)) ))
-
+	SELECT * WHERE {
+	?x rdfs:label "Prince Harry"@en .
+	?x dbp:mother ?m. 
+	?x dbp:father ?f. 
+	}
+	
 latest U.S. state admitted
 (TOP (S (NP (JJS latest) (NNP U.S.) (NN state)) (VP (VBN admitted))))
+	SELECT * WHERE {
+	?us rdfs:label "United States"@en .
+	?c dbo:country ?us.
+	?c dbp:admittancedate ?date .
+	}
+	ORDER BY DESC(?date)
 
 number of languages spoken in Turkmenistan
 (TOP (NP (NP (NN number)) (PP (IN of) (NP (NP (NNS languages)) (VP (VBN spoken) (PP (IN in) (NP (NNP Turkmenistan))))))))
+	SELECT * WHERE {
+	?t rdfs:label "Turkmenistan"@en .
+	?l rdf:type dbo:Language .
+	?l dbpedia2:states ?t .
+	}
 
 movies directed by Francis Ford Coppola
 (TOP (NP (NP (NNS movies)) (VP (VBN directed) (PP (IN by) (NP (NNP Francis) (NNP Ford) (NNP Coppola))))))
+	SELECT * WHERE {
+	?m rdf:type dbo:Film .
+	?f rdfs:label "Francis Ford Coppola"@en .
+	?m dbpedia2:director ?f .
+	}
 
 maiden name of Angela Merkel
 (TOP (NP (NP (NN maiden) (NN name)) (PP (IN of) (NP (NNP Angela) (NNPS Merkel)))))
+	SELECT * WHERE {
+	?m rdfs:label "Angela Merkel"@en.
+	?m dbp:birthname ?mn.
+	}
 
 Methodist politicians
 (TOP (NP (NNP Methodist) (NNS politicians)))
+	SELECT * WHERE {
+	?p rdf:type umbel-rc:Politician.
+	?p dbo:religion dbr:Methodism.
+	} 
 
 number of times that Jane Fonda married
 (TOP (NP (NP (NP (NN number)) (PP (IN of) (NP (NNS times)))) (PP (IN that) (NP (NNP Jane) (NNP Fonda))) (. married)))
+	SELECT * WHERE {
+	?p rdfs:label "Jane Fonda"@en.
+	?p dbo:spouse ?x.
+	} 
 
 Australian nonprofit organizations
 (TOP (NP (JJ Australian) (JJ nonprofit) (NNS organizations)))
+	SELECT * WHERE {
+	?p rdf:type yago:Non-governmentalOrganizationsBasedInAustralia.
+	} 
 
 Military conflicts in which Lawrence of Arabia participated
 (TOP (NP (NP (JJ Military) (NNS conflicts)) (PP (IN in) (NP (NP (DT which) (NNP Lawrence)) (PP (IN of) (NP (NNP Arabia))))) (. participated)))
+	SELECT * WHERE {
+	?p rdfs:label "Lawrence of Arabia"@en.
+	?p dbo:wikiPageRedirects ?x.
+	?x dbpedia2:battles ?b.
+	} 
 
 number of inhabitants in Maribor
 (TOP (NP (NP (NP (NN number)) (PP (IN of) (NP (NNS inhabitants)))) (PP (IN in) (NP (NNP Maribor)))))
+	SELECT * WHERE {
+	?p rdfs:label "Maribor"@en.
+	?p dbo:populationTotal ?pop .
+	} 
 
 companies in Munich
 (TOP (NP (NP (NNS companies)) (PP (IN in) (NP (NNP Munich)))))
+	SELECT * WHERE {
+	?p rdfs:label "Munich"@en.
+	?p rdf:type dbo:Settlement .
+	?c rdf:type dbo:Company .
+	?c dbo:location ?p.
+	} 
 
 games developed by GMT
 (TOP (NP (NP (NNS games)) (VP (VBN developed) (PP (IN by) (NP (NNP GMT))))))
+	SELECT * WHERE {
+	?p rdfs:label "GMT Games"@en.
+	?x dbo:publisher ?p .
+	} 
 
 husband of Amanda Palmer
 (TOP (NP (NP (NN husband)) (PP (IN of) (NP (NNP Amanda) (NNP Palmer)))))
+	SELECT * WHERE {
+	?p rdfs:label "Amanda Palmer"@en.
+	?x dbo:spouse ?p
+	} 
 
 countries connected by the Rhine
 (TOP (NP (NP (NNS countries)) (VP (VBN connected) (PP (IN by) (NP (DT the) (NN Rhine))))))
+	SELECT * WHERE {
+	?p rdfs:label "Rhine"@en.
+	?p dbpedia2:country ?o.
+	} 
 
 professional surfers born in Australia
 (TOP (S (NP (JJ professional) (NNS surfers)) (VP (VBN born) (PP (IN in) (NP (NNP Australia))))))
 
 islands that belong to Japan
 (TOP (NP (NP (NNS islands)) (SBAR (WHNP (WDT that)) (S (VP (VBP belong) (PP (TO to) (NP (NNP Japan))))))))
+	SELECT * WHERE {
+	?p rdfs:label "Japan"@en.
+	?i dbo:country ?p.
+	?i rdf:type dbo:Island.
+	} 
 
 ruling party in Lisbon
 (TOP (VP (VBG ruling) (NP (NP (NN party)) (PP (IN in) (NP (NNP Lisbon))))))
 
 Apollo 14 astronauts
 (TOP (NP (NNP Apollo) (CD 14) (NNS astronauts)))
+	SELECT * WHERE {
+	?p rdfs:label "Apollo 14"@en.
+	?a rdf:type dbo:Astronaut.
+	?a dbpedia2:mission ?p.
+	} 
 
