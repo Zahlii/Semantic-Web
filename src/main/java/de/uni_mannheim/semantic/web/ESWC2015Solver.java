@@ -23,6 +23,7 @@ public class ESWC2015Solver
     	try {
     		ESWC2015Solver e = new ESWC2015Solver();
 			e.loadXMLData("test_set.xml");
+			e.loadXMLData("training_set.xml");
 		} catch (ParserConfigurationException | SAXException | IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
