@@ -1,14 +1,35 @@
 cosmonauts
 (TOP (NNS cosmonauts))
+	SELECT ?x,?z, ?y WHERE {
+	?x rdfs:label "Cosmonaut"@en .
+	?x dbo:wikiPageRedirects ?z .
+	?y dbo:occupation ?z .
+	} LIMIT 100
 
 German cities with more than 250000 inhabitants
 (TOP (NP (NP (JJ German) (NNS cities)) (PP (IN with) (NP (QP (JJR more) (IN than) (CD 250000)) (NNS inhabitants)))))
+	SELECT ?x WHERE {
+	?z rdfs:label "Germany"@en .
+	?x dbo:country ?z .
+	?x dbo:populationTotal ?pop . 
+	FILTER(?pop > 250000)
+	}
 
 mayor of Berlin
 (TOP (NP (NP (NN mayor)) (PP (IN of) (NP (NNP Berlin)))))
+	SELECT ?y WHERE {
+	?z rdfs:label "Berlin"@en .
+	?z dbp:leader ?y .
+	}
 
 second highest mountain on Earth
 (TOP (NP (NP (JJ second) (JJS highest) (NN mountain)) (PP (IN on) (NP (NN Earth)))))
+	SELECT ?z,?e WHERE {
+	?x rdfs:label "mountain"@en .
+	?z rdf:type ?x .
+	?z dbo:elevation ?e .
+	} ORDER BY DESC(?e) 
+	LIMIT 1 OFFSET 1
 
 professional skateboarders from Sweden
 (TOP (NP (NP (JJ professional) (NNS skateboarders)) (PP (IN from) (NP (NNP Sweden)))))
