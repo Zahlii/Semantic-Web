@@ -35,14 +35,20 @@ public class DBPedia {
 	}
 	
 	public static String checkTitleExists(String title) {
+
+		// Capitalize!
+		String first = title.substring(0, 1);
+		String rest = title.substring(1);
+		title = first.toUpperCase() + rest;
+		
 		String se = ("SELECT ?x WHERE { \r\n" + 
 				"{\r\n" + 
-				"?x rdfs:label \"XXX\"@en .\r\n" + 
-				"?x dbo:wikiPageID ?id.\r\n" + 
-				"} UNION {\r\n" + 
 				"?y rdfs:label \"XXX\"@en .\r\n" + 
 				"?y dbo:wikiPageRedirects ?x.\r\n" + 
 				"?y dbo:wikiPageID ?id.\r\n" + 
+				"} UNION {\r\n" + 
+				"?x rdfs:label \"XXX\"@en .\r\n" + 
+				"?x dbo:wikiPageID ?id.\r\n" + 
 				"} \r\n" + 
 				"FILTER(!regex(?x,\"Category\"))\r\n" + 
 				"} LIMIT 1").replaceAll("XXX", title.trim());

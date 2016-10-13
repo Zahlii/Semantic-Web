@@ -43,8 +43,8 @@ public class ESWC2015Solver
     	//DBPedia_Terms.getClasses();
     	
 		ESWC2015Solver e = new ESWC2015Solver();
-		e.loadXMLData("test_set.xml");
-		//e.loadXMLData("training_set.xml");
+		//e.loadXMLData("test_set.xml");
+		e.loadXMLData("training_set.xml");
 		
 		
 

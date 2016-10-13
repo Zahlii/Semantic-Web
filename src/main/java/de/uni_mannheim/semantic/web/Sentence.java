@@ -15,6 +15,7 @@ public class Sentence {
 		
     	constructTokens();
     	POSTagTokens();
+    	System.out.println(this);
     	//stemTokens();
     	lemmatizeTokens();
     	scanForEntities(0);
@@ -118,12 +119,17 @@ public class Sentence {
     	if(tokens.size() == 1 && tokens.get(0).getResource() != null)
     		return false;
     	
+    	if(tokens.size()==0)
+    		return false;
+    	
+    	String text = tokens.getText();
+    	
     	String[] pos = new String[tokens.size()];
     	int i = 0;
     	for(Token t : tokens)
     		pos[i++] = t.getPOSTag();
     	
-    	String posType = String.join(",", pos).replaceAll("S","");
+    	String posType = String.join(",", pos).replaceAll("NNPS","NNP").replaceAll("NNS", "NN");
     	
     	String[] allowedPosType = new String[] {
     			"NNP","NNPS",
@@ -133,16 +139,18 @@ public class Sentence {
     			"NN","NNP","NN",
     			"NNP,IN,NNP","NNP,PRP","NNP,NNP,PRP",
     			"NNP,NNP,IN,NNP","NN,IN,NN",
-    			"JJ"
     	};
 
     	
     	boolean applicableStructure = Arrays.asList(allowedPosType).contains(posType);
+    	String first = text.substring(0,1);
     	
-    	if(!applicableStructure)
-    		return false;
+    	boolean isCapitalized = first.toUpperCase().equals(first);
+    	
+    	if(applicableStructure || (isCapitalized && tokens.size()==1))
+    		return true;
 
-    	return true;
+    	return false;
     }
     
     private void mergeNGramEntity(NGram g, String resource) {
