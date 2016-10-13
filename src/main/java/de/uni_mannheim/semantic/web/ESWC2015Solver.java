@@ -39,10 +39,11 @@ public class ESWC2015Solver
     public static void main( String[] args ) throws Exception 
     {
     	
-    	DBPedia_Terms.getClasses();
     	
-		//ESWC2015Solver e = new ESWC2015Solver();
-		//e.loadXMLData("test_set.xml");
+    	//DBPedia_Terms.getClasses();
+    	
+		ESWC2015Solver e = new ESWC2015Solver();
+		e.loadXMLData("test_set.xml");
 		//e.loadXMLData("training_set.xml");
 		
 		
@@ -65,8 +66,8 @@ public class ESWC2015Solver
 				Element eElement = (Element) nNode;
 				String query = eElement.getElementsByTagName("keyword_query").item(0).getTextContent();
 				
-				TextAnalyzer t = new TextAnalyzer(query);
-				t.parseSentence();
+				Sentence s = new Sentence(query);
+				System.out.println(s);
 			}
 		}
     }

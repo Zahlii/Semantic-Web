@@ -1,46 +1,60 @@
 package de.uni_mannheim.semantic.web;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
-import opennlp.tools.namefind.NameFinderME;
+import opennlp.tools.lemmatizer.SimpleLemmatizer;
 import opennlp.tools.parser.AbstractBottomUpParser;
 import opennlp.tools.parser.Parse;
 import opennlp.tools.parser.Parser;
 import opennlp.tools.parser.ParserFactory;
 import opennlp.tools.parser.ParserModel;
+import opennlp.tools.postag.POSModel;
+import opennlp.tools.postag.POSTaggerME;
+import opennlp.tools.stemmer.PorterStemmer;
 import opennlp.tools.tokenize.Tokenizer;
 import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
-import opennlp.tools.util.InvalidFormatException;
 import opennlp.tools.util.Span;
 
 public class TextAnalyzer {
-    private static Tokenizer _tokenizer;
-    private static Parser _parser;
-    private static NameFinderME[] finders;
+    public static Tokenizer Tokenizer;
+    public static Parser Parser;
+    public static POSTaggerME Tagger;
+    public static PorterStemmer Stemmer;
+    public static SimpleLemmatizer Lemmatizer;
+    //private static NameFinderME[] finders;
     
+
     static {
 		try {
 			InputStream modelInTokens = new FileInputStream("en-token.bin");
 			final TokenizerModel tokenModel = new TokenizerModel(modelInTokens);
 			modelInTokens.close();    	 
-			_tokenizer = new TokenizerME(tokenModel);
+			Tokenizer = new TokenizerME(tokenModel);
 			
 			
 			InputStream modelInParser = new FileInputStream("en-parser-chunking.bin");
 			final ParserModel parseModel = new ParserModel(modelInParser);
 			modelInParser.close();
-			                
-			_parser = ParserFactory.create(parseModel);
-		} catch(Exception e) {
 			
+			InputStream modelInPos = new FileInputStream("en-pos-maxent.bin");
+			final POSModel posModel = new POSModel(modelInPos);
+			Tagger = new POSTaggerME(posModel);
+			modelInPos.close();
+			                
+			InputStream is = new FileInputStream("en-lemmatizer.dict");
+		    Lemmatizer = new SimpleLemmatizer(is);
+		    is.close();
+		    
+			Parser = ParserFactory.create(parseModel);
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 		
+		Stemmer = new PorterStemmer();
 		
 	    /*String[] names = {"person", "location", "organization"};
 	    int l = names.length;
@@ -53,12 +67,13 @@ public class TextAnalyzer {
     }
     
     public TextAnalyzer(String text) {
-    	this._text = text;
-    	this._originalText = _text;
+    	this._currentText = text;
+    	this._originalText = _currentText;
     	
     }
     
-    private String _text;
+
+    private String _currentText;
     private String _originalText;
     private HashMap<Integer,String> _variables = new HashMap<Integer,String>();
     
@@ -77,13 +92,13 @@ public class TextAnalyzer {
     }
     
     public void tagSentence() {
-    	Span[] spans = _tokenizer.tokenizePos(_text);
+    	Span[] spans = Tokenizer.tokenizePos(_currentText);
     	
-		final Parse p = new Parse(_text,new Span(0, _text.length()),AbstractBottomUpParser.INC_NODE,1,0);
+		final Parse p = new Parse(_currentText,new Span(0, _currentText.length()),AbstractBottomUpParser.INC_NODE,1,0);
 		for (int idx=0; idx < spans.length; idx++) {
 			final Span span = spans[idx];
 			// flesh out the parse with individual token sub-parses 
-			p.insert(new Parse(_text,span,AbstractBottomUpParser.TOK_NODE,0,idx));
+			p.insert(new Parse(_currentText,span,AbstractBottomUpParser.TOK_NODE,0,idx));
 		}
 		
 		// https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html
@@ -116,7 +131,7 @@ public class TextAnalyzer {
 		WHPP -> Wh-prepositional Phrase. Prepositional phrase containing a wh-noun phrase (such as of which or by whose authority) that either introduces a PP gap or is contained by a WHNP.
 		X -> Unknown, uncertain, or unbracketable. X is often used for bracketing typos and in bracketing the...the-constructions.
 		 */
-		Parse x =_parser.parse(p);
+		Parse x =Parser.parse(p);
 		
 
 		
@@ -138,7 +153,7 @@ public class TextAnalyzer {
     
 
 	private Span[] replaceNamedEntities() {
-		Span[] spans = _tokenizer.tokenizePos(_text);
+		Span[] spans = Tokenizer.tokenizePos(_currentText);
 		
 		ArrayList<String> tokens = tokenizeText(spans);
 	
@@ -173,7 +188,7 @@ public class TextAnalyzer {
 				if(successfulLookup != null) {
 					int var = _variables.size()+1;
 					_variables.put(var, successfulLookupResult);
-					_text = _text.replace(successfulLookup, "_"+var);
+					_currentText = _currentText.replace(successfulLookup, "_"+var);
 					return replaceNamedEntities();
 				}
 			}
@@ -186,7 +201,7 @@ public class TextAnalyzer {
 		ArrayList<String> tokens = new ArrayList<String>(spans.length);
 		
 		for(int i=0,l=spans.length;i<l;i++)
-			tokens.add((String) spans[i].getCoveredText(_text));
+			tokens.add((String) spans[i].getCoveredText(_currentText));
 		
 		return tokens;
 	}
