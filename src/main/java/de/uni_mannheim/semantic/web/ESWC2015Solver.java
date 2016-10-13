@@ -44,7 +44,7 @@ public class ESWC2015Solver
     	
 		ESWC2015Solver e = new ESWC2015Solver();
 		e.loadXMLData("test_set.xml");
-		//e.loadXMLData("training_set.xml");
+		e.loadXMLData("training_set.xml");
 		
 		
 
@@ -60,7 +60,7 @@ public class ESWC2015Solver
 		doc.getDocumentElement().normalize();
 		NodeList nList = doc.getElementsByTagName("query");
 
-		for (int temp = 0; temp < Math.min(20,nList.getLength()); temp++) {
+		for (int temp = 0; temp < Math.min(2000,nList.getLength()); temp++) {
 			Node nNode = nList.item(temp);
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement = (Element) nNode;

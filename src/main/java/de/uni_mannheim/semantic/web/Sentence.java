@@ -16,6 +16,7 @@ public class Sentence {
     	POSTagTokens();
     	//stemTokens();
     	lemmatizeTokens();
+    	scanForEntities();
     }
     
     private void constructTokens() {
@@ -82,5 +83,38 @@ public class Sentence {
     	
     	_tokens.subList(start, end).clear();
     	_tokens.add(start, n);
+    }
+    
+    private void scanForEntities() {
+    	int i = 0,
+    		l = _tokens.size(),
+    		c = 0;
+    	
+    	String searchTerm = null;
+    	
+    	while(i<l) {
+    		Token _current = _tokens.get(i);
+    		String pos = _current.getType();
+    		
+    		// noun or proper noun singular or plural
+    		if(pos.startsWith("NN")) {
+    			if(searchTerm != null)
+    				searchTerm = searchTerm +" " + _current.getText();
+    			else
+    				searchTerm = _current.getText();
+    			
+    			System.out.println(searchTerm);
+    			
+    		} else if(pos.equals("IN") || pos.equals("OF")) {
+    			if(searchTerm != null)
+    				searchTerm = searchTerm +" " + _current.getText();
+    			
+    			System.out.println(searchTerm);
+    		} else {
+    			searchTerm = null;
+    		}
+
+    		i++;
+    	}
     }
 }
