@@ -87,8 +87,33 @@ public class Sentence {
     	_tokens.add(start, n);
     }
     
+    private List<List<Token>> getUpToNGrams(int n) {
+    	List<List<Token>> ret = new ArrayList<List<Token>>();
+    	for(int i=1;i<=n;i++) {
+    		ret.addAll(getNGrams(i));
+    	}
+    	return ret;
+    }
+    
+    private List<List<Token>> getNGrams(int n) {
+    	List<List<Token>> ret = new ArrayList<List<Token>>();
+    	for(int i=0;i<_tokens.size()-n+1;i++) {
+    		ret.add(_tokens.subList(i, i+n));
+    	}
+    	return ret;
+    }
+    
+    private boolean isCandidateNGram(List<Token> tokens) {
+    	return false;
+    }
+    
     private void scanForEntities() {
-    	int i = 0,
+    	
+    	getUpToNGrams(3);
+    	
+    	return;
+    	
+    	/*int i = 0,
     		l = _tokens.size();
     	
     	String searchTerm = null;
@@ -126,6 +151,6 @@ public class Sentence {
     		}
 
     		i++;
-    	}
+    	}*/
     }
 }
