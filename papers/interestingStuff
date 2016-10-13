@@ -3,3 +3,10 @@ https://www.overleaf.com/6583683zrvcdn
 
 Competition:
 http://qald.sebastianwalter.org/index.php?x=challenge&q=5
+
+steps:
+1.) Durchgang: NGrams auf dbpedia entities untersuchen (done)
+2.) Durchgang alle ngrams auf dbo:Classes durchsuchen
+3.) Alle ngrams auf dbp:Properties untersuchen
+4.) dann versuchen ausgehend von den levenshetein-distanzen zwischen ngram text und gefundenen properties etc die wahrscheinlichkeit zu bestimmen, dass das ngram als resource 1, class 2 oder property 3 dient
+	Dann müsste Sentence eine ResourceInterpretation, eine OntologyInterpretation und eine PropertyInterpretation haben, jeweils mit entsprechenden Tokens die wir über Analyse der NGrams gewinnen

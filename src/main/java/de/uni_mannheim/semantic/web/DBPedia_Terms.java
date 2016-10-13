@@ -175,6 +175,25 @@ public class DBPedia_Terms {
 		}
 		return false;
 	}
+	
+	public static OntologyClass getOntologyClassByName(String name){
+		String query = "SELECT * FROM " + CLASS_TABLE + " WHERE ((Levenshtein(name, '" + name
+		+ "') * 1.0) / MIN(LENGTH(name), LENGTH('"+name+"'))) < 0.5" 
+		+ ";";
+
+		try {
+			Statement stmt = _connection.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+
+			while(rs.next()){
+//				if((double)(new Levenshtein()).computeLevenshteinDistance(rs.getString("name"), name) / Math.min(name.length(), rs.getString("name").length()) < 0.2)
+				System.out.println(rs.getString("name")+" "+name);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	public static void printClassTable() {
 		String query = "SELECT * FROM " + CLASS_TABLE;
@@ -264,9 +283,9 @@ public class DBPedia_Terms {
 
 	public static void main(String[] args) {
 
-		resetDatabase();
+//		resetDatabase();
 
-		crawlIntoDB();
+//		crawlIntoDB();
 //		printDB();
 
 

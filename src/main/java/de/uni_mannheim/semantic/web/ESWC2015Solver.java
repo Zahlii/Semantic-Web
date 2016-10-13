@@ -44,8 +44,9 @@ public class ESWC2015Solver
     	
 		ESWC2015Solver e = new ESWC2015Solver();
 		//e.loadXMLData("test_set.xml");
-		e.loadXMLData("training_set.xml");
-		
+//		e.loadXMLData("training_set.xml");
+		e.loadXMLData(System.getProperty("user.dir") + "/data/qald-5_train.xml");
+
 		
 
     }
@@ -58,16 +59,23 @@ public class ESWC2015Solver
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(fXmlFile);
 		doc.getDocumentElement().normalize();
-		NodeList nList = doc.getElementsByTagName("query");
+		//training_set.xml
+//		NodeList nList = doc.getElementsByTagName("query");
+		//qald-5_trian.xml
+		NodeList nList = doc.getElementsByTagName("question");
 
+		
 		for (int temp = 0; temp < Math.min(100,nList.getLength()); temp++) {
 			Node nNode = nList.item(temp);
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement = (Element) nNode;
-				String query = eElement.getElementsByTagName("keyword_query").item(0).getTextContent();
+				//training_set.xml
+//				String query = eElement.getElementsByTagName("keyword_query").item(0).getTextContent();
 				
-				Sentence s = new Sentence(query);
+				//qald-5_trian.xml
+				String query = eElement.getElementsByTagName("string").item(0).getTextContent();
 
+				Sentence s = new Sentence(query);
 			}
 		}
     }

@@ -19,6 +19,7 @@ public class Sentence {
     	//stemTokens();
     	lemmatizeTokens();
     	scanForEntities(0);
+    	scanForDboClasses();
     	System.out.println("==>"+ this);
     	System.out.println();
     }
@@ -153,6 +154,7 @@ public class Sentence {
     	return false;
     }
     
+    //Was ist wenn ein wort selbst eine bedeutung hat und nochmal in kombi mit einem anderen?
     private void mergeNGramEntity(NGram g, String resource) {
     	Token newToken = mergeTokens(g.getStartTokenIndex(),g.getEndTokenIndex());
     	newToken.setPOSTag("NNP");
@@ -177,5 +179,13 @@ public class Sentence {
     		}
     	}
     	
+    }
+    
+    private void scanForDboClasses(){
+    	for (int i = 0; i < _tokens.size(); i++) {
+//    		if(_tokens.get(i).getResource() == null) continue;
+    		DBPedia_Terms.getOntologyClassByName(_tokens.get(i).getText());
+//			DBPedia.scanForDboClasses(_tokens.get(i).getResource());
+		}
     }
 }
