@@ -37,6 +37,13 @@
     <artifactId>sqlite-jdbc</artifactId>
     <version>3.14.2.1</version>
 </dependency>
+<dependency>
+    <groupId>jsoup</groupId>
+    <artifactId>jsoup</artifactId>
+    <version>1.9.1</version>
+    <scope>system</scope>
+    <systemPath>${project.basedir}/src/main/resources/jsoup-1.9.1.jar</systemPath>
+</dependency>
 	
   </dependencies>
 </project>
