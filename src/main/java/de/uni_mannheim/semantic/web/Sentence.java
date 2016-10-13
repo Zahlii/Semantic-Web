@@ -19,7 +19,7 @@ public class Sentence {
     	//stemTokens();
     	lemmatizeTokens();
     	scanForEntities(0);
-    	System.out.println(this);
+    	System.out.println("==>"+ this);
     	System.out.println();
     }
     
