@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,13 +36,14 @@ import java.util.List;
 public class ESWC2015Solver
 {
 
-    public static void main( String[] args ) throws InvalidFormatException, IOException, ParserConfigurationException, SAXException 
+    public static void main( String[] args ) throws Exception 
     {
     	
+    	DBPedia_Terms.getClasses();
     	
-		ESWC2015Solver e = new ESWC2015Solver();
+		//ESWC2015Solver e = new ESWC2015Solver();
 		//e.loadXMLData("test_set.xml");
-		e.loadXMLData("training_set.xml");
+		//e.loadXMLData("training_set.xml");
 		
 		
 
