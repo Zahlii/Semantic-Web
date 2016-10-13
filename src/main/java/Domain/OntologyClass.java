@@ -6,11 +6,11 @@ public class OntologyClass {
 	private String name;
 	private String link;
 	private ArrayList<Property> properties;
+	private String superclass;
 	
-	public OntologyClass(String name, String link, ArrayList<Property> properties){
+	public OntologyClass(String name, String link){
 		this.setName(name);
 		this.setLink(link);
-		this.setProperties(properties);
 	}
 
 	public String getName() {
@@ -35,5 +35,13 @@ public class OntologyClass {
 
 	public void setProperties(ArrayList<Property> properties) {
 		this.properties = properties;
+	}
+
+	public String getSuperclass() {
+		return superclass;
+	}
+
+	public void setSuperclass(String superclass) {
+		this.superclass = superclass;
 	}
 }

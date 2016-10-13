@@ -16,7 +16,8 @@ public class ClassCrawler {
 
 	
 	public static void main(String[] args) {
-		crawlClasses();
+		ArrayList<OntologyClass> list = crawlClasses();
+		System.out.println(list.get(0).getProperties().size());
 //		ArrayList<Property> list = crawlProperties(classLink+"owl%3AThing");
 //		for(int i=0; i<list.size(); i++){
 //			System.out.println(list.get(i).getName());
@@ -43,12 +44,13 @@ public class ClassCrawler {
 			int done = 1;  
 			
 			for(int i=0; i<classes.size(); i++){
+//			for(int i=0; i<10; i++){
 				String name = classes.get(i).attr("name");
 				if(!name.equals("")){
 					i++;
 					String link = classLink+classes.get(i).attr("href");
-					ArrayList<Property> properties = crawlProperties(link);
-					OntologyClass oc = new OntologyClass(name, link, properties);
+					OntologyClass oc = new OntologyClass(name, link);
+					oc = crawlProperties(oc);
 					oClasses.add(oc);
 					i++;
 					
@@ -70,11 +72,19 @@ public class ClassCrawler {
 	 * @param propLink
 	 * @return list with all properties of a class
 	 */
-	private static ArrayList<Property> crawlProperties(String propLink){
+	private static OntologyClass crawlProperties(OntologyClass oc){
 		ArrayList<Property> properties = new ArrayList<Property>();
 		Document doc;
 		try {
-			doc = Jsoup.connect(propLink).get();
+			doc = Jsoup.connect(oc.getLink()).get();
+			Elements desc = doc.select("table").get(0).select("tr");
+			String superclass;
+			try{
+				superclass = classLink+desc.get(desc.size()-1).select("td").get(1).select("a").attr("href");
+			}catch(Exception e){
+				superclass = "";
+			}
+			
 			Elements rows = doc.select("table").get(1).select("tr");
 			
 			for(int i=0; i<rows.size(); i++){
@@ -94,7 +104,7 @@ public class ClassCrawler {
 								break;
 							}
 							case 1:{
-								label = f.text();
+								label = f.text().replaceAll("'", "");
 								break;
 							}
 							case 2:{
@@ -116,14 +126,16 @@ public class ClassCrawler {
 							}
 						}
 					}
-					Property p = new Property(name, label, domain, range, description);
+					Property p = new Property(name, oc.getLink(), label, domain, range, description);
 					properties.add(p);
 				}
 			}
+			oc.setSuperclass(superclass);
+			oc.setProperties(properties);
 			
 		} catch(Exception e){
 			
 		}
-		return properties;
+		return oc;
 	}
 }

@@ -7,9 +7,11 @@ public class Property {
 	private String domain;
 	private String range;
 	private String description;
+	private String ontologyClass;
 	
-	public Property(String name, String label, String domain, String range, String description){
+	public Property(String name, String ontologyClass, String label, String domain, String range, String description){
 		this.setName(name);
+		this.setOntologyClass(ontologyClass);
 		this.setLabel(label);
 		this.setDomain(domain);
 		this.setRange(range);
@@ -54,5 +56,13 @@ public class Property {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getOntologyClass() {
+		return ontologyClass;
+	}
+
+	public void setOntologyClass(String ontologyClass) {
+		this.ontologyClass = ontologyClass;
 	}
 }
