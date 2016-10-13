@@ -67,7 +67,7 @@ public class ESWC2015Solver
 				String query = eElement.getElementsByTagName("keyword_query").item(0).getTextContent();
 				
 				Sentence s = new Sentence(query);
-				System.out.println(s);
+
 			}
 		}
     }

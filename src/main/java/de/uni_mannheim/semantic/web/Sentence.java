@@ -11,12 +11,14 @@ public class Sentence {
     
     public Sentence(String _text) {
     	_originalText = _text.trim();
-    	
+		
     	constructTokens();
     	POSTagTokens();
     	//stemTokens();
     	lemmatizeTokens();
+    	System.out.println(this);
     	scanForEntities();
+    	System.out.println();
     }
     
     private void constructTokens() {
@@ -87,30 +89,39 @@ public class Sentence {
     
     private void scanForEntities() {
     	int i = 0,
-    		l = _tokens.size(),
-    		c = 0;
+    		l = _tokens.size();
     	
     	String searchTerm = null;
+    	
+    	List<Token> termTokens = new ArrayList<Token>();
     	
     	while(i<l) {
     		Token _current = _tokens.get(i);
     		String pos = _current.getType();
     		
-    		// noun or proper noun singular or plural
-    		if(pos.startsWith("NN")) {
-    			if(searchTerm != null)
-    				searchTerm = searchTerm +" " + _current.getText();
-    			else
-    				searchTerm = _current.getText();
+    		if(termTokens.size()==3) {
+    			termTokens.clear();
+    			searchTerm = null;
+    		}
+    		// noun or proper noun singular
+    		if(pos.startsWith("NN") ) {
+    			if(searchTerm != null) {
+    				searchTerm = searchTerm +" " + _current.getStem();
+    			} else {
+    				searchTerm = _current.getStem();
+    			}
+    			termTokens.add(_current);
+    			System.out.println("\t"+searchTerm);
     			
-    			System.out.println(searchTerm);
+    		} else if(pos.equals("IN") || pos.equals("OF") || pos.equals("CD")) {
+    			if(searchTerm != null) {
+    				searchTerm = searchTerm +" " + _current.getStem();
     			
-    		} else if(pos.equals("IN") || pos.equals("OF")) {
-    			if(searchTerm != null)
-    				searchTerm = searchTerm +" " + _current.getText();
-    			
-    			System.out.println(searchTerm);
+    				termTokens.add(_current);    			
+    				System.out.println("\t"+searchTerm);
+    			}
     		} else {
+    			termTokens.clear();
     			searchTerm = null;
     		}
 
