@@ -12,12 +12,18 @@ import org.apache.jena.query.ResultSet;
 public class DBPedia {
 	private static final String endpoint = "http://dbpedia.org/sparql";
 	
-	private static final String prefix = "PREFIX p: <http://dbpedia.org/property/>"+
-			"PREFIX dbpedia: <http://dbpedia.org/resource/>"+
-			"PREFIX category: <http://dbpedia.org/resource/Category:>"+
-			"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>"+
-			"PREFIX skos: <http://www.w3.org/2004/02/skos/core#>"+
-			"PREFIX geo: <http://www.georss.org/georss/>";
+	private static final String prefix = "PREFIX owl: <http://www.w3.org/2002/07/owl#>\r\n" + 
+			"PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\r\n" + 
+			"PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\r\n" + 
+			"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\r\n" + 
+			"PREFIX foaf: <http://xmlns.com/foaf/0.1/>\r\n" + 
+			"PREFIX dc: <http://purl.org/dc/elements/1.1/>\r\n" + 
+			"PREFIX : <http://dbpedia.org/resource/>\r\n" + 
+			"PREFIX dbpedia2: <http://dbpedia.org/property/>\r\n" + 
+			"PREFIX dbpedia: <http://dbpedia.org/>\r\n" + 
+			"PREFIX skos: <http://www.w3.org/2004/02/skos/core#>" + 
+			"PREFIX dbo: <http://dbpedia.org/ontology/>\r\n" + 
+			"PREFIX dbp: <http://dbpedia.org/property/>";
 	
 	public static ResultSet query(String strQuery) {
 		Query q = QueryFactory.create(prefix + "\r\n" + strQuery);
@@ -29,7 +35,19 @@ public class DBPedia {
 	}
 	
 	public static String checkTitleExists(String title) {
-		ResultSet r = DBPedia.query("SELECT ?x WHERE { ?x rdfs:label \""+title+"\"@en } LIMIT 1");
+		String se = ("SELECT ?x WHERE { \r\n" + 
+				"{\r\n" + 
+				"?x rdfs:label \"XXX\"@en .\r\n" + 
+				"?x dbo:wikiPageID ?id.\r\n" + 
+				"} UNION {\r\n" + 
+				"?y rdfs:label \"XXX\"@en .\r\n" + 
+				"?y dbo:wikiPageRedirects ?x.\r\n" + 
+				"?y dbo:wikiPageID ?id.\r\n" + 
+				"} \r\n" + 
+				"FILTER(!regex(?x,\"Category\"))\r\n" + 
+				"} LIMIT 1").replaceAll("XXX", title.trim());
+
+		ResultSet r = DBPedia.query(se);
 		if(r.hasNext()) {
 			QuerySolution s =  r.next();
 			return s.get("x").toString();
