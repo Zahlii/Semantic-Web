@@ -3,6 +3,7 @@ package de.uni_mannheim.semantic.web.info;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
@@ -14,6 +15,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import de.uni_mannheim.semantic.web.crawl.OntologyClass;
+import de.uni_mannheim.semantic.web.crawl.Property;
 import de.uni_mannheim.semantic.web.nlp.helpers.TextHelper;
 
 public class DBPedia {
@@ -94,5 +97,51 @@ public class DBPedia {
 		}
 		
 		return null;
+	}
+	
+	public static ArrayList<String> checkPropertyExists(String obj, Property prop){
+		ArrayList<String> properties = new ArrayList<>();
+		
+		String se = ("PREFIX obj:<OBJECT> \r\n"
+				+ " SELECT ?prop \r\n"
+				+ "	WHERE{  \r\n"
+//				+ "		obj: dbo:PROPERTY ?prop . \r\n"
+				+ "		obj: dbp:PROPERTY ?prop . \r\n"
+//				+ "	    ganges: ?p dbr:India . \r\n"
+				+ "}")
+				.replaceAll("OBJECT", obj)
+				.replaceAll("PROPERTY", prop.getName());
+
+		ResultSet r = DBPedia.query(se);
+		while(r.hasNext()) {
+			QuerySolution s =  r.next();
+			String p = s.get("prop").toString();
+			properties.add(p);
+		}
+		
+		return properties;
+	}
+	
+	public static ArrayList<String> checkClassRelationExists(String obj1, OntologyClass obj2){
+		ArrayList<String> relations = new ArrayList<>();
+
+		String se = ("PREFIX obj: <OBJECT1> \r\n"
+				+ " SELECT ?p \r\n"
+				+ "	WHERE{  \r\n"
+//				+ "		obj: dbp:country ?(PROPERTY) . \r\n"
+				+ "	    obj: ?p <OBJECT2> . \r\n"
+				+ "}")
+				.replaceAll("OBJECT1", obj1)
+				.replaceAll("OBJECT2", obj2.getLink());
+//		System.out.println(se);
+		
+		ResultSet r = DBPedia.query(se);
+		while(r.hasNext()) {
+			QuerySolution s =  r.next();
+			String rel = s.get("p").toString();
+			relations.add(rel);
+		}
+		
+		return relations;
 	}
 }

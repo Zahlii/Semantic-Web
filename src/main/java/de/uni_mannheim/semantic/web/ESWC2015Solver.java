@@ -46,9 +46,8 @@ public class ESWC2015Solver
 		ESWC2015Solver e = new ESWC2015Solver();
 		//e.loadXMLData("test_set.xml");
 		e.loadXMLData("training_set.xml");
-		//e.loadXMLData(System.getProperty("user.dir") + "/data/qald-5_train.xml");
-
-		//Sentence s = new Sentence("Who was John F. Kennedys vice president?");
+//		e.loadXMLData(System.getProperty("user.dir") + "/data/qald-5_train.xml");
+//		Sentence s = new Sentence("Who was John F. Kennedys vice president?");
     }
     
 
@@ -62,7 +61,7 @@ public class ESWC2015Solver
 		//training_set.xml
 		NodeList nList = doc.getElementsByTagName("query");
 		//qald-5_trian.xml
-		//NodeList nList = doc.getElementsByTagName("question");
+//		NodeList nList = doc.getElementsByTagName("question");
 
 		
 		for (int temp = 0; temp < Math.min(100,nList.getLength()); temp++) {
@@ -73,7 +72,7 @@ public class ESWC2015Solver
 				String query = eElement.getElementsByTagName("keyword_query").item(0).getTextContent();
 				
 				//qald-5_trian.xml
-				//String query = eElement.getElementsByTagName("string").item(0).getTextContent();
+//				String query = eElement.getElementsByTagName("string").item(0).getTextContent();
 
 				Sentence s = new Sentence(query);
 			}

@@ -146,10 +146,12 @@ public class DBPedia_Terms {
 		return false;
 	}
 	
-	public static OntologyClass getOntologyClassByName(String name){
-		String query = "SELECT * FROM " + CLASS_TABLE + " WHERE ((Levenshtein(name, '" + name
-		+ "') * 1.0) / MIN(LENGTH(name), LENGTH('"+name+"'))) < 0.5" 
-		+ ";";
+	public static ArrayList<OntologyClass> getOntologyClassByName(String name){
+		ArrayList<OntologyClass> classes = new ArrayList<>();
+		
+		String query = "SELECT * FROM " + CLASS_TABLE + " WHERE "
+				+ "((Levenshtein(name, '" + name + "') * 1.0) / MIN(LENGTH(name), LENGTH('"+name+"'))) < 0.25" 
+				+ ";";
 
 		try {
 			Statement stmt = _connection.createStatement();
@@ -157,12 +159,34 @@ public class DBPedia_Terms {
 
 			while(rs.next()){
 //				if((double)(new Levenshtein()).computeLevenshteinDistance(rs.getString("name"), name) / Math.min(name.length(), rs.getString("name").length()) < 0.2)
-				System.out.println(rs.getString("name")+" "+name);
+				OntologyClass oc = new OntologyClass("dbo:"+rs.getString("name"), rs.getString("link"));
+				classes.add(oc);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return classes;
+	}
+	
+	public static ArrayList<Property> getOntologyPropertyByName(String name){
+		ArrayList<Property> properties = new ArrayList<>();
+		
+		String query = "SELECT * FROM " + PROP_TABLE + " WHERE "
+				+ "((Levenshtein(name, '" + name + "') * 1.0) / MIN(LENGTH(name), LENGTH('"+name+"'))) < 0.3" 
+				+ ";";
+
+		try {
+			Statement stmt = _connection.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+
+			while(rs.next()){
+				Property prop = new Property(rs.getString("name"), String.valueOf(rs.getInt("class")), rs.getString("label"), String.valueOf(rs.getInt("domain")), rs.getString("range"), rs.getString("description"));
+				properties.add(prop);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return properties;
 	}
 
 	public static void printClassTable() {

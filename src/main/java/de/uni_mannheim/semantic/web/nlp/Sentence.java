@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.uni_mannheim.semantic.web.crawl.OntologyClass;
+import de.uni_mannheim.semantic.web.crawl.Property;
 import de.uni_mannheim.semantic.web.info.DBPedia;
 import de.uni_mannheim.semantic.web.info.DBPedia_Terms;
 import opennlp.tools.parser.AbstractBottomUpParser;
@@ -24,7 +26,7 @@ public class Sentence {
     	lemmatizeTokens();
     	
     	DBResourceInterpretation dbr = new DBResourceInterpretation(this);
-
+//    	InterpretationTest test = new InterpretationTest(this);
     	System.out.println();
     }
     
@@ -138,18 +140,6 @@ public class Sentence {
     	return sb.toString();
     }
     
-
-    
-
-        
-    private void scanForDboClasses(){
-    	for (int i = 0; i < _mainNGram.size(); i++) {
-//    		if(_mainNGram.get(i).getResource() == null) continue;
-    		DBPedia_Terms.getOntologyClassByName(_mainNGram.get(i).getText());
-//			DBPedia.scanForDboClasses(_mainNGram.get(i).getResource());
-		}
-    }
-
 	public NGram getMainNGram() {
 		return _mainNGram;
 	}
