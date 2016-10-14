@@ -1,4 +1,4 @@
-package Domain;
+package de.uni_mannheim.semantic.web.crawl;
 
 public class Property {
 

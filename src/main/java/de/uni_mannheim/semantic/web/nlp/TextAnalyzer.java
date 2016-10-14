@@ -1,10 +1,11 @@
-package de.uni_mannheim.semantic.web;
+package de.uni_mannheim.semantic.web.nlp;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import de.uni_mannheim.semantic.web.info.DBPedia;
 import opennlp.tools.lemmatizer.SimpleLemmatizer;
 import opennlp.tools.parser.AbstractBottomUpParser;
 import opennlp.tools.parser.Parse;

@@ -1,4 +1,4 @@
-package de.uni_mannheim.semantic.web;
+package de.uni_mannheim.semantic.web.nlp;
 
 import java.util.ArrayList;
 import java.util.List;

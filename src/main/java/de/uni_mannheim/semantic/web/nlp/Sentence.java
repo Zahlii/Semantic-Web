@@ -1,9 +1,11 @@
-package de.uni_mannheim.semantic.web;
+package de.uni_mannheim.semantic.web.nlp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.uni_mannheim.semantic.web.info.DBPedia;
+import de.uni_mannheim.semantic.web.info.DBPedia_Terms;
 import opennlp.tools.util.Span;
 
 public class Sentence {

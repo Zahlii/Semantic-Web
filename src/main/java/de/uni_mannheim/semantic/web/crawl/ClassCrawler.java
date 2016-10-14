@@ -1,4 +1,4 @@
-package de.uni_mannheim.semantic.web;
+package de.uni_mannheim.semantic.web.crawl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,9 +7,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import Domain.OntologyClass;
-import Domain.Property;
 
 public class ClassCrawler {
 	private static String classLink = "http://mappings.dbpedia.org/server/ontology/classes/";
