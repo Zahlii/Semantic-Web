@@ -41,6 +41,7 @@ public class DBPedia {
 		String rest = title.substring(1);
 		title = first.toUpperCase() + rest;
 		
+		// we dont want categories, but we want possible redirection targets. we don't want disambiguations either!
 		String se = ("SELECT ?x WHERE { \r\n" + 
 				"{\r\n" + 
 				"?y rdfs:label \"XXX\"@en .\r\n" + 
@@ -49,8 +50,11 @@ public class DBPedia {
 				"} UNION {\r\n" + 
 				"?x rdfs:label \"XXX\"@en .\r\n" + 
 				"?x dbo:wikiPageID ?id.\r\n" + 
+				"OPTIONAL { ?x dbo:wikiPageDisambiguates ?dis . }\r\n" + 
+				"FILTER(!BOUND(?dis))\r\n" + 
 				"} \r\n" + 
 				"FILTER(!regex(?x,\"Category\"))\r\n" + 
+				"\r\n" + 
 				"} LIMIT 1").replaceAll("XXX", title.trim());
 
 		ResultSet r = DBPedia.query(se);

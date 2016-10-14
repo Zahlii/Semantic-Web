@@ -46,12 +46,13 @@ public class Token {
 	private String _sentence;
 	private Span _span;
 	private String _text;
-	private String _stem;
-	private String _posTag;
-	private String _resource;
+	private String _stem = "";
+	private String _posTag = "";
+	private String _resource = "";
 	private int _start;
 	private int _end;
 	private int _index;
+	private double _probability = 0;
 	
 	public Token(Span span,String text,int index) {
 		this._sentence = text;
@@ -60,9 +61,23 @@ public class Token {
 		this.setText((String) span.getCoveredText(text));
 	}
 	
-    @Override
+	// Clone it
+    public Token(Token t,String completeText) {
+    	this(t.getSpan(),completeText,t.getIndex());
+    	setPOSTag(t.getPOSTag());
+    	setResource(t.getResource());
+    	setStem(t.getStem());
+    	setProbability(getProbability());
+	}
+	public double getProbability() {
+		return _probability;
+	}
+	public void setProbability(double _probability) {
+		this._probability = _probability;
+	}
+	@Override
     public String toString() {
-    	return _text + "("+_posTag+" from "+_stem+" = "+this._resource+")";
+    	return _text + "("+_posTag+" from "+_stem+" = "+this._resource+" ["+this._probability+"])";
     }
     
     public Token mergeWith(Token nextToken) {

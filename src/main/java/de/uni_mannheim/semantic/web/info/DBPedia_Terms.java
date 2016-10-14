@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 import org.sqlite.Function;
 
-import de.uni_mannheim.semantic.web.Levenshtein;
 import de.uni_mannheim.semantic.web.crawl.ClassCrawler;
 import de.uni_mannheim.semantic.web.crawl.OntologyClass;
 import de.uni_mannheim.semantic.web.crawl.Property;
+import de.uni_mannheim.semantic.web.nlp.helpers.Levenshtein;
 
 
 

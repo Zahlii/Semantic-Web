@@ -46,10 +46,9 @@ public class ESWC2015Solver
 		ESWC2015Solver e = new ESWC2015Solver();
 		//e.loadXMLData("test_set.xml");
 //		e.loadXMLData("training_set.xml");
-		e.loadXMLData(System.getProperty("user.dir") + "/data/qald-5_train.xml");
+		//e.loadXMLData(System.getProperty("user.dir") + "/data/qald-5_train.xml");
 
-		
-
+		Sentence s = new Sentence("How many students does the Free University in Amsterdam have ?");
     }
     
 
@@ -66,7 +65,7 @@ public class ESWC2015Solver
 		NodeList nList = doc.getElementsByTagName("question");
 
 		
-		for (int temp = 0; temp < Math.min(100,nList.getLength()); temp++) {
+		for (int temp = 0; temp < Math.min(10,nList.getLength()); temp++) {
 			Node nNode = nList.item(temp);
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement = (Element) nNode;

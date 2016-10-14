@@ -5,15 +5,27 @@ import java.util.List;
 
 import opennlp.tools.util.Span;
 
-public class NGram extends ArrayList<Token> {
+public class NGram extends ArrayList<Token> implements Cloneable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -4840688175789406794L;
-
+	private String _originalText;
+	
 	public NGram(List<Token> subList) {
 		super(subList);
+		_originalText = getText();
+	}
+	
+	
+	// Clone it
+	public NGram(NGram other) {
+		this(new ArrayList<Token>(other.size()));
+		_originalText = other.getText();
+		for(Token t : other) {
+			this.add(new Token(t,_originalText));
+		}
 	}
 	
 	public int getStartTokenIndex() {
@@ -55,4 +67,22 @@ public class NGram extends ArrayList<Token> {
     	
     	return sb.toString().trim();
     }
+    
+    public List<NGram> getUpToNGrams(int n) {
+    	List<NGram> ret = new ArrayList<NGram>();
+    	for(int i=n;i>=0;i--) {
+    		ret.addAll(getNGrams(i));
+    	}
+    	return ret;
+    }
+    
+    public List<NGram> getNGrams(int n) {
+    	List<NGram> ret = new ArrayList<NGram>();
+    	for(int i=0;i<this.size()-n+1;i++) {
+    		ret.add(new NGram(this.subList(i, i+n)));
+    	}
+    	return ret;
+    }
+
+
 }
