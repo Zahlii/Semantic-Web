@@ -29,7 +29,8 @@ public class Sentence {
     }
     
     private void cleanText() {
-    	_originalText = _originalText.replace("?", "").trim();
+    	_originalText = _originalText.replaceAll("[^A-Za-z0-9\\s.]", "").replaceAll("[^A-Za-z0-9]$", "");
+    	System.out.println(_originalText);
     }
     public void parseTokens() {
     	Span[] spans = TextAnalyzer.Tokenizer.tokenizePos(_originalText);

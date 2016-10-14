@@ -2,12 +2,19 @@ package de.uni_mannheim.semantic.web.info;
 
 
 
+import java.io.IOException;
+
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
 import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import de.uni_mannheim.semantic.web.nlp.helpers.TextHelper;
 
 public class DBPedia {
 	private static final String endpoint = "http://dbpedia.org/sparql";
@@ -34,7 +41,28 @@ public class DBPedia {
 		return RS;
 	}
 	
-	public static String checkTitleExists(String title) {
+	public static String findRessourceByTitle(String title) {
+		
+		if(title.length()>5 && TextHelper.endsWith(title,"s"))
+			title = TextHelper.removeLast(title);
+		
+		String url = "http://lookup.dbpedia.org/api/search.asmx/PrefixSearch?QueryClass=&MaxHits=1&QueryString=" + title;
+		Document doc;
+		try {
+			doc = Jsoup.connect(url).get();
+			Elements s = doc.select("Result URI");
+			
+			if(s.size()>1)
+				return s.get(0).html();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		return null;
+	}
+	public static DBLookupResult checkTitleExists(String title) {
 
 		// Capitalize!
 		String first = title.substring(0, 1);
@@ -42,7 +70,7 @@ public class DBPedia {
 		title = first.toUpperCase() + rest;
 		
 		// we dont want categories, but we want possible redirection targets. we don't want disambiguations either!
-		String se = ("SELECT ?x WHERE { \r\n" + 
+		String se = ("SELECT ?x ?y WHERE { \r\n" + 
 				"{\r\n" + 
 				"?y rdfs:label \"XXX\"@en .\r\n" + 
 				"?y dbo:wikiPageRedirects ?x.\r\n" + 
@@ -60,7 +88,9 @@ public class DBPedia {
 		ResultSet r = DBPedia.query(se);
 		if(r.hasNext()) {
 			QuerySolution s =  r.next();
-			return s.get("x").toString();
+			String x = s.get("x").toString();
+			String y = s.contains("y") ? s.get("y").toString() : null;
+			return new DBLookupResult(x,y);
 		}
 		
 		return null;

@@ -3,8 +3,10 @@ package de.uni_mannheim.semantic.web.nlp;
 import java.util.Arrays;
 import java.util.List;
 
+import de.uni_mannheim.semantic.web.info.DBLookupResult;
 import de.uni_mannheim.semantic.web.info.DBPedia;
 import de.uni_mannheim.semantic.web.nlp.helpers.Levenshtein;
+import de.uni_mannheim.semantic.web.nlp.helpers.TextHelper;
 
 public class DBResourceInterpretation extends SentenceInterpretation {
 
@@ -42,11 +44,9 @@ public class DBResourceInterpretation extends SentenceInterpretation {
 
     	
     	boolean applicableStructure = Arrays.asList(allowedPosType).contains(posType);
-    	String first = text.substring(0,1);
     	
-    	boolean isCapitalized = first.toUpperCase().equals(first);
     	
-    	if(applicableStructure || (isCapitalized && tokens.size()==1))
+    	if(applicableStructure || (TextHelper.isCapitalized(text) && tokens.size()==1 && tokens.get(0).getPOSTag().contains("NN")))
     		return true;
 
     	return false;
@@ -66,14 +66,19 @@ public class DBResourceInterpretation extends SentenceInterpretation {
     		if(isCandidateNGram(ngram)) {
     			int s = ngram.size();
     			String title = ngram.getStemmedText();
-    			String dbTitle = DBPedia.checkTitleExists(title);
+
+    			DBLookupResult dbTitle = DBPedia.checkTitleExists(title);
+    			
     			if(dbTitle != null) {
-    				String cleanedTitle = dbTitle.replaceAll("http://dbpedia.org/resource/", "");
-    				int dist = Levenshtein.computeLevenshteinDistance(title,cleanedTitle);
-    				double probability = s>=3 ? 1 : 1.0/dist;
-    				mergeNGramEntity(ngram,dbTitle,probability);
-    				scanForEntities(++depth);
-    				return;
+    				double probability = TextHelper.similarity(title,dbTitle.getSimilarityRelevantCleanedPage());
+    				
+    				if(probability<0.1) {
+	    				mergeNGramEntity(ngram,dbTitle.endPage,1-probability);
+	    				if(s>1) {
+	    					scanForEntities(++depth);
+	    					return;
+	    				}
+    				}
     			}
     		}
     	}

@@ -12,8 +12,8 @@ public class Levenshtein extends Function {
 			throw new SQLException("Levenshtein(text1,text2): Invalid argument count. Requires 2, but found " + args());
 		}
 
-		String t1 = value_text(0);
-		String t2 = value_text(1);
+		String t1 = value_text(0).toLowerCase();
+		String t2 = value_text(1).toLowerCase();
 		result(computeLevenshteinDistance(t1, t2));
 	}
 

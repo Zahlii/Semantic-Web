@@ -44,6 +44,10 @@
     <scope>system</scope>
     <systemPath>${project.basedir}/src/main/resources/jsoup-1.9.1.jar</systemPath>
 </dependency>
-	
+	<dependency>
+    <groupId>info.debatty</groupId>
+    <artifactId>java-string-similarity</artifactId>
+    <version>RELEASE</version>
+</dependency>
   </dependencies>
 </project>

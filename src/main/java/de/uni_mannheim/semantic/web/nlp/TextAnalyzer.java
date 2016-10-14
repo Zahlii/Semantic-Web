@@ -77,21 +77,7 @@ public class TextAnalyzer {
     private String _currentText;
     private String _originalText;
     private HashMap<Integer,String> _variables = new HashMap<Integer,String>();
-    
-    public void parseSentence() {
-
-		
-		Span[] newSpans = replaceNamedEntities();
-		ArrayList<String> tokens = tokenizeText(newSpans);
-		
-		System.out.println(_originalText);
-		System.out.println(tokens);
-		System.out.println(_variables);
-		System.out.println();
-		 
-		
-    }
-    
+        
    
     
     
@@ -104,51 +90,6 @@ public class TextAnalyzer {
 
     
 
-	private Span[] replaceNamedEntities() {
-		Span[] spans = Tokenizer.tokenizePos(_currentText);
-		
-		ArrayList<String> tokens = tokenizeText(spans);
-	
-		
-		int l = tokens.size();
-		
-		String title;
-		
-		for(int i=0;i<l;i++) {
-			String t = tokens.get(i);
-			
-			
-			String lookup = "";
-			String successfulLookup = null;
-			String successfulLookupResult = null;
-			
-			// current token a noun?
-			if(isCandidateForNamedEntity(t)) {			
-						
-				// create up to maxLength Lookups
-				for(int j=i;j<Math.min(l,i+4);j++) {
-					String nextItem = tokens.get(j);
-					lookup = (lookup + " " + nextItem).trim();
-					
-					// if we found it, it's the new title
-					if((title = DBPedia.checkTitleExists(lookup)) != null) {
-						successfulLookup = lookup;
-						successfulLookupResult = title;
-					}
-				}
-				
-				if(successfulLookup != null) {
-					int var = _variables.size()+1;
-					_variables.put(var, successfulLookupResult);
-					_currentText = _currentText.replace(successfulLookup, "_"+var);
-					return replaceNamedEntities();
-				}
-			}
-		}
-
-		return spans;
-	}
-	
 	private ArrayList<String> tokenizeText(Span[] spans) {
 		ArrayList<String> tokens = new ArrayList<String>(spans.length);
 		
