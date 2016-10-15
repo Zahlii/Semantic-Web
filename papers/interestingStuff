@@ -10,3 +10,7 @@ steps:
 3.) Alle ngrams auf dbp:Properties untersuchen
 4.) dann versuchen ausgehend von den levenshetein-distanzen zwischen ngram text und gefundenen properties etc die wahrscheinlichkeit zu bestimmen, dass das ngram als resource 1, class 2 oder property 3 dient
 	Dann müsste Sentence eine ResourceInterpretation, eine OntologyInterpretation und eine PropertyInterpretation haben, jeweils mit entsprechenden Tokens die wir über Analyse der NGrams gewinnen
+	
+1.) Who What Give etc extrahieren und umsetzen in restriktionen 
+2.) Entities finden über resourcen und mergen 
+3.) Potenzmenge der übrigen tokens finden und auf ähnlichkeit mit klassen/properties untersuchen
