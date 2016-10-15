@@ -35,9 +35,10 @@ public class QModel extends QVariable {
 		QModel m = new QModel();
 		
 		QVariable capital = new QVariable("capital");
-		capital.filterBy("regex", "L.*");
+		capital.filterByType("dbo:Settlement")
+		 .filterBy("regex", "L.*");
 		
-		m.filterByResourceProperty("rdf:type", "yago:WikicatAfricanCountries")
+		m.filterByType("yago:WikicatAfricanCountries")
 		 .filterByVariableProperty("dbo:capital", capital)
 		 .filterBy("regex","A.*");
 		

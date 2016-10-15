@@ -22,6 +22,11 @@ public class QVariable implements QueryItem {
 		return this;
 	}
 	
+	public QVariable filterByType(String type) {
+		_properties.add(new QueryProperty(this, "rdf:type", type));
+		return this;
+	}
+	
 	public QVariable filterBy(String filter,String arg) {
 		_append.append("FILTER("+filter+"("+this.asString()+",\"" + arg +"\"))\r\n");
 		return this;
