@@ -1,0 +1,25 @@
+Give me OBJ	<OBJ>
+Who is ... 	<Person>
+Who was ... 	<Person>
+When is ... 	<Time>
+When was ... 	<Time>
+Which OBJ 	<OBJ>
+How many OBJ	<Integer>
+What is OBJ	<OBJ>
+To ...		remove To and check again
+List OBJ	<List<OBJ>
+
+What is ...	...
+What were ...	...
+Is ... a/an ...	...
+How ADJ		...
+Do ...		...
+Are/Is ...	...
+In which ...	...
+
+Ausnahmen:
+Who produces Orangina
+Does Breaking Bad have more episodes than Game of Thrones
+Sean Parnell is the governor of which U.S. state
+Are tree frogs a type of amphibian
+In which UK city are the headquarters of the MI6
