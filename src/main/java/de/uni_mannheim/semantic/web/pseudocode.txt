@@ -1,0 +1,76 @@
+
+
+function replaceNamedEntity() {
+	NGrams = generateUpToNGrams(4)
+	for(NGram in NGrams) {
+		if(isCandidateForNER(NGram)) {
+			Resource = DBPediaFind(Ngram.text)
+			if(Resource.Probability>0.8) {
+		 		MergeIntoEntity(NGram)
+		 		return true
+			}      
+		}
+	}
+	return false
+}
+  
+function analyzeNGramProbabilities(PermSentence) {
+	// formula one racer..perhaps
+	NGrams = Perm.createPowerSet.filter(Set.Size <= 3)
+	
+	for(NGram in NGrams) {
+		ClassResult(class,probability) = findSimilarClasses(NGram,QuestionType) // take prevalent class into account
+		PropertyResult(property,probability) = findSimilarProperties(NGram,Questiontype,SortOrder) // take them into account
+		
+		if(c.propability>0.8) {
+			merge(NGram,c.probability,c.class)
+			return analyzeNGramProbabilities(mergedSentence);
+		} else if(p.propability>0.8) {
+			merge(NGram,p.probability,p.property)
+			return analyzeNGramProbabilities(mergedSentence);
+		}	
+	}
+	return false;
+}
+
+Sentence = "Who is John F. Kennedys vice president?"
+Sentence.POSTag()
+
+
+
+
+Sentence.determineSortOrder()
+	Search for superlative forms: 
+		smallest/largest, smallest/biggest, oldest/youngest/latest , highest/smallest
+		most X => search for numerical properties on class
+	
+	
+QuestionType = Sentence.analyzeQuestionType()
+	Who => dbo:Person
+	Where => dbo:Place
+	When => search for date
+	Which/Give me (all) => match next parts vs all classes (e.g. Which newspaper...? Which German)
+	amount => search for number?
+	
+
+	
+Sentence.cleanStopWords()
+	(Who is/was,Where is/was,Which is/was,When,Give me, To which, Give me a/all, What is the, ...)
+	Remove ? . ! etc
+	
+	
+// replace named entities
+// TODO enhance to use startsWith? E.g. John F. Kennedys -> remove last char?
+i = 0;
+while(sentence.replaceNamedEntity() && i++<=3) {} ;
+
+
+Permutation = Permutation(Sentence)
+
+while(Perm = permutation.next()) {
+	MergedTokens = analyzeNGramProbabilities(Perm)
+	if(MergedTokens.totalprobability > 0.5) {
+		// construct query
+		return;
+	}
+}
