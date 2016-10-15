@@ -1,12 +1,10 @@
 package de.uni_mannheim.semantic.web.nlp;
 
 import java.util.Arrays;
-import java.util.List;
 
 import de.uni_mannheim.semantic.web.info.DBLookupResult;
 import de.uni_mannheim.semantic.web.info.DBPedia;
-import de.uni_mannheim.semantic.web.nlp.helpers.Levenshtein;
-import de.uni_mannheim.semantic.web.nlp.helpers.TextHelper;
+import de.uni_mannheim.semantic.web.helpers.TextHelper;
 
 public class DBResourceInterpretation extends SentenceInterpretation {
 

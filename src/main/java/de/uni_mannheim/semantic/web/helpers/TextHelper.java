@@ -1,7 +1,10 @@
-package de.uni_mannheim.semantic.web.nlp.helpers;
+package de.uni_mannheim.semantic.web.helpers;
 
-import info.debatty.java.stringsimilarity.MetricLCS;
-import info.debatty.java.stringsimilarity.NGram;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import info.debatty.java.stringsimilarity.NormalizedLevenshtein;
 
 public class TextHelper {
@@ -41,6 +44,11 @@ public class TextHelper {
 
         return l.distance(s1, s2);
 		//int le = Levenshtein.computeLevenshteinDistance(s1,s2);
+	}
+	
+	public static String readFile(String path, Charset encoding) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(encoded, encoding);
 	}
 	
 	

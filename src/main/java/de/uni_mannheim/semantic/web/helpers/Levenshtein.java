@@ -1,4 +1,4 @@
-package de.uni_mannheim.semantic.web.nlp.helpers;
+package de.uni_mannheim.semantic.web.helpers;
 
 import java.sql.SQLException;
 
