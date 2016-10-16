@@ -45,9 +45,9 @@ public class ESWC2015Solver
     	
 		ESWC2015Solver e = new ESWC2015Solver();
 		//e.loadXMLData("test_set.xml");
-		e.loadXMLData("training_set.xml");
-//		e.loadXMLData(System.getProperty("user.dir") + "/data/qald-5_train.xml");
-//		Sentence s = new Sentence("Who was John F. Kennedys vice president?");
+		//e.loadXMLData("training_set.xml");
+		e.loadXMLData(System.getProperty("user.dir") + "/data/qald-5_train.xml");
+		//Sentence s = new Sentence("Who was John F. Kennedys vice president?");
     }
     
 
@@ -59,20 +59,20 @@ public class ESWC2015Solver
 		Document doc = dBuilder.parse(fXmlFile);
 		doc.getDocumentElement().normalize();
 		//training_set.xml
-		NodeList nList = doc.getElementsByTagName("query");
+		//NodeList nList = doc.getElementsByTagName("query");
 		//qald-5_trian.xml
-//		NodeList nList = doc.getElementsByTagName("question");
+		NodeList nList = doc.getElementsByTagName("question");
 
 		
-		for (int temp = 0; temp < Math.min(100,nList.getLength()); temp++) {
+		for (int temp = 0; temp < Math.min(10,nList.getLength()); temp++) {
 			Node nNode = nList.item(temp);
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement = (Element) nNode;
 				//training_set.xml
-				String query = eElement.getElementsByTagName("keyword_query").item(0).getTextContent();
+				//String query = eElement.getElementsByTagName("keyword_query").item(0).getTextContent();
 				
 				//qald-5_trian.xml
-//				String query = eElement.getElementsByTagName("string").item(0).getTextContent();
+				String query = eElement.getElementsByTagName("string").item(0).getTextContent();
 
 				Sentence s = new Sentence(query);
 			}

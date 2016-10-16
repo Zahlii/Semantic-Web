@@ -26,7 +26,7 @@ public class TextHelper {
 		int l = end.length();
 		
 		// 5-3 +1
-		return i == (s.length() - l + 1);
+		return i == (s.length() - l);
 
 	}
 
@@ -42,13 +42,26 @@ public class TextHelper {
 		
 		NormalizedLevenshtein l = new NormalizedLevenshtein();
 
-        return l.distance(s1, s2);
+        return 1-l.distance(s1, s2);
 		//int le = Levenshtein.computeLevenshteinDistance(s1,s2);
 	}
 	
 	public static String readFile(String path, Charset encoding) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(encoded, encoding);
+	}
+
+	public static String capitalize(String text) {
+		String first = text.substring(0,1);
+    	return first.toUpperCase() + text.substring(1);
+	}
+	
+	public static String removePosS(String title) {
+		if(endsWith(title, "s")) {
+			return removeLast(title);
+		}
+		
+		return title;
 	}
 	
 	

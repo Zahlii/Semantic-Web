@@ -68,10 +68,10 @@ public class DBResourceInterpretation extends SentenceInterpretation {
     			DBLookupResult dbTitle = DBPedia.checkTitleExists(title);
     			
     			if(dbTitle != null) {
-    				double probability = TextHelper.similarity(title,dbTitle.getSimilarityRelevantCleanedPage());
-    				
-    				if(probability<0.1) {
-	    				mergeNGramEntity(ngram,dbTitle.endPage,1-probability);
+    				double probability = TextHelper.similarity(title,dbTitle.getSimilarityRelevantCleanedPage())*s;
+    			
+    				if(probability>=0.9) {
+	    				mergeNGramEntity(ngram,dbTitle.endPage,probability);
 	    				if(s>1) {
 	    					scanForEntities(++depth);
 	    					return;
@@ -82,4 +82,5 @@ public class DBResourceInterpretation extends SentenceInterpretation {
     	}
     	
     }
+
 }

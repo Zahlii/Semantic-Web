@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.uni_mannheim.semantic.web.info.DBPedia;
+import opennlp.tools.util.Span;
 
 public abstract class SentenceInterpretation {
 	protected Sentence _sentence;
@@ -62,4 +63,19 @@ public abstract class SentenceInterpretation {
     	
     	return sb.toString();
     }
+    
+    public Token[] getTokens() {
+    	return _mainNGram.toArray(new Token[_mainNGram.size()]);
+    }
+    
+
+	public Span[] getSpans() {
+		Span[] s = new Span[_mainNGram.size()];
+		int i=0;
+		for(Token t : getTokens()) {
+			s[i++] = t.getSpan();
+		}
+		
+		return s;
+	}
 }

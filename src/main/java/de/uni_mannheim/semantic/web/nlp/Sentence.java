@@ -21,12 +21,15 @@ public class Sentence {
     	
     	cleanText();
     	constructTokens();
+    	
     	POSTagTokens();
     	//parseTokens();
     	lemmatizeTokens();
     	
     	DBResourceInterpretation dbr = new DBResourceInterpretation(this);
 //    	InterpretationTest test = new InterpretationTest(this);
+    	
+    	parseTokens(dbr.getSpans());
     	System.out.println();
     }
     
@@ -34,8 +37,8 @@ public class Sentence {
     	_originalText = _originalText.replaceAll("[^A-Za-z0-9\\s.]", "").replaceAll("[^A-Za-z0-9]$", "");
     	System.out.println(_originalText);
     }
-    public void parseTokens() {
-    	Span[] spans = TextAnalyzer.Tokenizer.tokenizePos(_originalText);
+    public void parseTokens(Span[] spans) {
+    	//Span[] spans = TextAnalyzer.Tokenizer.tokenizePos(_originalText);
     	
 		final Parse p = new Parse(_originalText,new Span(0, _originalText.length()),AbstractBottomUpParser.INC_NODE,1,0);
 		for (int idx=0; idx < spans.length; idx++) {
@@ -75,9 +78,12 @@ public class Sentence {
 		X -> Unknown, uncertain, or unbracketable. X is often used for bracketing typos and in bracketing the...the-constructions.
 		 */
 		Parse x = TextAnalyzer.Parser.parse(p);
-		x.show();
-
+		showParse(x);
 		
+    }
+    
+    private void showParse(Parse p) {
+    	p.showCodeTree();
     }
     
     private void constructTokens() {
