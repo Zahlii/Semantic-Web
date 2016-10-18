@@ -35,7 +35,9 @@ public class DBPedia {
 	}
 	
 	public static ResultSet query(String strQuery) {
-		Query q = QueryFactory.create(prefix + "\r\n" + strQuery);
+		String x = prefix + "\r\n" + strQuery;
+		//System.out.println(x);
+		Query q = QueryFactory.create(x);
 		QueryExecution qexec =
 		QueryExecutionFactory.sparqlService(endpoint, q);
 		ResultSet RS = qexec.execSelect();

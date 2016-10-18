@@ -19,6 +19,7 @@ import de.uni_mannheim.semantic.web.helpers.Levenshtein;
 
 public class DBPedia_Terms {
 
+	public static final String CATEGORY_TABLE = "Category";
 	public static final String CLASS_TABLE = "Ontology_Class";
 	public static final String PROP_TABLE = "Property";
 
@@ -63,11 +64,18 @@ public class DBPedia_Terms {
 				+ " FOREIGN KEY(class) REFERENCES " + CLASS_TABLE + "(id)\n" 
 				+ ");";
 
+		String sqlCategoryTable = "CREATE TABLE IF NOT EXISTS " + CATEGORY_TABLE 
+				+ " (\n" + "	id integer PRIMARY KEY,\n"
+				+ "	name text NOT NULL,\n" 
+				+ " search texyt NOT NULL \n"
+				+ ");";
+		
 		try {
 			Statement stmt = _connection.createStatement();
 			// create a new table
 			stmt.execute(sqlClassTable);
 			stmt.execute(sqlPropertyTable);
+			stmt.execute(sqlCategoryTable);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -113,6 +121,19 @@ public class DBPedia_Terms {
 		}
 	}
 
+	public static void insertCategory(String fullname, String searchName) {
+		String sql = "INSERT INTO " + CATEGORY_TABLE + "(name,search) VALUES(?,?)";
+
+
+		try {
+			PreparedStatement pstmt = _connection.prepareStatement(sql);
+			pstmt.setString(1, fullname);
+			pstmt.setString(2, searchName);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	public static int getForeignKey(String domainLink) {
 		String query = "SELECT id " + "FROM " + CLASS_TABLE + " " + "WHERE link = '" + domainLink + "';";
 
