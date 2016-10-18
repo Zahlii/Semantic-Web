@@ -1,4 +1,4 @@
-package de.uni_mannheim.semantic.web.nlp;
+package de.uni_mannheim.semantic.web.nlp.interpretation;
 
 import java.util.ArrayList;
 
@@ -6,6 +6,7 @@ import de.uni_mannheim.semantic.web.crawl.OntologyClass;
 import de.uni_mannheim.semantic.web.crawl.Property;
 import de.uni_mannheim.semantic.web.info.DBPedia;
 import de.uni_mannheim.semantic.web.info.DBPedia_Terms;
+import de.uni_mannheim.semantic.web.nlp.Sentence;
 
 public class InterpretationTest extends DBResourceInterpretation {
 

@@ -1,8 +1,11 @@
-package de.uni_mannheim.semantic.web.nlp;
+package de.uni_mannheim.semantic.web.nlp.interpretation;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uni_mannheim.semantic.web.nlp.NGram;
+import de.uni_mannheim.semantic.web.nlp.Sentence;
+import de.uni_mannheim.semantic.web.nlp.Token;
 import opennlp.tools.util.Span;
 
 public abstract class SentenceInterpretation {

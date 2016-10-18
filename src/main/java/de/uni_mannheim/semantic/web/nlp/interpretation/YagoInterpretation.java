@@ -1,14 +1,19 @@
-package de.uni_mannheim.semantic.web.nlp;
+package de.uni_mannheim.semantic.web.nlp.interpretation;
 
 import java.util.Arrays;
+import java.util.List;
 
 import de.uni_mannheim.semantic.web.info.DBLookupResult;
 import de.uni_mannheim.semantic.web.info.DBPedia;
+import de.uni_mannheim.semantic.web.info.DBPedia_MySQL;
+import de.uni_mannheim.semantic.web.nlp.NGram;
+import de.uni_mannheim.semantic.web.nlp.Sentence;
+import de.uni_mannheim.semantic.web.nlp.Token;
 import de.uni_mannheim.semantic.web.helpers.TextHelper;
 
-public class DBResourceInterpretation extends SentenceInterpretation {
+public class YagoInterpretation extends SentenceInterpretation {
 
-	public DBResourceInterpretation(Sentence s) {
+	public YagoInterpretation(Sentence s) {
 		super(s);
 
 		System.out.println(this);
@@ -37,8 +42,7 @@ public class DBResourceInterpretation extends SentenceInterpretation {
 
 		boolean applicableStructure = Arrays.asList(allowedPosType).contains(posType);
 
-		if (applicableStructure
-				|| (TextHelper.isCapitalized(text) && tokens.size() == 1 && tokens.get(0).getPOSTag().contains("NN")))
+		if (applicableStructure)
 			return true;
 
 		return false;
@@ -57,21 +61,9 @@ public class DBResourceInterpretation extends SentenceInterpretation {
 
 		for (NGram ngram : _ngrams) {
 			if (isCandidateNGram(ngram)) {
-				int s = ngram.size();
-				String title = ngram.getStemmedText();
-
-				DBLookupResult dbTitle = DBPedia.checkTitleExists(title);
-
-				if (dbTitle != null) {
-					double probability = TextHelper.similarity(title, dbTitle.getSimilarityRelevantCleanedPage()) * s;
-
-					if (probability >= 0.9) {
-						mergeNGramEntity(ngram, dbTitle.endPage, probability);
-						if (s > 1) {
-							scanForEntities(++depth);
-							return;
-						}
-					}
+				List<String> results = DBPedia_MySQL.findCategoriesForNGram(ngram);
+				if(results.size()>0) {
+					System.out.println(results);
 				}
 			}
 		}

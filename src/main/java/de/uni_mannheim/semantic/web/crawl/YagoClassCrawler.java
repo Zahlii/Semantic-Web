@@ -36,7 +36,7 @@ public class YagoClassCrawler {
 			}
 
 			System.out.println(new Date().toString() + " | " + i + " Finished parsing");
-			DBPedia_MySQL.insertCategory(data);
+			DBPedia_MySQL.insertCategories(data);
 			System.out.println(new Date().toString() + " | " + i + " Finished Saving");
 		}
 	}

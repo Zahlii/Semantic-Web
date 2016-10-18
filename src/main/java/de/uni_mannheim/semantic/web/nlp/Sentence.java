@@ -1,6 +1,9 @@
 package de.uni_mannheim.semantic.web.nlp;
 
 import java.util.ArrayList;
+
+import de.uni_mannheim.semantic.web.nlp.interpretation.DBResourceInterpretation;
+import de.uni_mannheim.semantic.web.nlp.interpretation.YagoInterpretation;
 import opennlp.tools.parser.AbstractBottomUpParser;
 import opennlp.tools.parser.Parse;
 import opennlp.tools.util.Span;
@@ -19,10 +22,12 @@ public class Sentence {
 		// parseTokens();
 		lemmatizeTokens();
 
-		DBResourceInterpretation dbr = new DBResourceInterpretation(this);
+		//DBResourceInterpretation dbr = new DBResourceInterpretation(this);
+		
+		YagoInterpretation y = new YagoInterpretation(this);
 		// InterpretationTest test = new InterpretationTest(this);
 
-		parseTokens(dbr.getSpans());
+		//parseTokens(dbr.getSpans());
 		System.out.println();
 	}
 
