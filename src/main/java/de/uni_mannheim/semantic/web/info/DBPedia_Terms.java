@@ -53,7 +53,7 @@ public class DBPedia_Terms {
 				+ " FOREIGN KEY(class) REFERENCES " + CLASS_TABLE + "(id)\n" + ");";
 
 		String sqlCategoryTable = "CREATE TABLE IF NOT EXISTS " + CATEGORY_TABLE + " (\n"
-				+ "	id integer PRIMARY KEY,\n" + "	name text NOT NULL,\n" + " search texyt NOT NULL \n" + ");";
+				+ "	id integer PRIMARY KEY,\n" + "	name text NOT NULL,\n" + " search text NOT NULL \n" + ");";
 
 		try {
 			Statement stmt = _connection.createStatement();
