@@ -8,8 +8,8 @@ public class Property {
 	private String range;
 	private String description;
 	private String ontologyClass;
-	
-	public Property(String name, String ontologyClass, String label, String domain, String range, String description){
+
+	public Property(String name, String ontologyClass, String label, String domain, String range, String description) {
 		this.setName(name);
 		this.setOntologyClass(ontologyClass);
 		this.setLabel(label);

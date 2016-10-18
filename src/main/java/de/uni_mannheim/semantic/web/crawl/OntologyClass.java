@@ -7,8 +7,8 @@ public class OntologyClass {
 	private String link;
 	private ArrayList<Property> properties;
 	private String superclass;
-	
-	public OntologyClass(String name, String link){
+
+	public OntologyClass(String name, String link) {
 		this.setName(name);
 		this.setLink(link);
 	}

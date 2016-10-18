@@ -15,8 +15,6 @@ import de.uni_mannheim.semantic.web.crawl.OntologyClass;
 import de.uni_mannheim.semantic.web.crawl.Property;
 import de.uni_mannheim.semantic.web.helpers.Levenshtein;
 
-
-
 public class DBPedia_Terms {
 
 	public static final String CATEGORY_TABLE = "Category";
@@ -46,30 +44,17 @@ public class DBPedia_Terms {
 	public static void createTables() {
 
 		// SQL statement for creating the Ontology Class table
-		String sqlClassTable = "CREATE TABLE IF NOT EXISTS " + CLASS_TABLE + " (\n" 
-				+ "	id integer PRIMARY KEY,\n"
-				+ "	name text NOT NULL,\n" 
-				+ "	link text NOT NULL,\n"
-				+ " superclass integer \n"
-				+ ");";
+		String sqlClassTable = "CREATE TABLE IF NOT EXISTS " + CLASS_TABLE + " (\n" + "	id integer PRIMARY KEY,\n"
+				+ "	name text NOT NULL,\n" + "	link text NOT NULL,\n" + " superclass integer \n" + ");";
 
-		String sqlPropertyTable = "CREATE TABLE IF NOT EXISTS " + PROP_TABLE 
-				+ " (\n" + "	id integer PRIMARY KEY,\n"
-				+ "	name text NOT NULL,\n" 
-				+ " class integer NOT NULL,\n"
-				+ "	label text NOT NULL,\n" 
-				+ "	domain integer NOT NULL,\n"
-				+ "	range text NOT NULL,\n" 
-				+ "	description text,\n" 
-				+ " FOREIGN KEY(class) REFERENCES " + CLASS_TABLE + "(id)\n" 
-				+ ");";
+		String sqlPropertyTable = "CREATE TABLE IF NOT EXISTS " + PROP_TABLE + " (\n" + "	id integer PRIMARY KEY,\n"
+				+ "	name text NOT NULL,\n" + " class integer NOT NULL,\n" + "	label text NOT NULL,\n"
+				+ "	domain integer NOT NULL,\n" + "	range text NOT NULL,\n" + "	description text,\n"
+				+ " FOREIGN KEY(class) REFERENCES " + CLASS_TABLE + "(id)\n" + ");";
 
-		String sqlCategoryTable = "CREATE TABLE IF NOT EXISTS " + CATEGORY_TABLE 
-				+ " (\n" + "	id integer PRIMARY KEY,\n"
-				+ "	name text NOT NULL,\n" 
-				+ " search texyt NOT NULL \n"
-				+ ");";
-		
+		String sqlCategoryTable = "CREATE TABLE IF NOT EXISTS " + CATEGORY_TABLE + " (\n"
+				+ "	id integer PRIMARY KEY,\n" + "	name text NOT NULL,\n" + " search texyt NOT NULL \n" + ");";
+
 		try {
 			Statement stmt = _connection.createStatement();
 			// create a new table
@@ -90,10 +75,10 @@ public class DBPedia_Terms {
 			pstmt.setString(2, oc.getLink());
 			pstmt.setInt(3, getForeignKey(oc.getSuperclass()));
 			pstmt.executeUpdate();
-			
+
 			ArrayList<Property> props = oc.getProperties();
-			
-			for(int i=0; i<props.size(); i++){
+
+			for (int i = 0; i < props.size(); i++) {
 				Property p = props.get(i);
 				insertProperty(p);
 			}
@@ -124,7 +109,6 @@ public class DBPedia_Terms {
 	public static void insertCategory(String fullname, String searchName) {
 		String sql = "INSERT INTO " + CATEGORY_TABLE + "(name,search) VALUES(?,?)";
 
-
 		try {
 			PreparedStatement pstmt = _connection.prepareStatement(sql);
 			pstmt.setString(1, fullname);
@@ -134,6 +118,7 @@ public class DBPedia_Terms {
 			e.printStackTrace();
 		}
 	}
+
 	public static int getForeignKey(String domainLink) {
 		String query = "SELECT id " + "FROM " + CLASS_TABLE + " " + "WHERE link = '" + domainLink + "';";
 
@@ -141,7 +126,7 @@ public class DBPedia_Terms {
 			Statement stmt = _connection.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 
-			while(rs.next()){
+			while (rs.next()) {
 				return rs.getInt("id");
 			}
 		} catch (SQLException e) {
@@ -151,10 +136,10 @@ public class DBPedia_Terms {
 	}
 
 	public static boolean contains(Property p) {
-		String query = "SELECT id FROM " + PROP_TABLE + " WHERE name = '" + p.getName() 
-		+ "' AND label = '" + p.getLabel() 
-//		+ "' AND class = '" + p.getOntologyClass()
-		+ "';";
+		String query = "SELECT id FROM " + PROP_TABLE + " WHERE name = '" + p.getName() + "' AND label = '"
+				+ p.getLabel()
+				// + "' AND class = '" + p.getOntologyClass()
+				+ "';";
 
 		try {
 			Statement stmt = _connection.createStatement();
@@ -166,21 +151,23 @@ public class DBPedia_Terms {
 		}
 		return false;
 	}
-	
-	public static ArrayList<OntologyClass> getOntologyClassByName(String name){
+
+	public static ArrayList<OntologyClass> getOntologyClassByName(String name) {
 		ArrayList<OntologyClass> classes = new ArrayList<>();
-		
-		String query = "SELECT * FROM " + CLASS_TABLE + " WHERE "
-				+ "((Levenshtein(name, '" + name + "') * 1.0) / MIN(LENGTH(name), LENGTH('"+name+"'))) < 0.25" 
-				+ ";";
+
+		String query = "SELECT * FROM " + CLASS_TABLE + " WHERE " + "((Levenshtein(name, '" + name
+				+ "') * 1.0) / MIN(LENGTH(name), LENGTH('" + name + "'))) < 0.25" + ";";
 
 		try {
 			Statement stmt = _connection.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 
-			while(rs.next()){
-//				if((double)(new Levenshtein()).computeLevenshteinDistance(rs.getString("name"), name) / Math.min(name.length(), rs.getString("name").length()) < 0.2)
-				OntologyClass oc = new OntologyClass("dbo:"+rs.getString("name"), rs.getString("link"));
+			while (rs.next()) {
+				// if((double)(new
+				// Levenshtein()).computeLevenshteinDistance(rs.getString("name"),
+				// name) / Math.min(name.length(),
+				// rs.getString("name").length()) < 0.2)
+				OntologyClass oc = new OntologyClass("dbo:" + rs.getString("name"), rs.getString("link"));
 				classes.add(oc);
 			}
 		} catch (SQLException e) {
@@ -188,20 +175,21 @@ public class DBPedia_Terms {
 		}
 		return classes;
 	}
-	
-	public static ArrayList<Property> getOntologyPropertyByName(String name){
+
+	public static ArrayList<Property> getOntologyPropertyByName(String name) {
 		ArrayList<Property> properties = new ArrayList<>();
-		
-		String query = "SELECT * FROM " + PROP_TABLE + " WHERE "
-				+ "((Levenshtein(name, '" + name + "') * 1.0) / MIN(LENGTH(name), LENGTH('"+name+"'))) < 0.3" 
-				+ ";";
+
+		String query = "SELECT * FROM " + PROP_TABLE + " WHERE " + "((Levenshtein(name, '" + name
+				+ "') * 1.0) / MIN(LENGTH(name), LENGTH('" + name + "'))) < 0.3" + ";";
 
 		try {
 			Statement stmt = _connection.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 
-			while(rs.next()){
-				Property prop = new Property(rs.getString("name"), String.valueOf(rs.getInt("class")), rs.getString("label"), String.valueOf(rs.getInt("domain")), rs.getString("range"), rs.getString("description"));
+			while (rs.next()) {
+				Property prop = new Property(rs.getString("name"), String.valueOf(rs.getInt("class")),
+						rs.getString("label"), String.valueOf(rs.getInt("domain")), rs.getString("range"),
+						rs.getString("description"));
 				properties.add(prop);
 			}
 		} catch (SQLException e) {
@@ -218,10 +206,11 @@ public class DBPedia_Terms {
 			stmt = _connection.createStatement();
 
 			ResultSet rs = stmt.executeQuery(query);
-			System.out.format("%-5s%-20s%-11s%-50s","id", "name", "superclass", "link");
+			System.out.format("%-5s%-20s%-11s%-50s", "id", "name", "superclass", "link");
 			System.out.println();
 			while (rs.next()) {
-				System.out.format("%-5d%-20s%-11s%-50s",rs.getInt("id"), rs.getString("name"),  rs.getInt("superclass"), rs.getString("link"));
+				System.out.format("%-5d%-20s%-11s%-50s", rs.getInt("id"), rs.getString("name"), rs.getInt("superclass"),
+						rs.getString("link"));
 				System.out.println();
 			}
 		} catch (SQLException e) {
@@ -232,9 +221,9 @@ public class DBPedia_Terms {
 
 	public static void printPropertyTable(boolean sortByName) {
 		String query;
-		if(sortByName){
+		if (sortByName) {
 			query = "SELECT * FROM " + PROP_TABLE + " ORDER BY name ASC";
-		}else{
+		} else {
 			query = "SELECT * FROM " + PROP_TABLE;
 		}
 
@@ -243,21 +232,23 @@ public class DBPedia_Terms {
 			stmt = _connection.createStatement();
 
 			ResultSet rs = stmt.executeQuery(query);
-			
-			System.out.format("%-5s%-30s%-6s%-30s%-5s%-20s%-20s","id", "name", "class", "label", "domain", "range", "description");
+
+			System.out.format("%-5s%-30s%-6s%-30s%-5s%-20s%-20s", "id", "name", "class", "label", "domain", "range",
+					"description");
 			System.out.println();
 			while (rs.next()) {
-				System.out.format("%-5d%-30s%-6d%-40s%-5s%-50s%-50s",rs.getInt("id"), rs.getString("name"), rs.getInt("class"), 
-						rs.getString("label"), rs.getString("domain"), rs.getString("range"), rs.getString("description"));
+				System.out.format("%-5d%-30s%-6d%-40s%-5s%-50s%-50s", rs.getInt("id"), rs.getString("name"),
+						rs.getInt("class"), rs.getString("label"), rs.getString("domain"), rs.getString("range"),
+						rs.getString("description"));
 				System.out.println();
 			}
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void dropTable(String table) {
 		Statement stmt;
 		String sql = "DROP TABLE IF EXISTS " + table;
@@ -270,15 +261,15 @@ public class DBPedia_Terms {
 			e.printStackTrace();
 		}
 	}
-	
-	public static void resetDatabase(){
+
+	public static void resetDatabase() {
 		dropTable(CLASS_TABLE);
 		dropTable(PROP_TABLE);
 
 		createTables();
 	}
-	
-	public static void crawlIntoDB(){
+
+	public static void crawlIntoDB() {
 		System.out.println("Start crawling...");
 		ArrayList<OntologyClass> list = ClassCrawler.crawlClasses();
 		System.out.println("Inserting in DB...");
@@ -287,8 +278,8 @@ public class DBPedia_Terms {
 		}
 		System.out.println("...inserting done.");
 	}
-	
-	public static void printDB(){
+
+	public static void printDB() {
 		System.out.println(CLASS_TABLE + ": ");
 		printClassTable();
 		System.out.println();
@@ -298,11 +289,10 @@ public class DBPedia_Terms {
 
 	public static void main(String[] args) {
 
-//		resetDatabase();
+		// resetDatabase();
 
-//		crawlIntoDB();
-//		printDB();
-
+		// crawlIntoDB();
+		// printDB();
 
 	}
 
