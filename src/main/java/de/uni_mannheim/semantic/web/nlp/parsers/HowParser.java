@@ -50,11 +50,14 @@ public class HowParser extends GenericParser {
 			search = _sentence.getVerbs().get(0).getStem();
 		}
 
-		String prop = pl.findPropertyFor(search);
-
-		System.out.println(prop);
+		List<String> prop = pl.findPropertyFor(search);
 
 		System.out.println(_sentence);
+
+		System.out.print("\t");
+		System.out.println(prop);
+
+
 	}
 
 

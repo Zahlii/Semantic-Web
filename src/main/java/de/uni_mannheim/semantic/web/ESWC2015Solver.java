@@ -40,7 +40,7 @@ public class ESWC2015Solver {
 		// training_set.xml
 		// NodeList nList = doc.getElementsByTagName("query");
 		// qald-5_trian.xml
-		 NodeList nList = doc.getElementsByTagName("question");
+		NodeList nList = doc.getElementsByTagName("question");
 
 		List<Sentence> sen = new ArrayList<Sentence>(nList.getLength());
 		
@@ -62,11 +62,11 @@ public class ESWC2015Solver {
 			}
 		}
 		
-		/*sen.sort(null);
+		sen.sort(null);
 		
 		for(Sentence si : sen) {
 			System.out.println(si.getType() + " -> " + si.getText());
-		}*/
+		}
 	}
 
 }

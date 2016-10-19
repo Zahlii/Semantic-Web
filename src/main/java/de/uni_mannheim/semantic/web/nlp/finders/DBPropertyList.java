@@ -5,10 +5,7 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.RDFNode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DBPropertyList {
     private String _resource;
@@ -31,7 +28,8 @@ public class DBPropertyList {
             String k = l.get("p").toString();
             RDFNode r = l.get("o");
 
-            String v = r.isResource() ? r.toString() : r.asLiteral().getString();
+
+            String v = r.toString();
 
             if(!props.containsKey(k)) {
                 props.put(k,new ArrayList<String>());
@@ -43,22 +41,31 @@ public class DBPropertyList {
         return props;
     }
 
-    public String findPropertyFor(String s) {
-        if(findingHints.containsKey(s))
-            s = findingHints.get(s);
+    public List<String> findPropertyFor(String s) {
+        List<String> tries = new ArrayList<String>();
+        List<String> res = new ArrayList<String>();
 
-        for(String k : props.keySet()) {
-            if(k.contains(s))
-                return props.get(k).toString();
+        if(findingHints.containsKey(s))
+            tries = new ArrayList<String>(Arrays.asList(findingHints.get(s)));
+
+        tries.add(s);
+
+        for(String prop : props.keySet()) {
+            for(String search: tries) {
+                if(prop.contains(search)) {
+                    List<String> result = props.get(prop);
+                    res.addAll(result);
+                }
+            }
         }
 
-        return null;
+        return res;
     }
 
-    public static Map<String,String> findingHints = new HashMap<String,String>();
+    public static Map<String,String[]> findingHints = new HashMap<String,String[]>();
     static {
-        findingHints.put("tall","height");
-        findingHints.put("high","elevation");
-        findingHints.put("marry","spouse");
+        findingHints.put("tall",new String[] {"elevation","height"});
+        findingHints.put("high",new String[] {"altitude","elevation","height"});
+        findingHints.put("marry",new String[] {"spouse","husband","wife"});
     }
 }
