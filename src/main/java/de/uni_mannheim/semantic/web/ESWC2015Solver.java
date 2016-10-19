@@ -14,6 +14,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ESWC2015Solver {
 
@@ -40,6 +42,8 @@ public class ESWC2015Solver {
 		// qald-5_trian.xml
 		 NodeList nList = doc.getElementsByTagName("question");
 
+		List<Sentence> sen = new ArrayList<Sentence>(nList.getLength());
+		
 		for (int temp = 0; temp < Math.min(150, nList.getLength()); temp++) {
 			Node nNode = nList.item(temp);
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -52,8 +56,17 @@ public class ESWC2015Solver {
 
 
 				Sentence s = new Sentence(query);
+				
+				if(s.getType() != null)
+					sen.add(s);
 			}
 		}
+		
+		/*sen.sort(null);
+		
+		for(Sentence si : sen) {
+			System.out.println(si.getType() + " -> " + si.getText());
+		}*/
 	}
 
 }

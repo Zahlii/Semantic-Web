@@ -8,49 +8,7 @@ import opennlp.tools.parser.AbstractBottomUpParser;
 import opennlp.tools.parser.Parse;
 import opennlp.tools.util.Span;
 
-public class Sentence {
-	enum QuestionType {
-		Which("In which","To which","For which","Which","Through which"), // followed by CLASS
-		Give_me_all("Give me all","Give me a list of all","Show me all","List the","List all"), // Followed by DESCRIPTION or CLASS
-		Give_me_the("Give me"), // Followed by OBJECT
-		Who_is("Who is","Who was","Who were"), // followed by DESCRIPTION or RESOURCE
-		When_is("When is","When was","When were"), // followed by RESOURCE
-		What_is("What is","What was","What were","What are"), // followed by PREDICATE? 
-		Where_is("Where is","Where was","Where were"), // followed by PREDICATE? 
-		Who("Who"), // followed by predicate
-		When("When"), // Followed by 
-		How_many("How many"), // followed by indicator for number
-		Does("Does","Is","Do","Was","Did","Are"), // followed by RESOURCE
-		How("How"); 
-		
-		private final String[] _alternatives;
-		
-		QuestionType(String... alternatives) {
-			this._alternatives = alternatives;
-		}
-		public String[] getAlternatives() {
-			return this._alternatives;
-		}
-		
-		public boolean matches(String text) {
-			for(String s : _alternatives) {
-				if(text.startsWith(s))
-					return true;
-			}
-			
-			return false;
-		}
-		
-		public String remove(String text) {
-			for(String s : _alternatives) {
-				if(text.startsWith(s))
-					return text.replace(s, "").trim();
-			}
-			
-			return text;
-		}
-	}
-	
+public class Sentence implements Comparable<Sentence> {
 	private QuestionType type;
 	private NGram _mainNGram;
 	private String _originalText;
@@ -61,24 +19,26 @@ public class Sentence {
 		cleanText();
 		try {
 			extractQuestionType();
+			
 			constructTokens();
-
+			
 			POSTagTokens();
-			// parseTokens();
 			lemmatizeTokens();
-
-			// DBResourceInterpretation dbr = new DBResourceInterpretation(this);
-
-			// YagoInterpretation y = new YagoInterpretation(this);
-			// InterpretationTest test = new InterpretationTest(this);
-
+			
+			
+			type.startParsing(this);
+			
+			// 
 			// parseTokens(dbr.getSpans());
-			System.out.println(this);
 		} catch(Exception e) {
 			System.err.println(e);
 		}
 		
 		
+	}
+
+	public QuestionType getType() {
+		return type;
 	}
 
 	private void extractQuestionType() throws Exception {
@@ -93,10 +53,18 @@ public class Sentence {
 		throw new Exception("Malformed or unknown question " + this._originalText);
 	}
 
+	public Word get(int i) {
+		return _mainNGram.get(i);
+		
+	}
 	private void cleanText() {
 		_originalText = _originalText.replaceAll("[^A-Za-z0-9\\s.]", "").replaceAll("[^A-Za-z0-9]$", "");
 	}
 
+	public void removeWord(int index) {
+		_mainNGram.remove(index);
+	}
+	
 	public void parseTokens(Span[] spans) {
 		// Span[] spans = TextAnalyzer.Tokenizer.tokenizePos(_originalText);
 
@@ -220,5 +188,14 @@ public class Sentence {
 
 	public String getText() {
 		return _originalText;
+	}
+
+	@Override
+	public int compareTo(Sentence arg0) {
+		int c = this.getType().compareTo(arg0.getType());
+		if(c == 0)
+			return this.getText().compareTo(arg0.getText());
+		
+		return c;
 	}
 }
