@@ -5,7 +5,7 @@ import java.util.List;
 
 import de.uni_mannheim.semantic.web.nlp.NGram;
 import de.uni_mannheim.semantic.web.nlp.Sentence;
-import de.uni_mannheim.semantic.web.nlp.Token;
+import de.uni_mannheim.semantic.web.nlp.Word;
 import opennlp.tools.util.Span;
 
 public abstract class SentenceInterpretation {
@@ -27,15 +27,15 @@ public abstract class SentenceInterpretation {
 	public abstract void interpret();
 
 	protected void mergeNGramEntity(NGram g, String resource, double prob) {
-		Token newToken = mergeTokens(g.getStartTokenIndex(), g.getEndTokenIndex());
+		Word newToken = mergeTokens(g.getStartTokenIndex(), g.getEndTokenIndex());
 		newToken.setPOSTag("ENTITY");
 		newToken.setResource(resource);
 		newToken.setProbability(prob);
 	}
 
-	protected Token mergeTokens(int start, int end) {
+	protected Word mergeTokens(int start, int end) {
 
-		Token n = _mainNGram.get(start);
+		Word n = _mainNGram.get(start);
 		if (end <= start)
 			return n;
 
@@ -46,7 +46,7 @@ public abstract class SentenceInterpretation {
 		_mainNGram.subList(start, end + 1).clear();
 		_mainNGram.add(start, n);
 		int i = 0;
-		for (Token t : _mainNGram) {
+		for (Word t : _mainNGram) {
 			t.setIndex(i++);
 		}
 
@@ -56,21 +56,21 @@ public abstract class SentenceInterpretation {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for (Token _token : _mainNGram) {
+		for (Word _token : _mainNGram) {
 			sb.append(_token.toString()).append(",");
 		}
 
 		return sb.toString();
 	}
 
-	public Token[] getTokens() {
-		return _mainNGram.toArray(new Token[_mainNGram.size()]);
+	public Word[] getTokens() {
+		return _mainNGram.toArray(new Word[_mainNGram.size()]);
 	}
 
 	public Span[] getSpans() {
 		Span[] s = new Span[_mainNGram.size()];
 		int i = 0;
-		for (Token t : getTokens()) {
+		for (Word t : getTokens()) {
 			s[i++] = t.getSpan();
 		}
 

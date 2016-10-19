@@ -66,10 +66,6 @@ public class DBPedia {
 
 	public static DBLookupResult checkTitleExists(String title) {
 
-		// Capitalize!
-		title = TextHelper.capitalize(title);
-		title = TextHelper.removePosS(title);
-
 		// we dont want categories, but we want possible redirection targets. we
 		// don't want disambiguations either!
 		String se = ("SELECT ?x ?y WHERE { \r\n" + "{\r\n" + "?y rdfs:label \"XXX\"@en .\r\n"

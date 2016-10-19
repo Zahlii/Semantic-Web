@@ -3,13 +3,10 @@ package de.uni_mannheim.semantic.web.nlp.interpretation;
 import java.util.Arrays;
 import java.util.List;
 
-import de.uni_mannheim.semantic.web.info.DBLookupResult;
-import de.uni_mannheim.semantic.web.info.DBPedia;
 import de.uni_mannheim.semantic.web.info.DBPedia_MySQL;
 import de.uni_mannheim.semantic.web.nlp.NGram;
 import de.uni_mannheim.semantic.web.nlp.Sentence;
-import de.uni_mannheim.semantic.web.nlp.Token;
-import de.uni_mannheim.semantic.web.helpers.TextHelper;
+import de.uni_mannheim.semantic.web.nlp.Word;
 
 public class YagoInterpretation extends SentenceInterpretation {
 
@@ -31,7 +28,7 @@ public class YagoInterpretation extends SentenceInterpretation {
 
 		String[] pos = new String[tokens.size()];
 		int i = 0;
-		for (Token t : tokens)
+		for (Word t : tokens)
 			pos[i++] = t.getPOSTag();
 
 		String posType = String.join(",", pos).replaceAll("NNPS", "NNP").replaceAll("NNS", "NN");
@@ -62,7 +59,7 @@ public class YagoInterpretation extends SentenceInterpretation {
 		for (NGram ngram : _ngrams) {
 			if (isCandidateNGram(ngram)) {
 				List<String> results = DBPedia_MySQL.findCategoriesForNGram(ngram);
-				if(results.size()>0) {
+				if (results.size() > 0) {
 					System.out.println(results);
 				}
 			}

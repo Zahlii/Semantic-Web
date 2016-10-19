@@ -1,8 +1,11 @@
 package de.uni_mannheim.semantic.web.nlp;
 
+import java.util.Arrays;
+import java.util.List;
+import de.uni_mannheim.semantic.web.helpers.TextHelper;
 import opennlp.tools.util.Span;
 
-public class Token {
+public class Word {
 
 	public Span getSpan() {
 		return _span;
@@ -65,7 +68,7 @@ public class Token {
 	private int _index;
 	private double _probability = 0;
 
-	public Token(Span span, String text, int index) {
+	public Word(Span span, String text, int index) {
 		this._sentence = text;
 		this._index = index;
 		this.setSpan(span);
@@ -73,7 +76,7 @@ public class Token {
 	}
 
 	// Clone it
-	public Token(Token t, String completeText) {
+	public Word(Word t, String completeText) {
 		this(t.getSpan(), completeText, t.getIndex());
 		setPOSTag(t.getPOSTag());
 		setResource(t.getResource());
@@ -94,9 +97,29 @@ public class Token {
 		return _text + "(" + _posTag + " from " + _stem + " = " + this._resource + " [" + this._probability + "])";
 	}
 
-	public Token mergeWith(Token nextToken) {
-		Token ret = new Token(new Span(this._start, nextToken.getSpan().getEnd()), _sentence, this._index);
+	public Word mergeWith(Word nextToken) {
+		Word ret = new Word(new Span(this._start, nextToken.getSpan().getEnd()), _sentence, this._index);
 		return ret;
+	}
+
+	public boolean isCapitalized() {
+		return TextHelper.isCapitalized(this._text);
+	}
+
+	public boolean isNumber() {
+		return this._posTag.equals("CN");
+	}
+
+	public boolean isEntityPreposition() {
+		List<String> words = Arrays.asList(new String[] { "of","in" });
+
+		return words.contains(this._text);
+	}
+
+	public boolean isQuestionWord() {
+		List<String> words = Arrays.asList(new String[] { "Which","What","Who","Give","Where","Is","In","To"});
+
+		return words.contains(this._text);
 	}
 
 }

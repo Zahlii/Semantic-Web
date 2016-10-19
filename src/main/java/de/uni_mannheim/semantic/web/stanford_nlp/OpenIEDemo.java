@@ -4,22 +4,17 @@ import edu.stanford.nlp.ie.util.RelationTriple;
 import edu.stanford.nlp.io.IOUtils;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.naturalli.NaturalLogicAnnotations;
-import edu.stanford.nlp.naturalli.OpenIE;
-import edu.stanford.nlp.naturalli.SentenceFragment;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.semgraph.SemanticGraph;
-import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 import edu.stanford.nlp.util.PropertiesUtils;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Properties;
 
 /**
- * A demo illustrating how to call the OpenIE system programmatically.
- * You can call this code with:
+ * A demo illustrating how to call the OpenIE system programmatically. You can
+ * call this code with:
  *
  * <pre>
  *   java -mx1g -cp stanford-openie.jar:stanford-openie-models.jar edu.stanford.nlp.naturalli.OpenIEDemo
@@ -28,42 +23,39 @@ import java.util.Properties;
  */
 public class OpenIEDemo {
 
-  private OpenIEDemo() {} // static main
+	private OpenIEDemo() {
+	} // static main
 
-  public static void main(String[] args) throws Exception {
-    // Create the Stanford CoreNLP pipeline
+	public static void main(String[] args) throws Exception {
+		// Create the Stanford CoreNLP pipeline
 
+		// Annotate an example document.
+		String text = IOUtils.slurpFile("questions.txt");
 
-    // Annotate an example document.
-    String text = IOUtils.slurpFile("questions.txt");
-    
-    Properties props = PropertiesUtils.asProperties(
-            "annotators", "tokenize,ssplit,pos,lemma,depparse,natlog,openie"
-    );
-    StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-    
-    Annotation doc = new Annotation(text);
-    pipeline.annotate(doc);
+		Properties props = PropertiesUtils.asProperties("annotators",
+				"tokenize,ssplit,pos,lemma,depparse,natlog,openie");
+		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
 
-    // Loop over sentences in the document
-    int sentNo = 0;
-    for (CoreMap sentence : doc.get(CoreAnnotations.SentencesAnnotation.class)) {
-      System.out.println("Sentence #" + ++sentNo + ": " + sentence.get(CoreAnnotations.TextAnnotation.class));
+		Annotation doc = new Annotation(text);
+		pipeline.annotate(doc);
 
-      // Print SemanticGraph
-      //System.out.println(sentence.get(SemanticGraphCoreAnnotations.EnhancedDependenciesAnnotation.class).toString(SemanticGraph.OutputFormat.LIST));
+		// Loop over sentences in the document
+		int sentNo = 0;
+		for (CoreMap sentence : doc.get(CoreAnnotations.SentencesAnnotation.class)) {
+			System.out.println("Sentence #" + ++sentNo + ": " + sentence.get(CoreAnnotations.TextAnnotation.class));
 
-      // Get the OpenIE triples for the sentence
-      Collection<RelationTriple> triples = sentence.get(NaturalLogicAnnotations.RelationTriplesAnnotation.class);
+			// Print SemanticGraph
+			// System.out.println(sentence.get(SemanticGraphCoreAnnotations.EnhancedDependenciesAnnotation.class).toString(SemanticGraph.OutputFormat.LIST));
 
-      // Print the triples
-      for (RelationTriple triple : triples) {
-        System.out.println(triple.confidence + "\t" +
-            triple.subjectLemmaGloss() + "\t" +
-            triple.relationLemmaGloss() + "\t" +
-            triple.objectLemmaGloss());
-      }
-    }
-  }
+			// Get the OpenIE triples for the sentence
+			Collection<RelationTriple> triples = sentence.get(NaturalLogicAnnotations.RelationTriplesAnnotation.class);
+
+			// Print the triples
+			for (RelationTriple triple : triples) {
+				System.out.println(triple.confidence + "\t" + triple.subjectLemmaGloss() + "\t"
+						+ triple.relationLemmaGloss() + "\t" + triple.objectLemmaGloss());
+			}
+		}
+	}
 
 }

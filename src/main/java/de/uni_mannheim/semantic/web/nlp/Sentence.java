@@ -22,12 +22,12 @@ public class Sentence {
 		// parseTokens();
 		lemmatizeTokens();
 
-		//DBResourceInterpretation dbr = new DBResourceInterpretation(this);
-		
-		YagoInterpretation y = new YagoInterpretation(this);
+		DBResourceInterpretation dbr = new DBResourceInterpretation(this);
+
+		// YagoInterpretation y = new YagoInterpretation(this);
 		// InterpretationTest test = new InterpretationTest(this);
 
-		//parseTokens(dbr.getSpans());
+		// parseTokens(dbr.getSpans());
 		System.out.println();
 	}
 
@@ -96,17 +96,17 @@ public class Sentence {
 		Span[] _mainNGrams = TextAnalyzer.Tokenizer.tokenizePos(_originalText);
 
 		int i = 0;
-		ArrayList<Token> tokens = new ArrayList<Token>(_mainNGrams.length);
+		ArrayList<Word> tokens = new ArrayList<Word>(_mainNGrams.length);
 
 		for (Span _token : _mainNGrams) {
-			tokens.add(new Token(_token, _originalText, i++));
+			tokens.add(new Word(_token, _originalText, i++));
 		}
 
 		_mainNGram = new NGram(tokens);
 	}
 
 	private void lemmatizeTokens() {
-		for (Token _token : _mainNGram) {
+		for (Word _token : _mainNGram) {
 			String lemma = TextAnalyzer.Lemmatizer.lemmatize(_token.getText(), _token.getPOSTag());
 			_token.setStem(lemma);
 		}
@@ -114,7 +114,7 @@ public class Sentence {
 	}
 
 	private void stemTokens() {
-		for (Token _token : _mainNGram) {
+		for (Word _token : _mainNGram) {
 			String pos = _token.getPOSTag();
 
 			if (pos.startsWith("VB") || pos.equals("NNS")) {
@@ -128,7 +128,7 @@ public class Sentence {
 	private String[] getTokenizedStrings() {
 		String[] _strings = new String[_mainNGram.size()];
 		int i = 0;
-		for (Token _token : _mainNGram) {
+		for (Word _token : _mainNGram) {
 			_strings[i++] = _token.getText();
 		}
 		return _strings;
@@ -145,7 +145,7 @@ public class Sentence {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for (Token _token : _mainNGram) {
+		for (Word _token : _mainNGram) {
 			sb.append(_token.toString()).append(",");
 		}
 

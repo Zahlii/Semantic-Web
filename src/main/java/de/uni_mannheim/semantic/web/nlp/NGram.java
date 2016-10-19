@@ -5,7 +5,7 @@ import java.util.List;
 
 import opennlp.tools.util.Span;
 
-public class NGram extends ArrayList<Token> implements Cloneable {
+public class NGram extends ArrayList<Word> implements Cloneable {
 
 	/**
 	 * 
@@ -13,17 +13,17 @@ public class NGram extends ArrayList<Token> implements Cloneable {
 	private static final long serialVersionUID = -4840688175789406794L;
 	private String _originalText;
 
-	public NGram(List<Token> subList) {
+	public NGram(List<Word> subList) {
 		super(subList);
 		_originalText = getText();
 	}
 
 	// Clone it
 	public NGram(NGram other) {
-		this(new ArrayList<Token>(other.size()));
+		this(new ArrayList<Word>(other.size()));
 		_originalText = other.getText();
-		for (Token t : other) {
-			this.add(new Token(t, _originalText));
+		for (Word t : other) {
+			this.add(new Word(t, _originalText));
 		}
 	}
 
@@ -42,7 +42,7 @@ public class NGram extends ArrayList<Token> implements Cloneable {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for (Token _token : this) {
+		for (Word _token : this) {
 			sb.append(_token.toString()).append(",");
 		}
 
@@ -51,7 +51,7 @@ public class NGram extends ArrayList<Token> implements Cloneable {
 
 	public String getText() {
 		StringBuilder sb = new StringBuilder();
-		for (Token _token : this) {
+		for (Word _token : this) {
 			sb.append(_token.getText()).append(" ");
 		}
 
@@ -60,7 +60,7 @@ public class NGram extends ArrayList<Token> implements Cloneable {
 
 	public String getStemmedText() {
 		StringBuilder sb = new StringBuilder();
-		for (Token _token : this) {
+		for (Word _token : this) {
 			sb.append(_token.getStem()).append(" ");
 		}
 
