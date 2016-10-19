@@ -44,7 +44,7 @@ public class DBPedia {
 
 	public static String findRessourceByTitle(String title) {
 
-		if (title.length() > 5 && TextHelper.endsWith(title, "s"))
+		if (title.length() > 5 && title.endsWith("s"))
 			title = TextHelper.removeLast(title);
 
 		String url = "http://lookup.dbpedia.org/api/search.asmx/PrefixSearch?QueryClass=&MaxHits=1&QueryString="

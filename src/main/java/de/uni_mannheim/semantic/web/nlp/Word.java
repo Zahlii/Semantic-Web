@@ -69,10 +69,9 @@ public class Word {
 	private double _probability = 0;
 
 	public Word(Span span, String text, int index) {
-		this._sentence = text;
 		this._index = index;
 		this.setSpan(span);
-		this.setText((String) span.getCoveredText(text));
+		setSentence(text);
 	}
 
 	// Clone it
@@ -122,4 +121,12 @@ public class Word {
 		return words.contains(this._text);
 	}
 
+	public void setSentence(String text) {
+		this._sentence = text;
+		this.setText((String) getSpan().getCoveredText(text));
+	}
+
+    public boolean isThe() {
+		return _text.equals("the");
+    }
 }

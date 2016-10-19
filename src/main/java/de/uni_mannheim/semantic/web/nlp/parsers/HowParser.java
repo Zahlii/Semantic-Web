@@ -7,32 +7,32 @@ import de.uni_mannheim.semantic.web.nlp.Word;
 public class HowParser extends GenericParser {
 
 	enum HowParserType {
-		Often,
-		Tall,
-		High
+		Often_Verb,
+		Property
 	}
 	
 	private HowParserType subType;
 	
 	@Override
 	protected void parseInternal() {
-		System.out.println(_sentence);
+
 		
 		Word w1 = _sentence.get(0); 
-		_sentence.removeWord(0); // Tall
-		_sentence.removeWord(1); // Is, was
+		_sentence.removeToken(0); // Tall
+		_sentence.removeToken(0); // Is, was
 		
 		switch(w1.getText()) {
 		case "often":
-			subType = HowParserType.Often;
+			subType = HowParserType.Often_Verb;
 			break;
 		case "tall":
-			subType = HowParserType.Tall;
-			break;
 		case "high":
-			subType = HowParserType.High;
+			subType = HowParserType.Property;
 			break;
 		}
+
+		_sentence.findEntity();
+		System.out.println(_sentence);
 	}
 
 

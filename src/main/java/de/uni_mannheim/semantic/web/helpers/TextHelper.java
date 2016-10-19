@@ -13,21 +13,11 @@ public class TextHelper {
 		return first.toUpperCase().equals(first);
 	}
 
-	public static boolean endsWith(String s, String end) {
-		// Hallo, lo
+	public static String removeLastSignificant(String title) {
+		if(title.endsWith("s") || title.endsWith("n"))
+			return removeLast(title);
 
-		// 3
-		int i = s.indexOf(end);
-
-		if (i == -1)
-			return false;
-
-		// 3
-		int l = end.length();
-
-		// 5-3 +1
-		return i == (s.length() - l);
-
+		return title;
 	}
 
 	public static String removeLast(String title) {
@@ -52,14 +42,6 @@ public class TextHelper {
 	public static String capitalize(String text) {
 		String first = text.substring(0, 1);
 		return first.toUpperCase() + text.substring(1);
-	}
-
-	public static String removePosS(String title) {
-		if (endsWith(title, "s")) {
-			return removeLast(title);
-		}
-
-		return title;
 	}
 
 }
