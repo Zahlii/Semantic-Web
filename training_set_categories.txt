@@ -1,0 +1,166 @@
+[1.9812]
+Question How -> tall is Michael Jordan
+	Michael Jordan(ENTITY from  = http://dbpedia.org/resource/Michael_Jordan [1.8571428571428572]),
+	
+[http://dbpedia.org/resource/Tom_Hayden, http://dbpedia.org/resource/Ted_Turner, http://dbpedia.org/resource/Roger_Vadim]
+Question How -> often did Jane Fonda marry
+	Jane Fonda(ENTITY from  = http://dbpedia.org/resource/Jane_Fonda [1.8]),marry(VBP from marry =  [0.0]),
+	
+[181.0]
+Question How -> tall is Claudia Schiffer
+	Claudia Schiffer(ENTITY from  = http://dbpedia.org/resource/Claudia_Schiffer [1.875]),
+	
+[8848]
+Question How -> high is the Mount Everest
+	the Mount Everest(ENTITY from  = http://dbpedia.org/resource/Mount_Everest [2.769230769230769]),
+	
+java.lang.Exception: Malformed or unknown question What did Bruce Carver die from
+
+Which -> Chess players died in the same place they were born in
+Which -> German cities have more than 250000 inhabitants
+Which -> Greek goddesses dwelt on Mount Olympus
+Which -> U.S. state has been admitted latest
+Which -> U.S. state has the abbreviation MN
+Which -> U.S. state has the highest population density
+Which -> U.S. state is Fort Knox located
+Which -> U.S. states are in the same time zone as Utah
+Which -> UK city are the headquarters of the MI6
+Which -> awards did Douglas Hofstadter win
+Which -> books by Kerouac were published by Viking Press
+Which -> bridges are of the same type as the Manhattan Bridge
+Which -> cities does the Weser flow through
+Which -> city was the former Dutch queen Juliana buried
+Which -> countries adopted the Euro
+Which -> countries are connected by the Rhine
+Which -> countries does the Himalayan mountain system extend
+Which -> countries does the Yenisei river flow
+Which -> countries have more than ten caves
+Which -> countries have more than two official languages
+Which -> country does the Ganges start
+Which -> country does the creator of Miffy come from
+Which -> country is the Limerick Lake
+Which -> films directed by Garry Marshall was Julia Roberts starring
+Which -> films starring Clint Eastwood did he direct himself
+Which -> instruments does Cat Stevens play
+Which -> label did Elvis record his first album
+Which -> military conflicts did Lawrence of Arabia participate
+Which -> monarchs were married to a German
+Which -> mountain is the highest after the Annapurna
+Which -> movies did Kurosawa direct
+Which -> museum exhibits The Scream by Munch
+Which -> other weapons did the designer of the Uzi develop
+Which -> presidents were born in 1945
+Which -> professional surfers were born in Australia
+Which -> river does the Brooklyn Bridge cross
+Which -> ships were called after Benjamin Franklin
+Which -> states border Illinois
+Which -> telecommunications organizations are located in Belgium
+Which -> television shows were created by John Cleese
+Give_me_all -> American inventions
+Give_me_all -> Apollo 14 astronauts
+Give_me_all -> Australian nonprofit organizations
+Give_me_all -> Bsides of the Ramones
+Give_me_all -> Danish movies
+Give_me_all -> Methodist politicians
+Give_me_all -> actors starring in movies directed by William Shatner
+Give_me_all -> bandleaders that play trumpet
+Give_me_all -> books by William Goldman with more than 300 pages
+Give_me_all -> breeds of the German Shepherd dog
+Give_me_all -> cars that are produced in Germany
+Give_me_all -> children of Margaret Thatcher
+Give_me_all -> cities in New Jersey with more than 100000 inhabitants
+Give_me_all -> communist countries
+Give_me_all -> companies in Munich
+Give_me_all -> companies in the advertising industry
+Give_me_all -> cosmonauts
+Give_me_all -> federal chancellors of Germany
+Give_me_all -> games by GMT
+Give_me_all -> islands that belong to Japan
+Give_me_all -> lakes in Denmark
+Give_me_all -> launch pads operated by NASA
+Give_me_all -> libraries established earlier than 1400
+Give_me_all -> members of Prodigy
+Give_me_all -> movies directed by Francis Ford Coppola
+Give_me_all -> people that were born in Vienna and died in Berlin
+Give_me_all -> professional skateboarders from Sweden
+Give_me_all -> sister cities of Brno
+Give_me_all -> soccer clubs in Spain
+Give_me_all -> songs from Bruce Springsteen released between 1980 and 1990
+Give_me_all -> world heritage sites designated within the past two years
+Give_me_the -> the birthdays of all actors of the television show Charmed
+Give_me_the -> the capitals of all countries in Africa
+Who_is -> John F. Kennedys vice president
+Who_is -> called Frank The Tank
+Who_is -> the Formula 1 race driver with the most races
+Who_is -> the daughter of Robert Kennedy married to
+Who_is -> the editor of Forbes
+Who_is -> the father of Queen Elizabeth II
+Who_is -> the governor of Wyoming
+Who_is -> the husband of Amanda Palmer
+Who_is -> the mayor of Berlin
+Who_is -> the mayor of Tel Aviv
+Who_is -> the owner of RollsRoyce
+Who_is -> the youngest player in the Premier League
+When_is -> Alberta admitted as province
+When_is -> Latvia join the EU
+When_is -> Michael Jackson die
+When_is -> the Battle of Gettysburg
+When_is -> the Hells Angels founded
+When_is -> the Statue of Liberty built
+When_is -> the movie Worst Case Scenario going to be in cinemas in the Netherlands
+What_is -> the area code of Berlin
+What_is -> the average temperature on Hawaii
+What_is -> the birth name of Angela Merkel
+What_is -> the capital of Canada
+What_is -> the currency of the Czech Republic
+What_is -> the founding year of the brewery that produces Pilsner Urquell
+What_is -> the highest mountain in Australia
+What_is -> the highest place of the Urals
+What_is -> the largest city in Australia
+What_is -> the longest river
+What_is -> the main discoveries of the Mars rover Curiosity
+What_is -> the melting point of copper
+What_is -> the nicknames of San Francisco
+What_is -> the official language of Suriname
+What_is -> the ruling party in Lisbon
+What_is -> the second highest mountain on Earth
+What_is -> the time zone of Salt Lake City
+What_is -> the total amount of men and women serving in the FDNY
+Where_is -> the residence of the prime minister of Spain
+Who -> are the parents of the wife of Juan Carlos I
+Who -> composed the music for Harold and Maude
+Who -> created Goofy
+Who -> created the comic Captain America
+Who -> designed the Brooklyn Bridge
+Who -> developed Minecraft
+Who -> founded Intel
+Who -> invented the zipper
+Who -> painted The Storm on the Sea of Galilee
+Who -> produces Orangina
+Who -> wrote the lyrics for the Polish national anthem
+How_many -> children did Benjamin Franklin have
+How_many -> countries are there in Europe
+How_many -> employees does Google have
+How_many -> employees does IBM have
+How_many -> inhabitants does Maribor have
+How_many -> languages are spoken in Turkmenistan
+How_many -> missions does the Soyuz programme have
+How_many -> people live in the capital of Australia
+How_many -> students does the Free University in Amsterdam have
+Does -> Breaking Bad have more episodes than Game of Thrones
+Does -> Egypts largest city also its capital
+Does -> Frank Herbert still alive
+Does -> Marc Chagall a jew
+Does -> Margaret Thatcher a chemist
+Does -> Prince Harry and Prince William have the same parents
+Does -> Rita Wilson the wife of Tom Hanks
+Does -> Socrates influence Aristotle
+Does -> Tesla win a nobel prize in physics
+Does -> U.S. president Jackson involved in a war
+Does -> proinsulin a protein
+Does -> the Cuban Missile Crisis earlier than the Bay of Pigs Invasion
+Does -> tree frogs a type of amphibian
+How -> Claudia Schiffer
+How -> Jane Fonda marry
+How -> Michael Jordan
+How -> the Mount Everest

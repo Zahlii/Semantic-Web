@@ -1,0 +1,67 @@
+java.lang.Exception: Malformed or unknown question Show me everyone who was born on Halloween
+
+java.lang.Exception: Malformed or unknown question What does the abbreviation FIFA stand for
+
+java.lang.Exception: Malformed or unknown question Desserts from which country contain fish
+
+java.lang.Exception: Malformed or unknown question Where did the architect of the Eiffel Tower study
+
+
+Question How -> high is the Yokohama Marine Tower
+	the Yokohama Marine Tower(ENTITY from  = http://dbpedia.org/resource/Yokohama_Marine_Tower [3.619047619047619]),
+	
+Which -> German mathematicians were members of the von Braun rocket group
+Which -> Greek parties are proEuropean
+Which -> Secretary of State was significantly involved in the United States dominance of the Caribbean
+Which -> animals are critically endangered
+Which -> artists were born on the same date as Rachel Stevens
+Which -> city is Air China headquartered
+Which -> city were the parents of Che Guevara born
+Which -> city where Charlie Chaplins half brothers born
+Which -> country is Mecca located
+Which -> frequent flyer program has the most airlines
+Which -> movie by the Coen brothers stars John Turturro in the role of a New York City playwright
+Which -> movies starring Brad Pitt were directed by Guy Ritchie
+Which -> museum in New York has the most visitors
+Which -> musician wrote the most books
+Which -> of the volcanoes that erupted in 1550 is still active
+Which -> programming languages were influenced by Perl
+Which -> soccer players were born on Malta
+Which -> subsidiary of Lufthansa serves both Dortmund and Berlin Tegel
+Which -> types of grapes grow in Oregon
+Which -> volcanos in Japan erupted since 2000
+Which -> writers converted to Islam
+Give_me_all -> ESA astronauts
+Give_me_all -> Swedish holidays
+Give_me_all -> Swiss nonprofit organizations
+Give_me_all -> seven kings of Rome
+Give_me_all -> spacecrafts that flew to Mars
+Give_me_the -> the currency of China
+Who_is -> starring in Spanish movies produced by Benicio del Toro
+Who_is -> the architect of the tallest building in Japan
+Who_is -> the heaviest player of the Chicago Bulls
+Who_is -> the manager of Real Madrid
+Who_is -> the mayor of Rotterdam
+Who_is -> the oldest child of Meryl Streep
+Who_is -> the parents of Queen Victoria
+Who_is -> the tallest basketball player
+Who_is -> the youngest Pulitzer Prize winner
+When_is -> the Ming dynasty dissolve
+What_is -> the height difference between Mount Everest and K2
+What_is -> the highest mountain in Italy
+What_is -> the name of the Viennese newspaper founded by the creator of the croissant
+What_is -> the net income of Apple
+Where_is -> the Father of Singapore born
+Who -> killed John Lennon
+How_many -> airlines are members of the Star Alliance
+How_many -> children does Eddie Murphy have
+How_many -> companies were founded by the founder of Facebook
+How_many -> companies were founded in the same year as Google
+How_many -> ethnic groups live in Slovenia
+How_many -> scientists graduated from an Ivy League university
+Does -> Arnold Schwarzenegger attend a university
+Does -> Barack Obama a democrat
+Does -> Lake Baikal bigger than the Great Bear Lake
+Does -> Taiko a kind of Japanese musical instruments
+Does -> there manmade lakes in Australia that are deeper than 100 meters
+How -> the Yokohama Marine Tower
