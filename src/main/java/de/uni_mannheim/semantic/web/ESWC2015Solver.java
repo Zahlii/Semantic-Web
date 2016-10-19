@@ -40,7 +40,7 @@ public class ESWC2015Solver {
 		// qald-5_trian.xml
 		 NodeList nList = doc.getElementsByTagName("question");
 
-		for (int temp = 0; temp < Math.min(15, nList.getLength()); temp++) {
+		for (int temp = 0; temp < Math.min(150, nList.getLength()); temp++) {
 			Node nNode = nList.item(temp);
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement = (Element) nNode;
