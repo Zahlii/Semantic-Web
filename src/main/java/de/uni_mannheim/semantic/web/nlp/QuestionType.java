@@ -52,7 +52,7 @@ public enum QuestionType {
 		return text;
 	}
 
-	public void startParsing(Sentence s) {
+	public void startParsing(Sentence s) throws Exception {
 		if(_parse != null) {
 			try {
 				GenericParser p = _parse.newInstance();

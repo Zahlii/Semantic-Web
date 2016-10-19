@@ -1,8 +1,10 @@
 package de.uni_mannheim.semantic.web.nlp.parsers;
 
-import de.uni_mannheim.semantic.web.nlp.QuestionType;
-import de.uni_mannheim.semantic.web.nlp.Sentence;
 import de.uni_mannheim.semantic.web.nlp.Word;
+import de.uni_mannheim.semantic.web.nlp.finders.DBPropertyList;
+
+import java.util.List;
+import java.util.Map;
 
 public class HowParser extends GenericParser {
 
@@ -14,7 +16,7 @@ public class HowParser extends GenericParser {
 	private HowParserType subType;
 	
 	@Override
-	protected void parseInternal() {
+	protected void parseInternal() throws Exception {
 
 		
 		Word w1 = _sentence.get(0); 
@@ -31,7 +33,27 @@ public class HowParser extends GenericParser {
 			break;
 		}
 
-		_sentence.findEntity();
+		Word w = _sentence.findEntity();
+
+		if(w == null)
+			throw new Exception("Unable to find entity.");
+
+		DBPropertyList pl = new DBPropertyList(w.getResource());
+
+		pl.fetchProperties();
+
+		String search;
+
+		if(subType == HowParserType.Property) {
+			search = w1.getText();
+		} else {
+			search = _sentence.getVerbs().get(0).getStem();
+		}
+
+		String prop = pl.findPropertyFor(search);
+
+		System.out.println(prop);
+
 		System.out.println(_sentence);
 	}
 

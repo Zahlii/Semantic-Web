@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+import de.uni_mannheim.semantic.web.nlp.finders.DBNERFinderResult;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -64,7 +65,7 @@ public class DBPedia {
 		return null;
 	}
 
-	public static DBLookupResult checkTitleExists(String title) {
+	public static DBNERFinderResult checkTitleExists(String title) {
 
 		// we dont want categories, but we want possible redirection targets. we
 		// don't want disambiguations either!
@@ -79,7 +80,7 @@ public class DBPedia {
 			QuerySolution s = r.next();
 			String x = s.get("x").toString();
 			String y = s.contains("y") ? s.get("y").toString() : null;
-			return new DBLookupResult(x, y);
+			return new DBNERFinderResult(x, y);
 		}
 
 		return null;

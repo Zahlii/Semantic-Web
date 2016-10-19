@@ -1,6 +1,7 @@
 package de.uni_mannheim.semantic.web.nlp;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.uni_mannheim.semantic.web.nlp.finders.DBNERFinder;
 import opennlp.tools.util.Span;
@@ -178,5 +179,15 @@ public class Sentence implements Comparable<Sentence> {
 
 	public NGram getMainNGram() {
 		return this._mainNGram;
+	}
+
+	public List<Word> getVerbs() {
+		ArrayList<Word> v = new ArrayList<Word>();
+
+		for(Word w : _mainNGram) {
+			if(w.getPOSTag().startsWith("VB"))
+				v.add(w);
+		}
+		return v;
 	}
 }

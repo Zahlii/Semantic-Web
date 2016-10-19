@@ -14,12 +14,12 @@ public abstract class GenericParser {
 		
 	}
 
-	public void parse(Sentence s) {
+	public void parse(Sentence s) throws Exception {
 		this._sentence = s;
 		
 		parseInternal();
 	}
 	
-	protected abstract void parseInternal();
+	protected abstract void parseInternal() throws Exception;
 
 }
