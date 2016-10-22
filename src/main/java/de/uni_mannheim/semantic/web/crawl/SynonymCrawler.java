@@ -2,6 +2,9 @@ package de.uni_mannheim.semantic.web.crawl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,7 +21,7 @@ public class SynonymCrawler {
 	private static final String URL = "http://www.synonym.com/";
 
 	public static void main(String[] args) {
-		Word w = new Word("tall", "JJ");
+		Word w = new Word("high", "JJ");
 		ArrayList<Word> list = SynonymCrawler.findSynonyms(w);
 
 		for (int i = 0; i < list.size(); i++) {
@@ -34,12 +37,16 @@ public class SynonymCrawler {
 	 */
 	public static ArrayList<Word> findSynonyms(Word w) {
 
-		ArrayList<Word> synonyms = new ArrayList<>();
+		final ArrayList<Word> synonyms = new ArrayList<>();
 
 		String searchW = w.getText().replace(" ", "_");
 		Document doc;
 		try {
-			doc = Jsoup.connect(URL + "synonyms/" + w.getText()).timeout(10 * 1000).get();
+//			long begin = System.currentTimeMillis();
+			doc = Jsoup.connect(URL + "synonyms/" + searchW).timeout(10 * 1000).get();
+			System.out.println(URL + "synonyms/" + searchW);
+//			long end = System.currentTimeMillis();
+//			System.out.println("duration: " + String.valueOf((end-begin)));
 
 			String wordform = getWordformFromPOSTag(w.getPOSTag());
 
@@ -55,17 +62,34 @@ public class SynonymCrawler {
 					if (box != null) {
 						Elements syns = box.select("li.syn");
 
+						ArrayList<SynonymCrawlerThread> threads = new ArrayList<>();
+						
+//						long begin2 = System.currentTimeMillis();
+						
 						for (int j = 0; j < syns.size(); j++) {
-							String link = syns.get(j).select("a").attr("href");
-							String text = syns.get(j).select("a").text();
 
-							String posTag = getPOStag(link, w.getText());
-							//pos tag "" if "text" is synonym of w but w is no synonym of "text"
-							if(!posTag.equals("")){
-								Word syn = new Word(text, posTag);
-								synonyms.add(syn);
+							final String link = syns.get(j).select("a").attr("href");
+							final String text = syns.get(j).select("a").text();
+
+							SynonymCrawlerThread t = (new SynonymCrawler()).new SynonymCrawlerThread(text, link, w);
+							t.run();
+							threads.add(t);
+						}
+						
+						for (int j= 0; j< threads.size(); j++){
+							try {
+								threads.get(j).join();
+								Word syn = threads.get(j).getSyn();
+								if(syn != null){
+									synonyms.add(syn);
+								}
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							}
 						}
+						
+//						long end2 = System.currentTimeMillis();
 					}
 				}
 			}
@@ -190,6 +214,36 @@ public class SynonymCrawler {
 			return ADV;
 		} else {
 			return "";
+		}
+	}
+	
+	public class SynonymCrawlerThread extends Thread{
+		private Word syn;
+		private Word w;
+		private String text;
+		private String link;
+		
+		public SynonymCrawlerThread(String text, String link, Word w){
+			this.w = w;
+			this.text = text;
+			this.link = link;
+		}
+		
+		public void run() {
+			String posTag = getPOStag(link, w.getText());
+			// pos tag "" if "text" is synonym of w but
+			// w is no synonym of "text"
+			if (!posTag.equals("")) {
+				syn = new Word(text, posTag);
+			}
+		}
+
+		public Word getSyn() {
+			return syn;
+		}
+
+		public void setSyn(Word syn) {
+			this.syn = syn;
 		}
 	}
 }
