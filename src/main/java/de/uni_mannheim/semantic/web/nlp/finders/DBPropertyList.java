@@ -1,6 +1,9 @@
 package de.uni_mannheim.semantic.web.nlp.finders;
 
+import de.uni_mannheim.semantic.web.crawl.SynonymCrawler;
 import de.uni_mannheim.semantic.web.info.DBPedia;
+import de.uni_mannheim.semantic.web.nlp.Word;
+
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdf.model.RDFNode;
@@ -41,18 +44,21 @@ public class DBPropertyList {
         return props;
     }
 
-    public List<String> findPropertyFor(String s) {
-        List<String> tries = new ArrayList<String>();
-        List<String> res = new ArrayList<String>();
+    public List<String> findPropertyFor(Word s) {
+        List<Word> tries = new ArrayList<>();
+        List<String> res = new ArrayList<>();
 
-        if(findingHints.containsKey(s))
-            tries = new ArrayList<String>(Arrays.asList(findingHints.get(s)));
+//        if(findingHints.containsKey(s))
+//            tries = new ArrayList<String>(Arrays.asList(findingHints.get(s)));
 
+        //crawls Synonyms
+        tries = SynonymCrawler.findSynonyms(s);
+        
         tries.add(s);
 
         for(String prop : props.keySet()) {
-            for(String search: tries) {
-                if(prop.contains(search)) {
+            for(Word search: tries) {
+                if(prop.contains(search.getText())) {
                     List<String> result = props.get(prop);
                     res.addAll(result);
                 }

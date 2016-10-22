@@ -45,12 +45,20 @@ public class HowParser extends GenericParser {
 
 		pl.fetchProperties();
 
-		String search;
-
+//		String search;
+//
+//		if(subType == HowParserType.Property) {
+//			search = w1.getText();
+//		} else {
+//			search = _sentence.getVerbs().get(0).getStem();
+//		}
+		
+		Word search;
+		
 		if(subType == HowParserType.Property) {
-			search = w1.getText();
+			search = w1;
 		} else {
-			search = _sentence.getVerbs().get(0).getStem();
+			search = _sentence.getVerbs().get(0);
 		}
 
 		List<String> prop = pl.findPropertyFor(search);
