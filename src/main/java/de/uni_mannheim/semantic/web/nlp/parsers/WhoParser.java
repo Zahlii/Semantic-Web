@@ -25,6 +25,9 @@ public class WhoParser extends GenericParser {
 			DBPropertyList pl = new DBPropertyList(w.getResource());
 			pl.fetchProperties();
 			
+			if(_sentence.getVerbs().size() == 0)
+				return answers;
+				
 			String search = _sentence.getVerbs().get(0).getStem();
 	
 			List<String> prop = pl.findPropertyFor(search);

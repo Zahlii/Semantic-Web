@@ -3,6 +3,7 @@ package de.uni_mannheim.semantic.web;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -64,7 +65,7 @@ public class EvaluationFramework {
 						}
 						
 						ArrayList<String> answerUris = new ArrayList<>();
-						NodeList answers = eElement.getElementsByTagName("answers");
+						NodeList answers = eElement.getElementsByTagName("answer");
 						for (int j = 0; j < answers.getLength(); j++) {
 							answerUris.add(answers.item(j).getTextContent());
 						}
@@ -96,23 +97,91 @@ public class EvaluationFramework {
 		}
 	}
 	
+	public static Double getAvg(ArrayList<Double> values){
+		Double sum = 0.0;
+		for (int i = 0; i < values.size(); i++) {
+			sum += values.get(i);
+		}
+		return sum / values.size();
+	}
+	
+	public static Double computeFMeasure(ArrayList<String> answers, ArrayList<String> expectedAnswers){
+		Double fmeasure = 0.0;
+		Double recall = 0.0;
+		Double precision = 0.0;
+		Double correct = 0.0;
+		
+		for (int j = 0; j < answers.size(); j++) {
+//			for (int k = 0; k < trainingSet.get(i).getAnswer().getQueryResult().size(); k++) {
+//				if(trainingSet.get(i).getAnswer().getQueryResult().get(k).equals(answers.get(j))){
+//					correct++;
+//				}
+//			}
+			if(expectedAnswers.contains(answers.get(j)))
+				correct++;
+		}
+		
+		recall = correct / expectedAnswers.size();
+		precision = (answers.size() > 0) ? correct / answers.size() : 0.0;
+		
+		fmeasure = (precision + recall > 0) ? (2 * precision * recall) / (precision + recall) : 0.0;
+
+		return fmeasure;
+	}
+	
 	public static void evaluateParser(LinkedDataAnswerer answerer){
 		EvaluationFramework.loadDataSet();
-		
+		ArrayList<Double> fmeasuresTraining = new ArrayList<>();
+		ArrayList<Double> fmeasuresTest = new ArrayList<>();
+
 		for (int i = 0; i < trainingSet.size(); i++) {
 			ArrayList<String> answers = new ArrayList<String>();
 			
-			if(trainingSet.get(i).getQuestion().getQuestion().contains("Who"))
+			if(trainingSet.get(i).getQuestion().getQuestion().contains("Who")){
+				System.out.println("Question: " + trainingSet.get(i).getQuestion().getQuestion());
+	//			System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getAnswer().getQueryResult().toArray(new String[0])));
+	
 				answers = answerer.train(trainingSet.get(i).getQuestion(), trainingSet.get(i).getAnswer());
-		
-			if(answers != null){
-				for (int j = 0; j < answers.size(); j++) {
-					System.out.println(answers.get(j));
+			
+				if(answers != null){
+					System.out.println("Given Answer: " + Arrays.toString(answers.toArray(new String[0])));
+
+					Double f = computeFMeasure(answers, trainingSet.get(i).getAnswer().getQueryResult());
+					System.out.println("F1: "+String.valueOf(f));
+					fmeasuresTraining.add(f);
+				} else {
+					fmeasuresTraining.add(0.0);
+					System.out.println("F1: 0.0");
+	
 				}
 			}
 		}
 		
-		//Test schleife
+		for (int i = 0; i < testSet.size(); i++) {
+			ArrayList<String> answers = new ArrayList<String>();
+			
+			if(testSet.get(i).getQuestion().getQuestion().contains("Who")){
+				System.out.println("Question: " + testSet.get(i).getQuestion().getQuestion());
+	//			System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getAnswer().getQueryResult().toArray(new String[0])));
+	
+				answers = answerer.test(testSet.get(i).getQuestion());
+			
+				if(answers != null){
+					System.out.println("Given Answer: " + Arrays.toString(answers.toArray(new String[0])));
+
+					Double f = computeFMeasure(answers, testSet.get(i).getAnswer().getQueryResult());
+					System.out.println("F1: "+String.valueOf(f));
+					fmeasuresTest.add(f);
+				} else {
+					fmeasuresTest.add(0.0);
+					System.out.println("F1: 0.0");
+	
+				}
+			}
+		}
+		
+		System.out.println("Training F-Measure Avg: "+getAvg(fmeasuresTraining));
+		System.out.println("Test F-Measure Avg: "+getAvg(fmeasuresTest));
 	}
 	
 	public static void main(String[] args){

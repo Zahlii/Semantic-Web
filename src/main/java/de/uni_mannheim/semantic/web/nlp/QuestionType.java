@@ -20,6 +20,7 @@ public enum QuestionType {
 	How_many("How many"), // followed by indicator for number
 	Does("Does","Is","Do","Was","Did","Are"), // followed by RESOURCE
 	How(HowParser.class, "How"),
+//	Who_is(WhoParser.class, "Who is","Who was","Who were"), // followed by DESCRIPTION or RESOURCE
 	Who(WhoParser.class, "Who"); 
 	
 	private final String[] _alternatives;
