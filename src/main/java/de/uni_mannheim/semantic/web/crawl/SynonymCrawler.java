@@ -22,7 +22,7 @@ public class SynonymCrawler {
 
 	public static void main(String[] args) {
 		Word w = new Word("high", "JJ");
-		ArrayList<Word> list = SynonymCrawler.findSynonyms(w);
+		ArrayList<String> list = SynonymCrawler.findSynonyms(w);
 
 		for (int i = 0; i < list.size(); i++) {
 			System.out.println(list.get(i).toString());
@@ -35,9 +35,9 @@ public class SynonymCrawler {
 	 * @param w
 	 * @return list with synonyms
 	 */
-	public static ArrayList<Word> findSynonyms(Word w) {
+	public static ArrayList<String> findSynonyms(Word w) {
 
-		final ArrayList<Word> synonyms = new ArrayList<>();
+		final ArrayList<String> synonyms = new ArrayList<>();
 
 		String searchW = w.getText().replace(" ", "_");
 		Document doc;
@@ -71,23 +71,24 @@ public class SynonymCrawler {
 							final String link = syns.get(j).select("a").attr("href");
 							final String text = syns.get(j).select("a").text();
 
-							SynonymCrawlerThread t = (new SynonymCrawler()).new SynonymCrawlerThread(text, link, w);
-							t.run();
-							threads.add(t);
+							synonyms.add(text);
+//							SynonymCrawlerThread t = (new SynonymCrawler()).new SynonymCrawlerThread(text, link, w);
+//							t.run();
+//							threads.add(t);
 						}
 						
-						for (int j= 0; j< threads.size(); j++){
-							try {
-								threads.get(j).join();
-								Word syn = threads.get(j).getSyn();
-								if(syn != null){
-									synonyms.add(syn);
-								}
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
+//						for (int j= 0; j< threads.size(); j++){
+//							try {
+//								threads.get(j).join();
+//								Word syn = threads.get(j).getSyn();
+//								if(syn != null){
+//									synonyms.add(syn);
+//								}
+//							} catch (InterruptedException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
+//						}
 						
 //						long end2 = System.currentTimeMillis();
 					}
@@ -230,12 +231,14 @@ public class SynonymCrawler {
 		}
 		
 		public void run() {
-			String posTag = getPOStag(link, w.getText());
-			// pos tag "" if "text" is synonym of w but
-			// w is no synonym of "text"
-			if (!posTag.equals("")) {
-				syn = new Word(text, posTag);
-			}
+//			String posTag = getPOStag(link, w.getText());
+//			// pos tag "" if "text" is synonym of w but
+//			// w is no synonym of "text"
+//			if (!posTag.equals("")) {
+//				syn = new Word(text, posTag);
+//			}
+			
+			
 		}
 
 		public Word getSyn() {

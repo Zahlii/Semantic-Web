@@ -2,6 +2,7 @@ package de.uni_mannheim.semantic.web.nlp.finders;
 
 import de.uni_mannheim.semantic.web.crawl.SynonymCrawler;
 import de.uni_mannheim.semantic.web.info.DBPedia;
+import de.uni_mannheim.semantic.web.nlp.TextAnalyzer;
 import de.uni_mannheim.semantic.web.nlp.Word;
 
 import org.apache.jena.query.QuerySolution;
@@ -45,7 +46,7 @@ public class DBPropertyList {
     }
 
     public List<String> findPropertyFor(Word s) {
-        List<Word> tries = new ArrayList<>();
+        List<String> tries = new ArrayList<>();
         List<String> res = new ArrayList<>();
 
 //        if(findingHints.containsKey(s))
@@ -54,11 +55,11 @@ public class DBPropertyList {
         //crawls Synonyms
         tries = SynonymCrawler.findSynonyms(s);
         
-        tries.add(s);
+        tries.add(s.getText());
 
         for(String prop : props.keySet()) {
-            for(Word search: tries) {
-                if(prop.contains(search.getStem())) {
+            for(String search: tries) {
+                if(prop.contains(TextAnalyzer.Stemmer.stem(search))) {
                     List<String> result = props.get(prop);
                     res.addAll(result);
                 }
