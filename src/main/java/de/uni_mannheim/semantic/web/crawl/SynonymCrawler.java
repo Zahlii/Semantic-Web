@@ -44,7 +44,7 @@ public class SynonymCrawler {
 		try {
 //			long begin = System.currentTimeMillis();
 			doc = Jsoup.connect(URL + "synonyms/" + searchW).timeout(10 * 1000).get();
-			System.out.println(URL + "synonyms/" + searchW);
+//			System.out.println(URL + "synonyms/" + searchW);
 //			long end = System.currentTimeMillis();
 //			System.out.println("duration: " + String.valueOf((end-begin)));
 
