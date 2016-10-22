@@ -110,18 +110,17 @@ public class EvaluationFramework {
 		Double recall = 0.0;
 		Double precision = 0.0;
 		Double correct = 0.0;
+		Double expectedSize = (double) expectedAnswers.size();
 		
 		for (int j = 0; j < answers.size(); j++) {
-//			for (int k = 0; k < trainingSet.get(i).getAnswer().getQueryResult().size(); k++) {
-//				if(trainingSet.get(i).getAnswer().getQueryResult().get(k).equals(answers.get(j))){
-//					correct++;
-//				}
-//			}
-			if(expectedAnswers.contains(answers.get(j)))
+			if(expectedAnswers.contains(answers.get(j))){
+				expectedAnswers.remove(answers.get(j));
 				correct++;
+			}
+			
 		}
 		
-		recall = correct / expectedAnswers.size();
+		recall = correct / expectedSize;
 		precision = (answers.size() > 0) ? correct / answers.size() : 0.0;
 		
 		fmeasure = (precision + recall > 0) ? (2 * precision * recall) / (precision + recall) : 0.0;
@@ -134,12 +133,13 @@ public class EvaluationFramework {
 		ArrayList<Double> fmeasuresTraining = new ArrayList<>();
 		ArrayList<Double> fmeasuresTest = new ArrayList<>();
 
+		System.out.println("Start training: ");
 		for (int i = 0; i < trainingSet.size(); i++) {
 			ArrayList<String> answers = new ArrayList<String>();
 			
-			if(trainingSet.get(i).getQuestion().getQuestion().contains("Who")){
+			if(trainingSet.get(i).getQuestion().getQuestion().contains("How")){
 				System.out.println("Question: " + trainingSet.get(i).getQuestion().getQuestion());
-	//			System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getAnswer().getQueryResult().toArray(new String[0])));
+				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getAnswer().getQueryResult().toArray(new String[0])));
 	
 				answers = answerer.train(trainingSet.get(i).getQuestion(), trainingSet.get(i).getAnswer());
 			
@@ -150,17 +150,18 @@ public class EvaluationFramework {
 					System.out.println("F1: "+String.valueOf(f));
 					fmeasuresTraining.add(f);
 				} else {
-					fmeasuresTraining.add(0.0);
+					fmeasuresTraining.add(new Double(0.0));
 					System.out.println("F1: 0.0");
 	
 				}
 			}
 		}
 		
+		System.out.println("Start test: ");
 		for (int i = 0; i < testSet.size(); i++) {
 			ArrayList<String> answers = new ArrayList<String>();
 			
-			if(testSet.get(i).getQuestion().getQuestion().contains("Who")){
+			if(testSet.get(i).getQuestion().getQuestion().contains("")){
 				System.out.println("Question: " + testSet.get(i).getQuestion().getQuestion());
 	//			System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getAnswer().getQueryResult().toArray(new String[0])));
 	
@@ -173,7 +174,7 @@ public class EvaluationFramework {
 					System.out.println("F1: "+String.valueOf(f));
 					fmeasuresTest.add(f);
 				} else {
-					fmeasuresTest.add(0.0);
+					fmeasuresTest.add(new Double(0.0));
 					System.out.println("F1: 0.0");
 	
 				}

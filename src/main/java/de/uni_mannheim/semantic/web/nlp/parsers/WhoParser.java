@@ -13,10 +13,10 @@ public class WhoParser extends GenericParser {
 
 	@Override
 	protected ArrayList<String> parseInternal() throws Exception {
-		System.out.println(_sentence);
+//		System.out.println(_sentence);
 		
-		if(_sentence.get(0).equals("is") || _sentence.get(0).equals("was"))
-			System.out.println(_sentence.removeToken(0));
+//		if(_sentence.get(0).equals("is") || _sentence.get(0).equals("was"))
+//			System.out.println(_sentence.removeToken(0));
 		
 		Word w = _sentence.findEntity();
 		
@@ -28,27 +28,17 @@ public class WhoParser extends GenericParser {
 			if(_sentence.getVerbs().size() == 0)
 				return answers;
 				
-			String search = _sentence.getVerbs().get(0).getStem();
+			Word search = _sentence.getVerbs().get(0);
 	
 			List<String> prop = pl.findPropertyFor(search);
 	
+			ArrayList<String> validTypes = new ArrayList<>();
+			validTypes.add("http://dbpedia.org/ontology/Organisation");
+			validTypes.add("http://dbpedia.org/ontology/Person");
+
 			for (int i = 0; i < prop.size(); i++) {
-				if(prop.get(i).matches("http:.*")){
-					ArrayList<String> types = DBPedia.getTypeOfResource(prop.get(i));
-					
-					boolean validType = false;
-					for (String type : types) {
-						if(type.equals("http://dbpedia.org/ontology/Organisation")){
-							validType = true;
-							break;
-						}
-						else if(type.equals("http://dbpedia.org/ontology/Person")){
-							validType = true;
-							break;
-						}
-					}
-					
-					if(validType)
+				if(!answers.contains(prop.get(i))){
+					if(isValidType(prop.get(i), validTypes))
 						answers.add(prop.get(i));
 				}
 			}

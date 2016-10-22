@@ -54,7 +54,6 @@ public class HowParser extends GenericParser {
 //		}
 		
 		Word search;
-		
 		if(subType == HowParserType.Property) {
 			search = w1;
 		} else {
@@ -62,13 +61,26 @@ public class HowParser extends GenericParser {
 		}
 
 		List<String> prop = pl.findPropertyFor(search);
+		
+		ArrayList<String> answers = new ArrayList<>();
+		ArrayList<String> validTypes = new ArrayList<>();
+//		validTypes.add("http://dbpedia.org/ontology/Organisation");
+//		validTypes.add("http://dbpedia.org/ontology/Person");
 
-		System.out.println(_sentence);
+		for (int i = 0; i < prop.size(); i++) {
+			prop.set(i, prop.get(i).replaceAll("\\^\\^.*", ""));
+			if(!answers.contains(prop.get(i))){
+				if(isValidType(prop.get(i), validTypes))
+					answers.add(prop.get(i));
+			}
+		}
+		
+//		System.out.println(_sentence);
 
-		System.out.print("\t");
-		System.out.println(prop);
+//		System.out.print("\t");
+//		System.out.println(prop);
 
-		return null;
+		return answers;
 	}
 
 
