@@ -58,7 +58,7 @@ public class DBPropertyList {
 
         for(String prop : props.keySet()) {
             for(Word search: tries) {
-                if(prop.contains(search.getText())) {
+                if(prop.contains(search.getStem())) {
                     List<String> result = props.get(prop);
                     res.addAll(result);
                 }
