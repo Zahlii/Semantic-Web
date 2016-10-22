@@ -50,14 +50,4 @@ public class Question {
 		this.id = id;
 	}
 
-	public Answer getAnswer() {
-		return answer;
-	}
-
-	public void setAnswer(Answer answer) {
-		this.answer = answer;
-	}
-	
-	
-	
 }
