@@ -18,7 +18,7 @@ public class SynonymCrawler {
 	private static final String URL = "http://www.synonym.com/";
 
 	public static void main(String[] args) {
-		Word w = new Word("high", "JJ");
+		Word w = new Word("tall", "JJ");
 		ArrayList<Word> list = SynonymCrawler.findSynonyms(w);
 
 		for (int i = 0; i < list.size(); i++) {
