@@ -1,5 +1,6 @@
 package de.uni_mannheim.semantic.web.nlp;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import de.uni_mannheim.semantic.web.helpers.TextHelper;
@@ -67,6 +68,12 @@ public class Word {
 	private int _end;
 	private int _index;
 	private double _probability = 0;
+	
+	public Word(String text, String posTag){
+		this._text = text;
+		this._posTag = posTag;
+		this._stem = TextAnalyzer.Stemmer.stem(text);
+	}
 
 	public Word(Span span, String text, int index) {
 		this._index = index;
