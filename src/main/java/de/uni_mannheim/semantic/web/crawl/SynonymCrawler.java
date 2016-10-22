@@ -39,7 +39,7 @@ public class SynonymCrawler {
 		String searchW = w.getText().replace(" ", "_");
 		Document doc;
 		try {
-			doc = Jsoup.connect(URL + "synonyms/" + w.getText()).get();
+			doc = Jsoup.connect(URL + "synonyms/" + w.getText()).timeout(10 * 1000).get();
 
 			String wordform = getWordformFromPOSTag(w.getPOSTag());
 
@@ -89,7 +89,7 @@ public class SynonymCrawler {
 	private static String getPOStag(String link, String word) {
 		Document doc = null;
 		try {
-			doc = Jsoup.connect(URL + link).get();
+			doc = Jsoup.connect(URL + link).timeout(10 * 1000).get();
 
 			Elements boxes = doc.select(".row.result");
 
