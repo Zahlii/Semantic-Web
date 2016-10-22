@@ -10,7 +10,8 @@ public class Sentence implements Comparable<Sentence> {
 	private QuestionType type;
 	private NGram _mainNGram;
 	private String _originalText;
-
+	private ArrayList<String> answers;
+	
 	public Sentence(String _text) {
 		_originalText = _text;
 
@@ -23,8 +24,7 @@ public class Sentence implements Comparable<Sentence> {
 			POSTagTokens();
 			lemmatizeTokens();
 			
-			
-			type.startParsing(this);
+			this.setAnswers(type.startParsing(this));
 
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -189,5 +189,13 @@ public class Sentence implements Comparable<Sentence> {
 				v.add(w);
 		}
 		return v;
+	}
+
+	public ArrayList<String> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(ArrayList<String> answers) {
+		this.answers = answers;
 	}
 }

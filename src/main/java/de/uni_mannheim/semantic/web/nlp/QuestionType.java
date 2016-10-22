@@ -1,6 +1,10 @@
 package de.uni_mannheim.semantic.web.nlp;
 
 import de.uni_mannheim.semantic.web.nlp.parsers.HowParser;
+import de.uni_mannheim.semantic.web.nlp.parsers.WhoParser;
+
+import java.util.ArrayList;
+
 import de.uni_mannheim.semantic.web.nlp.parsers.GenericParser;
 
 public enum QuestionType {
@@ -11,11 +15,12 @@ public enum QuestionType {
 	When_is("When is","When was","When were","When did"), // followed by RESOURCE
 	What_is("What is","What was","What were","What are"), // followed by PREDICATE? 
 	Where_is("Where is","Where was","Where were"), // followed by PREDICATE? 
-	Who("Who"), // followed by predicate
+//	Who("Who"), // followed by predicate
 	When("When"), // Followed by 
 	How_many("How many"), // followed by indicator for number
 	Does("Does","Is","Do","Was","Did","Are"), // followed by RESOURCE
-	How(HowParser.class, "How"); 
+	How(HowParser.class, "How"),
+	Who(WhoParser.class, "Who"); 
 	
 	private final String[] _alternatives;
 	private final Class<? extends GenericParser> _parse;
@@ -52,11 +57,11 @@ public enum QuestionType {
 		return text;
 	}
 
-	public void startParsing(Sentence s) throws Exception {
+	public ArrayList<String> startParsing(Sentence s) throws Exception {
 		if(_parse != null) {
 			try {
 				GenericParser p = _parse.newInstance();
-				p.parse(s);
+				return p.parse(s);
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -65,5 +70,6 @@ public enum QuestionType {
 				e.printStackTrace();
 			}
 		}
+		return null;
 	}
 }

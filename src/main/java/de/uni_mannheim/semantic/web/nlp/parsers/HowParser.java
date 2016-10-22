@@ -3,8 +3,11 @@ package de.uni_mannheim.semantic.web.nlp.parsers;
 import de.uni_mannheim.semantic.web.nlp.Word;
 import de.uni_mannheim.semantic.web.nlp.finders.DBPropertyList;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+//import com.github.andrewoma.dexx.collection.ArrayList;
 
 public class HowParser extends GenericParser {
 
@@ -16,7 +19,7 @@ public class HowParser extends GenericParser {
 	private HowParserType subType;
 	
 	@Override
-	protected void parseInternal() throws Exception {
+	protected ArrayList<String> parseInternal() throws Exception {
 
 		
 		Word w1 = _sentence.get(0); 
@@ -57,7 +60,7 @@ public class HowParser extends GenericParser {
 		System.out.print("\t");
 		System.out.println(prop);
 
-
+		return null;
 	}
 
 

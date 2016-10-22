@@ -104,6 +104,21 @@ public class DBPedia {
 
 		return properties;
 	}
+	
+	public static ArrayList<String> getTypeOfResource(String resource){
+		ArrayList<String> ret = new ArrayList<>();
+
+		String se = ("select ?type where{<RESOURCE> a ?type.}\r\n").replaceAll("RESOURCE", resource);
+
+		ResultSet r = DBPedia.query(se);
+		while (r.hasNext()) {
+			QuerySolution s = r.next();
+			String p = s.get("type").toString();
+			ret.add(p);
+		}
+
+		return ret;
+	}
 
 	public static ArrayList<String> checkClassRelationExists(String obj1, OntologyClass obj2) {
 		ArrayList<String> relations = new ArrayList<>();
