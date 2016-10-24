@@ -137,8 +137,8 @@ public class EvaluationFramework {
 		for (int i = 0; i < trainingSet.size(); i++) {
 			ArrayList<String> answers = new ArrayList<String>();
 			
-			if(trainingSet.get(i).getQuestion().getQuestion().contains("How")){
-				System.out.println("Question: " + trainingSet.get(i).getQuestion().getQuestion());
+			if(trainingSet.get(i).getQuestion().getQuestion().contains("Who")){
+				System.out.println("Question: " + trainingSet.get(i).getQuestion().getQuestion() + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
 				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getAnswer().getQueryResult().toArray(new String[0])));
 	
 				answers = answerer.train(trainingSet.get(i).getQuestion(), trainingSet.get(i).getAnswer());
@@ -161,7 +161,7 @@ public class EvaluationFramework {
 		for (int i = 0; i < testSet.size(); i++) {
 			ArrayList<String> answers = new ArrayList<String>();
 			
-			if(testSet.get(i).getQuestion().getQuestion().contains("")){
+			if(testSet.get(i).getQuestion().getQuestion().contains("Who")){
 				System.out.println("Question: " + testSet.get(i).getQuestion().getQuestion());
 	//			System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getAnswer().getQueryResult().toArray(new String[0])));
 	

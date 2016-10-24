@@ -21,13 +21,13 @@ import de.uni_mannheim.semantic.web.domain.DBPediaResource;
 
 public class DBPediaLookup {
 
-//	public static void main(String[] args) {
-//		DBPediaLookup db = new DBPediaLookup();
-//		ArrayList<DBPediaResource> r = db.findDBPediaResource("Facebook");
-//		for (int i = 0; i < r.size(); i++) {
-//			System.out.println(r.get(i));
-//		}
-//	}
+	public static void main(String[] args) {
+		DBPediaLookup db = new DBPediaLookup();
+		ArrayList<DBPediaResource> r = db.findDBPediaResource("formula one racer");
+		for (int i = 0; i < r.size(); i++) {
+			System.out.println(r.get(i));
+		}
+	}
 
 	/**
 	 * searches in dbpedia lookup for resources and returns them
@@ -51,7 +51,6 @@ public class DBPediaLookup {
 
 			Element e = doc.getDocumentElement();
 			NodeList nl = e.getElementsByTagName("result");
-			System.out.println(nl.getLength());
 			if (nl != null) {
 				for (int i = 0; i < nl.getLength(); i++) {
 					Element el = (Element) nl.item(i);
