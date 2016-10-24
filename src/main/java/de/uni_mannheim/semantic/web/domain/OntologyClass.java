@@ -1,4 +1,4 @@
-package de.uni_mannheim.semantic.web.crawl;
+package de.uni_mannheim.semantic.web.domain;
 
 import java.util.ArrayList;
 

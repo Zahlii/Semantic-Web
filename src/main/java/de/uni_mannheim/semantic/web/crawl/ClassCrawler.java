@@ -8,6 +8,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import de.uni_mannheim.semantic.web.domain.OntologyClass;
+import de.uni_mannheim.semantic.web.domain.Property;
+
 public class ClassCrawler {
 	private static String classLink = "http://mappings.dbpedia.org/server/ontology/classes/";
 

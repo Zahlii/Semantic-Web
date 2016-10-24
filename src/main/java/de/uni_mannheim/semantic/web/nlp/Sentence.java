@@ -198,4 +198,45 @@ public class Sentence implements Comparable<Sentence> {
 	public void setAnswers(ArrayList<String> answers) {
 		this.answers = answers;
 	}
+
+	public ArrayList<Word> getAdjectives() {
+		ArrayList<Word> adjs = new ArrayList<Word>();
+
+		for(Word w : _mainNGram) {
+			if(w.getPOSTag().startsWith("JJ"))
+				adjs.add(w);
+		}
+		return adjs;
+	}
+	
+	public ArrayList<Word> getAdverbs(){
+		ArrayList<Word> advs = new ArrayList<Word>();
+
+		for(Word w : _mainNGram) {
+			if(w.getPOSTag().startsWith("RB"))
+				advs.add(w);
+		}
+		return advs;
+	}
+	
+	public ArrayList<Word> getNouns(){
+		ArrayList<Word> advs = new ArrayList<Word>();
+
+		for(Word w : _mainNGram) {
+			if(w.getPOSTag().matches("NNS?"))
+				advs.add(w);
+		}
+		return advs;
+	}
+	
+	public ArrayList<Word> getProperNouns(){
+		ArrayList<Word> propNouns = new ArrayList<Word>();
+		
+		for(Word w : _mainNGram){
+			if(w.getPOSTag().matches("NNPS?")){
+				propNouns.add(w);
+			}
+		}
+		return propNouns;
+	}
 }

@@ -15,8 +15,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import de.uni_mannheim.semantic.web.crawl.OntologyClass;
-import de.uni_mannheim.semantic.web.crawl.Property;
+import de.uni_mannheim.semantic.web.domain.OntologyClass;
+import de.uni_mannheim.semantic.web.domain.Property;
 import de.uni_mannheim.semantic.web.helpers.TextHelper;
 
 public class DBPedia {
