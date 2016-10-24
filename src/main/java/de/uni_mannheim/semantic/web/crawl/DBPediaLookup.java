@@ -38,6 +38,7 @@ public class DBPediaLookup {
 	public static ArrayList<DBPediaResource> findDBPediaResource(String charSeq) {
 		ArrayList<DBPediaResource> dbpediaResources = new ArrayList<>();
 
+		charSeq = charSeq.replace(" ", "%20");
 		try {
 			String xml = Jsoup.connect("http://lookup.dbpedia.org/api/search/KeywordSearch?QueryString=" + charSeq)
 					.get().toString();
