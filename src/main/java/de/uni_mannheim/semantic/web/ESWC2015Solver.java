@@ -54,18 +54,18 @@ public class ESWC2015Solver {
 				// qald-5_trian.xml
 				String query =	eElement.getElementsByTagName("string").item(0).getTextContent();
 
-
-				Sentence s = new Sentence(query);
+System.out.println(query);
+				//Sentence s = new Sentence(query);
 				
-				if(s.getType() != null)
-					sen.add(s);
+				//if(s.getType() != null)
+				//	sen.add(s);
 			}
 		}
 		
 		sen.sort(null);
 		
 		for(Sentence si : sen) {
-			System.out.println(si.getType() + " -> " + si.getText());
+			//System.out.println(si.getType() + " -> " + si.getText());
 		}
 	}
 
