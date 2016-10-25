@@ -23,7 +23,8 @@ public class DBPropertyList {
 
 
         ResultSet s = DBPedia.query("SELECT ?p ?o WHERE {\n" +
-                "<"+this._resource+"> ?p ?o.\n" +
+                "{<"+this._resource+"> ?p ?o.}\n" +
+                "UNION {?o ?p <"+this._resource+"> .}\n" +
                 "}");
 
         while(s.hasNext()) {

@@ -26,9 +26,9 @@ public class ESWC2015Solver {
 		ESWC2015Solver e = new ESWC2015Solver();
 		// e.loadXMLData("test_set.xml");
 		// e.loadXMLData("training_set.xml");
-		e.loadXMLData(System.getProperty("user.dir") + "/data/qald-5_train.xml");
+		//e.loadXMLData(System.getProperty("user.dir") + "/data/qald-5_train.xml");
 
-		 //Sentence s = new Sentence("In which country does the Ganges start?");
+		Sentence s = new Sentence("Who wrote The Hunger Games?");
 	}
 
 	public void loadXMLData(String fileName) throws ParserConfigurationException, SAXException, IOException {
