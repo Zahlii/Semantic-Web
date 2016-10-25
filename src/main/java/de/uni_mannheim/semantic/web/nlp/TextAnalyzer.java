@@ -27,21 +27,21 @@ public class TextAnalyzer {
 
 	static {
 		try {
-			InputStream modelInTokens = new FileInputStream("en-token.bin");
+			InputStream modelInTokens = new FileInputStream("./data/models/en-token.bin");
 			final TokenizerModel tokenModel = new TokenizerModel(modelInTokens);
 			modelInTokens.close();
 			Tokenizer = new TokenizerME(tokenModel);
 
-			InputStream modelInParser = new FileInputStream("en-parser-chunking.bin");
+			InputStream modelInParser = new FileInputStream("./data/models/en-parser-chunking.bin");
 			final ParserModel parseModel = new ParserModel(modelInParser);
 			modelInParser.close();
 
-			InputStream modelInPos = new FileInputStream("en-pos-maxent.bin");
+			InputStream modelInPos = new FileInputStream("./data/models/en-pos-maxent.bin");
 			final POSModel posModel = new POSModel(modelInPos);
 			Tagger = new POSTaggerME(posModel);
 			modelInPos.close();
 
-			InputStream is = new FileInputStream("en-lemmatizer.dict");
+			InputStream is = new FileInputStream("./data/models/en-lemmatizer.dict");
 			Lemmatizer = new SimpleLemmatizer(is);
 			is.close();
 
