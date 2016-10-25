@@ -49,7 +49,7 @@ public enum QuestionType {
 		return false;
 	}
 	
-	public String remove(String text) {
+	public String removeFromQuestion(String text) {
 		for(String s : _alternatives) {
 			if(text.startsWith(s))
 				return text.replace(s, "").trim();

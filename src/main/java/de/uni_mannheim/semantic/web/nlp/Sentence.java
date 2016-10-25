@@ -41,7 +41,7 @@ public class Sentence implements Comparable<Sentence> {
 		for(QuestionType t : QuestionType.values()) {
 			if(t.matches(_originalText)) {
 				type = t;
-				_originalText = t.remove(_originalText);
+				_originalText = t.removeFromQuestion(_originalText);
 				return;
 			}
 		}
