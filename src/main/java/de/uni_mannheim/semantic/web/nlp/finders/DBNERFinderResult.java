@@ -2,8 +2,8 @@ package de.uni_mannheim.semantic.web.nlp.finders;
 
 public class DBNERFinderResult {
 
-	public String endPage;
-	public String redirectionStartPage;
+	private String endPage;
+	private String redirectionStartPage;
 
 	public DBNERFinderResult(String x, String y) {
 		endPage = x;
@@ -18,4 +18,7 @@ public class DBNERFinderResult {
 		return this.getSimilarityRelevantPage().replaceAll("http://dbpedia.org/resource/", "");
 	}
 
+    public String getPage() {
+        return endPage;
+    }
 }

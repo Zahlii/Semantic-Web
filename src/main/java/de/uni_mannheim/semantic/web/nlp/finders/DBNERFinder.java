@@ -60,7 +60,7 @@ public class DBNERFinder {
 
 			if (probability >= 0.9) {	
 				//System.out.println("Found " + dbTitle.endPage + " with probability " + probability + "(Term: "+title+")");
-				Word m = _sentence.mergeNGramEntity(ngram, dbTitle.endPage, probability);
+				Word m = _sentence.mergeNGramEntity(ngram, dbTitle.getPage(), probability);
 				return m;
 			}
 		} 
