@@ -6,9 +6,9 @@ import java.io.IOException;
 
 public class SearchTest {
     public static void main(String[] args) throws IOException, ParseException {
-        Search s = new Search();
+        Search s = new Search("yago");
 
-        s.search("Politician");
+        s.search("German~ cities~");
 
     }
 }

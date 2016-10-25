@@ -13,33 +13,42 @@ import org.apache.lucene.index.*;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.store.*;
 
 public class Search {
 
+    private String name;
     private StandardAnalyzer analyzer;
     private Directory index;
     private IndexWriterConfig config;
     private IndexWriter writer;
     private IndexReader reader;
     private IndexSearcher searcher;
+    private QueryParser qp;
 
-    public TopDocs search(String term) throws IOException {
+    public TopDocs search(String term) throws IOException, ParseException {
 
-        Query fuzzyQuery = new FuzzyQuery(new Term("title", term), 2);
+        Query q = qp.parse(term);
 
         // 3. search
-        int hitsPerPage = 10;
+        int hitsPerPage = 100;
         reader = DirectoryReader.open(index);
         searcher = new IndexSearcher(reader);
 
-        TopDocs docs = searcher.search(fuzzyQuery, hitsPerPage);
+
+
+        long startTime = System.nanoTime();
+
+
+        TopDocs docs = searcher.search(q, hitsPerPage);
+
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime)/1000000;
+
         ScoreDoc[] hits = docs.scoreDocs;
 
         // 4. display results
-        System.out.println("Found " + hits.length + " hits.");
+        System.out.println("Found " + hits.length + " hits ["+duration+"ms].");
         for (int i = 0; i < hits.length; ++i) {
             int docId = hits[i].doc;
             Document d = searcher.doc(docId);
@@ -50,15 +59,16 @@ public class Search {
         return docs;
     }
 
-    public Search() throws IOException, ParseException {
+    public Search(String name) throws IOException, ParseException {
+        this.name = name;
+
         analyzer = new StandardAnalyzer();
 
-        // 1. create the index
-        index = new RAMDirectory();
-
+        index = new SimpleFSDirectory(Paths.get("./data/lucene/"+name));
         config = new IndexWriterConfig(analyzer);
-
         writer = new IndexWriter(index, config);
+        qp = new QueryParser("title",analyzer);
+        qp.setDefaultOperator(QueryParser.Operator.AND);
     }
 
     public void addTerm(String title, String indexed_field) throws IOException {
@@ -76,7 +86,7 @@ public class Search {
         writer.addDocument(doc);
     }
 
-    public void closeWriter() throws IOException {
+    public void saveIndex() throws IOException {
         writer.close();
     }
 }

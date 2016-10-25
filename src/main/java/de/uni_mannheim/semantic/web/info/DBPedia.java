@@ -52,7 +52,7 @@ public class DBPedia {
 				+ title;
 		Document doc;
 		try {
-			doc = Jsoup.connect(url).get();
+			doc = Jsoup.connect(url).timeout(20000).get();
 			Elements s = doc.select("Result URI");
 
 			if (s.size() > 1)

@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -15,7 +14,6 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
 import de.uni_mannheim.semantic.web.helpers.TextHelper;
-import de.uni_mannheim.semantic.web.info.DBPedia_MySQL;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 public class TTLReader {
@@ -25,7 +23,7 @@ public class TTLReader {
 		File f = new File("D:\\Downloads\\yagoTypes.ttl");
 
 
-		Search db = new Search();
+		//Search db = new Search("yago");
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
@@ -41,6 +39,8 @@ public class TTLReader {
 		while ((l = in.readLine()) != null) {
 			i++;
 
+			//if(i>1000)
+			//	break;
 
 			if (!l.contains("rdf:type"))
 				continue;
@@ -66,35 +66,14 @@ public class TTLReader {
 
 		System.out.println(items.size());
 
-		ArrayList<Tuple<String, String>> data = new ArrayList<Tuple<String, String>>();
-
 		for (String x : items) {
-			//System.out.println(x);
-			db.addTerm(x.replace("Wikicat", ""),x.replace(" ",""));
-			//data.add(new Tuple<String, String>(x, x.replace("Wikicat", "")));
+			if(x.contains("United States"))
+				System.out.println(x);
+			//db.addTerm(x.replace("Wikicat", "").trim(),x.replace(" ",""));
 		}
 
-		System.out.println(new Date().toString() + " | " + i + " Finished parsing");
+		//db.saveIndex();
 
-		db.closeWriter();
-
-		db.search("German");
-
-		//DBPedia_MySQL.insertCategories(data);
-		System.out.println(new Date().toString() + " | " + i + " Finished saving");
-
-		/*
-		 * model.read(in,null,"TTL");
-		 * 
-		 * Query query = QueryFactory.
-		 * create("SELECT ?type WHERE { ?x rdfs:type ?type } LIMIT 1");
-		 * 
-		 * // Execute the query and obtain results QueryExecution qe =
-		 * QueryExecutionFactory.create(query, model); ResultSet results =
-		 * qe.execSelect();
-		 * 
-		 * if(results.hasNext()) { QuerySolution s = results.next();
-		 * System.out.println(s); }
-		 */
+		//db.search("German");
 	}
 }

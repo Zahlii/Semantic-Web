@@ -2,8 +2,8 @@ package de.uni_mannheim.semantic.web.stanford_nlp;
 
 import de.uni_mannheim.semantic.web.helpers.Levenshtein;
 import de.uni_mannheim.semantic.web.info.DBPedia;
-import de.uni_mannheim.semantic.web.nlp.QuestionType;
 import de.uni_mannheim.semantic.web.nlp.finders.DBNERFinderResult;
+
 import edu.stanford.nlp.io.IOUtils;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
@@ -35,9 +35,6 @@ public class StanfordSentence {
 	private String basicText;
 	private List<String> currentTokens;
 	private String cleanedText;
-
-	private String NERText;
-
 	private Annotation annotatedDocument;
 	private CoreMap annotatedSentence;
 	private List<CoreLabel> annotatedWords;
@@ -45,25 +42,19 @@ public class StanfordSentence {
 
 
 	private HashMap<String,String> resourceMap = new HashMap<String,String>();
-	private QuestionType type;
 
-	private StanfordSentence(String text) throws Exception {
+	private StanfordSentence(String text) {
 		this.basicText = text;
-
-		extractQuestionType();
-
-
 		this.cleanedText = basicText.replaceAll("(\\.|\\?)$","");
-
-
-		this.NERText = this.cleanedText;
 
 		replaceNextEntity(0);
 
 		basicAnnotate();
 	}
 
+
 	private static StanfordCoreNLP pipelineBasic;
+	private static StanfordCoreNLP pipelineDepparse;
 
 	public static void main(String[] args) throws Exception {
 
@@ -81,40 +72,23 @@ public class StanfordSentence {
 
 		int i=0;
 		for(String s : parts) {
-			if(i++ > 20)
+			if(i++ > 15)
 				break;
 			new StanfordSentence(s);
 		}
 	}
-	public QuestionType getType() {
-		return type;
-	}
-
-	private void extractQuestionType() throws Exception {
-		for(QuestionType t : QuestionType.values()) {
-			if(t.matches(basicText)) {
-
-				type = t;
-				basicText = t.removeFromQuestion(basicText);
-				return;
-			}
-		}
-
-		throw new Exception("Malformed or unknown question " + this.basicText);
-	}
-	
 
 	private void basicAnnotate() {
+		//basicText = basicText.replaceAll("(Who|What|Which|How|Where|When)","").trim();
 
 		annotatedDocument = new Annotation(cleanedText);
 		pipelineBasic.annotate(annotatedDocument);
 
 		System.out.println("================================================");
-		System.out.println("TYPE: " + type);
-		System.out.println("TEXT: " + basicText);
-		System.out.println("ENTITIES: "+ NERText);
+		System.out.println(basicText);
+		System.out.println("\t"+ cleanedText);
 
-		System.out.println("ENTITIY MAP: "+ resourceMap);
+		System.out.println("\t"+ resourceMap);
 
 		annotatedSentence = annotatedDocument.get(CoreAnnotations.SentencesAnnotation.class).get(0);
 		annotatedWords = annotatedSentence.get(CoreAnnotations.TokensAnnotation.class);
@@ -131,7 +105,7 @@ public class StanfordSentence {
 			return;
 
 		final int max = 5;
-		this.currentTokens = Arrays.asList(this.NERText.split(" "));
+		this.currentTokens = Arrays.asList(this.cleanedText.split(" "));
 		int l = currentTokens.size();
 
 		for(int size=max;size>=1;size--) {
@@ -200,7 +174,7 @@ public class StanfordSentence {
 
 		if(sr.wasFound()) {
 			String var = "Variable" + resourceMap.size();
-			NERText = NERText.replace(content.toString().trim(),var);
+			cleanedText = cleanedText.replace(content.toString().trim(),var);
 			resourceMap.put(var,sr.getRes());
 			return true;
 		}
