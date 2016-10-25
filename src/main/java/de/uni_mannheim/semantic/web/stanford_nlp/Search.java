@@ -54,23 +54,29 @@ public class Search {
         analyzer = new StandardAnalyzer();
 
         // 1. create the index
-        index = FSDirectory.open(Paths.get("index.lucene"));
+        index = new RAMDirectory();
 
-        //config = new IndexWriterConfig(analyzer);
+        config = new IndexWriterConfig(analyzer);
 
-        //writer = new IndexWriter(index, config);
+        writer = new IndexWriter(index, config);
     }
 
-    public void close() throws IOException {
-        reader.close();
-        //writer.close();
-    }
     public void addTerm(String title, String indexed_field) throws IOException {
+
+        title = title.trim();
+        indexed_field = indexed_field.trim();
+
+        //System.out.println(title+ " | " + indexed_field);
+
         Document doc = new Document();
         doc.add(new TextField("title", title, Field.Store.YES));
 
         // use a string field for isbn because we don't want it tokenized
         doc.add(new StringField("yago_name", indexed_field, Field.Store.YES));
         writer.addDocument(doc);
+    }
+
+    public void closeWriter() throws IOException {
+        writer.close();
     }
 }

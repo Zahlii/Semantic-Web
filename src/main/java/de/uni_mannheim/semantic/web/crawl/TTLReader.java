@@ -76,9 +76,9 @@ public class TTLReader {
 
 		System.out.println(new Date().toString() + " | " + i + " Finished parsing");
 
-		//db.close();
+		db.closeWriter();
 
-		db.search("Politician");
+		db.search("German");
 
 		//DBPedia_MySQL.insertCategories(data);
 		System.out.println(new Date().toString() + " | " + i + " Finished saving");
