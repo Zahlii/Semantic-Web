@@ -35,6 +35,10 @@ public class TTLReader {
 
 		while ((l = in.readLine()) != null) {
 			i++;
+
+			if(i>100)
+				break;
+
 			if (!l.contains("rdf:type"))
 				continue;
 
@@ -66,7 +70,8 @@ public class TTLReader {
 		}
 
 		System.out.println(new Date().toString() + " | " + i + " Finished parsing");
-		DBPedia_MySQL.insertCategories(data);
+		System.out.println(data);
+		//DBPedia_MySQL.insertCategories(data);
 		System.out.println(new Date().toString() + " | " + i + " Finished saving");
 
 		/*
