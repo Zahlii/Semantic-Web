@@ -1,19 +1,16 @@
 package de.uni_mannheim.semantic.web.stanford_nlp;
 
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.StanfordNLP;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaCategoryLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaResourceLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
-import edu.stanford.nlp.io.IOUtils;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.IndexedWord;
-import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
-import edu.stanford.nlp.util.PropertiesUtils;
 
 
 import java.util.*;
@@ -28,13 +25,15 @@ public class StanfordSentence {
 	private SemanticGraph graph;
 	private QuestionType type;
 	private ArrayList<Word> words;
-	private DBPediaResourceLookup dbpedia;
+
+	public DBPediaResourceLookup dbpediaResource;
+	public DBPediaCategoryLookup dbpediaCategory;
 
 
 
 	public static void main(String[] args) throws Exception {
 
-		StanfordSentence s = new StanfordSentence("How tall is Michael Jordan?");
+		StanfordSentence s = new StanfordSentence("Give me all cosmonauts.");
 		System.out.println("Answers: " + s.getAnswers());
 
 		//s = new StanfordSentence("Who produces Orangina?");
@@ -47,14 +46,14 @@ public class StanfordSentence {
 
 		extractQuestionType();
 
-		dbpedia = new DBPediaResourceLookup(this);
-
+		dbpediaResource = new DBPediaResourceLookup(this);
+		dbpediaCategory = new DBPediaCategoryLookup(this);
 
 		basicAnnotate();
 	}
 
 	public LookupResult<String> findEntity() {
-		LookupResult<String> res = dbpedia.findOneIn(0,words.size()-1);
+		LookupResult<String> res = dbpediaResource.findOneIn(0,words.size()-1);
 		return res;
 	}
 
@@ -77,8 +76,8 @@ public class StanfordSentence {
 
 		System.out.println("================================================");
 		System.out.println(basicText);
-		System.out.println("\t"+ dbpedia.getText());
-		System.out.println("\t"+dbpedia.getResults());
+		System.out.println("\t"+ dbpediaResource.getText());
+		System.out.println("\t"+ dbpediaResource.getResults());
 
 		annotatedWords = annotatedSentence.get(CoreAnnotations.TokensAnnotation.class);
 
@@ -135,7 +134,7 @@ public class StanfordSentence {
 		cleanedText = cleanedText.replace(w.getText(),"").trim();
 		annotatedWords.remove(index);
 		words.remove(index);
-		dbpedia.constructTokens();
+		dbpediaResource.constructTokens();
 		return w;
 	}
 

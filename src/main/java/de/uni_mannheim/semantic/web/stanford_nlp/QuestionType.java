@@ -1,5 +1,6 @@
 package de.uni_mannheim.semantic.web.stanford_nlp;
 
+import de.uni_mannheim.semantic.web.stanford_nlp.parsers.GiveMeParser;
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.HowParser;
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.WhoParser;
 
@@ -9,7 +10,7 @@ import de.uni_mannheim.semantic.web.stanford_nlp.parsers.GenericParser;
 
 public enum QuestionType {
 	Which("In which","To which","For which","Which","Through which"), // followed by CLASS
-	Give_me_all("Give me all","Give me a list of all","Show me all","List the","List all"), // Followed by DESCRIPTION or CLASS
+	Give_me_all(GiveMeParser.class,"Give me all","Give me a list of all","Show me all","List the","List all"), // Followed by DESCRIPTION or CLASS
 	Give_me_the("Give me"), // Followed by OBJECT
 	Who_is(WhoParser.class,"Who is","Who was","Who were"), // followed by DESCRIPTION or RESOURCE
 	When_is("When is","When was","When were","When did"), // followed by RESOURCE

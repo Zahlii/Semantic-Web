@@ -2,6 +2,7 @@ package de.uni_mannheim.semantic.web.stanford_nlp.lookup;
 
 import de.uni_mannheim.semantic.web.stanford_nlp.StanfordSentence;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -43,13 +44,19 @@ public abstract class AbstractLookup<E extends LookupResult> {
         constructTokens();
     }
 
-    public void findAll() {
+    public List<E> findAll() {
+        List<E> r = new ArrayList<E>();
+
         for(int i=0;i<2;i++) {
             E res = findOneIn(0,this.currentTokens.size()-1);
             if(res.getStatus() == LookupStatus.NOT_FOUND) {
-                return;
+                return r;
+            } else {
+                r.add(res);
             }
         }
+
+        return r;
     }
 
     public E findOneIn(int start, int end) {

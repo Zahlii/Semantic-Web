@@ -57,4 +57,8 @@ public class LookupResult<E> {
     public void setStatus(LookupStatus status) {
         this.status = status;
     }
+
+    public void setCertainty(double certainty) {
+        this.certainty = certainty;
+    }
 }
