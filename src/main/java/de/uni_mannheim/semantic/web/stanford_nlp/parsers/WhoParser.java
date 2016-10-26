@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_mannheim.semantic.web.nlp.Word;
-import de.uni_mannheim.semantic.web.nlp.finders.DBPropertyList;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaPropertyFetcher;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 
 public class WhoParser extends GenericParser {
@@ -22,7 +22,7 @@ public class WhoParser extends GenericParser {
 		ArrayList<String> answers = new ArrayList<>();
 		
 		if(w != null){
-			DBPropertyList pl = new DBPropertyList(w.getResult());
+			DBPediaPropertyFetcher pl = new DBPediaPropertyFetcher(w.getResult());
 			pl.fetchProperties();
 			
 //			if(_sentence.getVerbs().size() == 0)

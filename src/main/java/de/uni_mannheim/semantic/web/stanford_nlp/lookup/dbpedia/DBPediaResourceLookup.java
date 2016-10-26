@@ -1,8 +1,10 @@
-package de.uni_mannheim.semantic.web.stanford_nlp.lookup;
+package de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia;
 
 import de.uni_mannheim.semantic.web.crawl.DBPediaWrapper;
-import de.uni_mannheim.semantic.web.nlp.finders.DBNERFinderResult;
 import de.uni_mannheim.semantic.web.stanford_nlp.StanfordSentence;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.AbstractLookup;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupStatus;
 
 
 public class DBPediaResourceLookup extends AbstractLookup {
@@ -41,7 +43,7 @@ public class DBPediaResourceLookup extends AbstractLookup {
     }
 
     private LookupResult<String> sparqlLookup(String title) {
-        DBNERFinderResult found = DBPediaWrapper.sparqlSearch(title);
+        DBPediaSPARQLLookupResult found = DBPediaWrapper.sparqlSearch(title);
 
         LookupResult<String> res;
 

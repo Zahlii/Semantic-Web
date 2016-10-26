@@ -1,7 +1,7 @@
 package de.uni_mannheim.semantic.web.stanford_nlp;
 
 import de.uni_mannheim.semantic.web.nlp.Word;
-import de.uni_mannheim.semantic.web.stanford_nlp.lookup.DBPediaResourceLookup;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaResourceLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 import edu.stanford.nlp.io.IOUtils;
 import edu.stanford.nlp.ling.CoreAnnotations;
@@ -113,9 +113,7 @@ public class StanfordSentence {
 
 		words = new ArrayList<>(annotatedWords.size());
 		for(CoreLabel w : annotatedWords) {
-			String text = w.get(CoreAnnotations.TextAnnotation.class);
-			String pos = w.get(CoreAnnotations.PartOfSpeechAnnotation.class);
-			words.add(new Word(text,pos));
+			words.add(new Word(w));
 		}
 
 		graph = annotatedSentence.get(SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation.class);

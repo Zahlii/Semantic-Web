@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-import de.uni_mannheim.semantic.web.nlp.finders.DBNERFinderResult;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaSPARQLLookupResult;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -15,8 +15,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import de.uni_mannheim.semantic.web.domain.OntologyClass;
-import de.uni_mannheim.semantic.web.domain.Property;
+import de.uni_mannheim.semantic.web.crawl.model.OntologyClass;
+import de.uni_mannheim.semantic.web.crawl.model.Property;
 import de.uni_mannheim.semantic.web.helpers.TextHelper;
 
 public class DBPediaWrapper {
@@ -65,7 +65,7 @@ public class DBPediaWrapper {
 		return null;
 	}
 
-	public static DBNERFinderResult sparqlSearch(String title) {
+	public static DBPediaSPARQLLookupResult sparqlSearch(String title) {
 
 		// we dont want categories, but we want possible redirection targets. we
 		// don't want disambiguations either!
@@ -80,7 +80,7 @@ public class DBPediaWrapper {
 			QuerySolution s = r.next();
 			String x = s.get("x").toString();
 			String y = s.contains("y") ? s.get("y").toString() : null;
-			return new DBNERFinderResult(x, y);
+			return new DBPediaSPARQLLookupResult(x, y);
 		}
 
 		return null;

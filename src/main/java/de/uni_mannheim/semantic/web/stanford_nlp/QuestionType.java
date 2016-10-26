@@ -1,6 +1,5 @@
 package de.uni_mannheim.semantic.web.stanford_nlp;
 
-import de.uni_mannheim.semantic.web.nlp.Sentence;
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.HowParser;
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.WhoParser;
 

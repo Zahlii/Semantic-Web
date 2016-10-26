@@ -15,16 +15,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.mysql.cj.core.exceptions.MysqlErrorNumbers;
-import com.mysql.cj.fabric.exceptions.MySQLFabricException;
-
 import de.uni_mannheim.semantic.web.answerer.LinkedDataAnswerer;
 import de.uni_mannheim.semantic.web.answerer.Siri;
 import de.uni_mannheim.semantic.web.domain.Answer;
 import de.uni_mannheim.semantic.web.domain.QASet;
 import de.uni_mannheim.semantic.web.domain.Question;
-import de.uni_mannheim.semantic.web.nlp.Sentence;
-import edu.stanford.nlp.parser.metrics.Eval;
 
 public class EvaluationFramework {
 	public static final String trainingFile = "/data/qald-5_train.xml";

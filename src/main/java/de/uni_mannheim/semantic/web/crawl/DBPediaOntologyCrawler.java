@@ -10,9 +10,8 @@ import java.util.ArrayList;
 
 import org.sqlite.Function;
 
-import de.uni_mannheim.semantic.web.crawl.OntologyClassCrawler;
-import de.uni_mannheim.semantic.web.domain.OntologyClass;
-import de.uni_mannheim.semantic.web.domain.Property;
+import de.uni_mannheim.semantic.web.crawl.model.OntologyClass;
+import de.uni_mannheim.semantic.web.crawl.model.Property;
 import de.uni_mannheim.semantic.web.helpers.Levenshtein;
 
 public class DBPediaOntologyCrawler {

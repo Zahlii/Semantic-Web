@@ -3,7 +3,6 @@ package de.uni_mannheim.semantic.web.stanford_nlp.parsers;
 import java.util.ArrayList;
 
 import de.uni_mannheim.semantic.web.crawl.DBPediaWrapper;
-import de.uni_mannheim.semantic.web.nlp.Sentence;
 import de.uni_mannheim.semantic.web.stanford_nlp.StanfordSentence;
 
 public abstract class GenericParser {

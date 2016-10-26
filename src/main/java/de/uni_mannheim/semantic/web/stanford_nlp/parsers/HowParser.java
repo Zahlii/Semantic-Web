@@ -1,7 +1,7 @@
 package de.uni_mannheim.semantic.web.stanford_nlp.parsers;
 
 import de.uni_mannheim.semantic.web.nlp.Word;
-import de.uni_mannheim.semantic.web.nlp.finders.DBPropertyList;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaPropertyFetcher;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class HowParser extends GenericParser {
 		if(w == null)
 			throw new Exception("Unable to find entity.");
 
-		DBPropertyList pl = new DBPropertyList(w.getResult());
+		DBPediaPropertyFetcher pl = new DBPediaPropertyFetcher(w.getResult());
 
 		pl.fetchProperties();
 
