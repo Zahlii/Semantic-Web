@@ -1,4 +1,4 @@
-package de.uni_mannheim.semantic.web.stanford_nlp.helpers;
+package de.uni_mannheim.semantic.web.stanford_nlp.helpers.text;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

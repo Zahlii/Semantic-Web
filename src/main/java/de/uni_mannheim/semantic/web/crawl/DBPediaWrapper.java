@@ -17,7 +17,7 @@ import org.jsoup.select.Elements;
 
 import de.uni_mannheim.semantic.web.crawl.model.OntologyClass;
 import de.uni_mannheim.semantic.web.crawl.model.Property;
-import de.uni_mannheim.semantic.web.stanford_nlp.helpers.TextHelper;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.text.TextHelper;
 
 public class DBPediaWrapper {
 	private static final String endpoint = "http://dbpedia.org/sparql";

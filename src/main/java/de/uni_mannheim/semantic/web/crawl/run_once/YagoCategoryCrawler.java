@@ -8,11 +8,11 @@ import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.HashSet;
 
-import de.uni_mannheim.semantic.web.stanford_nlp.helpers.TextSearch;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.text.IndexedTextWriter;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
-import de.uni_mannheim.semantic.web.stanford_nlp.helpers.TextHelper;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.text.TextHelper;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 public class YagoCategoryCrawler {
@@ -22,7 +22,7 @@ public class YagoCategoryCrawler {
 		File f = new File("D:\\Downloads\\yagoTypes.ttl");
 
 
-		TextSearch db = new TextSearch("yago");
+		IndexedTextWriter db = new IndexedTextWriter("yago");
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 

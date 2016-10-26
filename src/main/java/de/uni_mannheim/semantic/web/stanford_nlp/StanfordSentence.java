@@ -35,7 +35,7 @@ public class StanfordSentence {
 	public static void main(String[] args) throws Exception {
 
 		StanfordSentence s = new StanfordSentence("How tall is Michael Jordan?");
-		System.out.println(s.getAnswers());
+		System.out.println("Answers: " + s.getAnswers());
 
 		//s = new StanfordSentence("Who produces Orangina?");
 		//System.out.println(s.getAnswers());
