@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -126,17 +127,18 @@ public class EvaluationFramework {
 	public static void evaluateParser(LinkedDataAnswerer answerer){
 		EvaluationFramework.loadDataSet();
 		ArrayList<Double> fmeasuresTraining = new ArrayList<>();
-		ArrayList<Double> fmeasuresTest = new ArrayList<>();
+		//ArrayList<Double> fmeasuresTest = new ArrayList<>();
 
 		System.out.println("Start training: ");
-		for (int i = 0; i < trainingSet.size(); i++) {
-			ArrayList<String> answers = new ArrayList<String>();
+		for (int i = 0; i < 1/*trainingSet.size()*/; i++) {
 
-			if(trainingSet.get(i).getQuestion().getQuestion().contains("Who")){
-				System.out.println("Question: " + trainingSet.get(i).getQuestion().getQuestion() + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
+			String q = trainingSet.get(i).getQuestion().getQuestion();
+
+			if(q.contains("Who") || q.contains("Give me")){
+				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
 				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getAnswer().getQueryResult().toArray(new String[0])));
 
-				answers = answerer.train(trainingSet.get(i).getQuestion(), trainingSet.get(i).getAnswer());
+				ArrayList<String> answers = answerer.train(trainingSet.get(i).getQuestion(), trainingSet.get(i).getAnswer());
 
 				if(answers != null){
 					System.out.println("Given Answer: " + Arrays.toString(answers.toArray(new String[0])));
@@ -152,9 +154,8 @@ public class EvaluationFramework {
 			}
 		}
 
-		System.out.println("Start test: ");
+		/*System.out.println("Start test: ");
 		for (int i = 0; i < testSet.size(); i++) {
-			ArrayList<String> answers = new ArrayList<String>();
 
 			if(testSet.get(i).getQuestion().getQuestion().contains("Who")){
 				System.out.println("Question: " + testSet.get(i).getQuestion().getQuestion());
@@ -174,10 +175,10 @@ public class EvaluationFramework {
 
 				}
 			}
-		}
+		}*/
 		
 		System.out.println("Training F-Measure Avg: "+getAvg(fmeasuresTraining));
-		System.out.println("Test F-Measure Avg: "+getAvg(fmeasuresTest));
+		//System.out.println("Test F-Measure Avg: "+getAvg(fmeasuresTest));
 	}
 
 	public static void main(String[] args){
