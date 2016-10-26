@@ -1,4 +1,4 @@
-package de.uni_mannheim.semantic.web.crawl;
+package de.uni_mannheim.semantic.web.crawl.run_once;
 
 import java.io.IOException;
 import java.io.StringReader;

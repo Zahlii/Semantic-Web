@@ -1,7 +1,7 @@
 package de.uni_mannheim.semantic.web.stanford_nlp.lookup;
 
 
-import de.uni_mannheim.semantic.web.helpers.Levenshtein;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.Levenshtein;
 
 public class LookupResult<E> {
     private E result;

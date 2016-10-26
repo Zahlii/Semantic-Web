@@ -1,4 +1,4 @@
-package de.uni_mannheim.semantic.web.stanford_nlp;
+package de.uni_mannheim.semantic.web.stanford_nlp.helpers;
 
 
 import java.io.IOException;
@@ -25,6 +25,7 @@ public class TextSearch {
     private IndexReader reader;
     private IndexSearcher searcher;
     private QueryParser qp;
+
 
     public TopDocs search(String term) throws IOException, ParseException {
 

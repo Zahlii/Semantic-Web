@@ -1,6 +1,7 @@
 package de.uni_mannheim.semantic.web.stanford_nlp;
 
-import de.uni_mannheim.semantic.web.nlp.Word;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.StanfordNLP;
+import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaResourceLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 import edu.stanford.nlp.io.IOUtils;
@@ -17,20 +18,11 @@ import edu.stanford.nlp.util.PropertiesUtils;
 
 import java.util.*;
 
-/**
- * A demo illustrating how to call the OpenIE system programmatically. You can
- * call this code with:
- *
- * <pre>
- *   java -mx1g -cp stanford-openie.jar:stanford-openie-models.jar edu.stanford.nlp.naturalli.StanfordSentence
- * </pre>
- *
- */
+
 public class StanfordSentence {
 
 	private String basicText;
 	private String cleanedText;
-	private Annotation annotatedDocument;
 	private CoreMap annotatedSentence;
 	private List<CoreLabel> annotatedWords;
 	private SemanticGraph graph;
@@ -38,35 +30,16 @@ public class StanfordSentence {
 	private ArrayList<Word> words;
 	private DBPediaResourceLookup dbpedia;
 
-	private static StanfordCoreNLP pipelineBasic;
+
 
 	public static void main(String[] args) throws Exception {
-
-		String text = IOUtils.slurpFile("./data/questions.txt");
-		String[] parts = text.split("\r\n");
-
-		Properties props = PropertiesUtils.asProperties("annotators",
-				"tokenize, ssplit, pos, lemma, depparse");
-
-		props.setProperty("tokenize.options", "ptb3Escaping=false");
-
-		pipelineBasic = new StanfordCoreNLP(props);
 
 		StanfordSentence s = new StanfordSentence("How tall is Michael Jordan?");
 		System.out.println(s.getAnswers());
 
-		s = new StanfordSentence("Who produces Orangina?");
-		System.out.println(s.getAnswers());
-
-		/*
-		int i=0;
-		for(String s : parts) {
-			if(i++ > 15)
-				break;
-			new StanfordSentence(s);
-		}*/
+		//s = new StanfordSentence("Who produces Orangina?");
+		//System.out.println(s.getAnswers());
 	}
-
 
 	public StanfordSentence(String text) throws Exception {
 		this.basicText = text;
@@ -100,15 +73,13 @@ public class StanfordSentence {
 	private void basicAnnotate() {
 		//basicText = basicText.replaceAll("(Who|What|Which|How|Where|When)","").trim();
 
-		annotatedDocument = new Annotation(cleanedText);
-		pipelineBasic.annotate(annotatedDocument);
+		annotatedSentence = StanfordNLP.handle(cleanedText);
 
 		System.out.println("================================================");
 		System.out.println(basicText);
 		System.out.println("\t"+ dbpedia.getText());
 		System.out.println("\t"+dbpedia.getResults());
 
-		annotatedSentence = annotatedDocument.get(CoreAnnotations.SentencesAnnotation.class).get(0);
 		annotatedWords = annotatedSentence.get(CoreAnnotations.TokensAnnotation.class);
 
 		words = new ArrayList<>(annotatedWords.size());

@@ -17,9 +17,9 @@ import org.xml.sax.SAXException;
 
 import de.uni_mannheim.semantic.web.answerer.LinkedDataAnswerer;
 import de.uni_mannheim.semantic.web.answerer.Siri;
-import de.uni_mannheim.semantic.web.domain.Answer;
-import de.uni_mannheim.semantic.web.domain.QASet;
-import de.uni_mannheim.semantic.web.domain.Question;
+import de.uni_mannheim.semantic.web.stanford_nlp.model.Answer;
+import de.uni_mannheim.semantic.web.stanford_nlp.model.QASet;
+import de.uni_mannheim.semantic.web.stanford_nlp.model.Question;
 
 public class EvaluationFramework {
 	public static final String trainingFile = "/data/qald-5_train.xml";

@@ -2,8 +2,8 @@ package de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia;
 
 import de.uni_mannheim.semantic.web.crawl.SynonymCrawler;
 import de.uni_mannheim.semantic.web.crawl.DBPediaWrapper;
-import de.uni_mannheim.semantic.web.nlp.TextAnalyzer;
-import de.uni_mannheim.semantic.web.nlp.Word;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.StanfordNLP;
+import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
 
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
@@ -60,7 +60,7 @@ public class DBPediaPropertyFetcher {
 
         for(String prop : props.keySet()) {
             for(String search: tries) {
-                if(prop.contains(TextAnalyzer.Stemmer.stem(search))) {
+                if(prop.contains(search) && !prop.contains("/wiki")) {
                     List<String> result = props.get(prop);
                     res.addAll(result);
                 }

@@ -1,4 +1,4 @@
-package de.uni_mannheim.semantic.web.helpers;
+package de.uni_mannheim.semantic.web.stanford_nlp.helpers;
 
 import java.util.*;
 

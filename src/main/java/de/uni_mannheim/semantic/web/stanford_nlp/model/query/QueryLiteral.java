@@ -1,4 +1,4 @@
-package de.uni_mannheim.semantic.web.query;
+package de.uni_mannheim.semantic.web.stanford_nlp.model.query;
 
 public class QueryLiteral implements QueryItem {
 	private String _literal;

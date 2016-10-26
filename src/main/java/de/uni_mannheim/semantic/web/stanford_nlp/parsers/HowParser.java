@@ -1,6 +1,6 @@
 package de.uni_mannheim.semantic.web.stanford_nlp.parsers;
 
-import de.uni_mannheim.semantic.web.nlp.Word;
+import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaPropertyFetcher;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 

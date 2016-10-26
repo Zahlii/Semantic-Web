@@ -2,14 +2,12 @@ package de.uni_mannheim.semantic.web.crawl;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import de.uni_mannheim.semantic.web.nlp.Word;
+import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
 
 public class SynonymCrawler {
 

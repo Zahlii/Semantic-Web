@@ -1,4 +1,4 @@
-package de.uni_mannheim.semantic.web.crawl;
+package de.uni_mannheim.semantic.web.crawl.run_once;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,11 +8,11 @@ import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.HashSet;
 
-import de.uni_mannheim.semantic.web.stanford_nlp.TextSearch;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.TextSearch;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
-import de.uni_mannheim.semantic.web.helpers.TextHelper;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.TextHelper;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 public class YagoCategoryCrawler {

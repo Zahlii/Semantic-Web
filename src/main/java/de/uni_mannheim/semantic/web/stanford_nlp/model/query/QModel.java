@@ -1,4 +1,4 @@
-package de.uni_mannheim.semantic.web.query;
+package de.uni_mannheim.semantic.web.stanford_nlp.model.query;
 
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;

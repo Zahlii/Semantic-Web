@@ -1,4 +1,4 @@
-package de.uni_mannheim.semantic.web.crawl;
+package de.uni_mannheim.semantic.web.crawl.run_once;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,7 +12,7 @@ import org.sqlite.Function;
 
 import de.uni_mannheim.semantic.web.crawl.model.OntologyClass;
 import de.uni_mannheim.semantic.web.crawl.model.Property;
-import de.uni_mannheim.semantic.web.helpers.Levenshtein;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.Levenshtein;
 
 public class DBPediaOntologyCrawler {
 
