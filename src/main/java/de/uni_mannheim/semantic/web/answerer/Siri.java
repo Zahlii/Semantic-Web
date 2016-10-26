@@ -12,7 +12,7 @@ public class Siri extends LinkedDataAnswerer{
 	public ArrayList<String> train(Question q, Answer a) {
 		Sentence s = new Sentence(q.getQuestion());
 		
-//		System.out.println(s.getType() + " -> " + s.getText());
+//		System.out.println(s.getType() + " -> " + s.getCleanedText());
 
 		return s.getAnswers();
 	}

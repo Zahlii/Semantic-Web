@@ -6,24 +6,23 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.HashSet;
 
-import de.uni_mannheim.semantic.web.stanford_nlp.Search;
+import de.uni_mannheim.semantic.web.stanford_nlp.TextSearch;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 
 import de.uni_mannheim.semantic.web.helpers.TextHelper;
 import org.apache.lucene.queryparser.classic.ParseException;
 
-public class TTLReader {
+public class YagoCategoryCrawler {
 
 	public static void main(String[] args) throws IOException, SQLException, ParseException {
 		Model model = ModelFactory.createDefaultModel();
 		File f = new File("D:\\Downloads\\yagoTypes.ttl");
 
 
-		//Search db = new Search("yago");
+		TextSearch db = new TextSearch("yago");
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
@@ -67,12 +66,10 @@ public class TTLReader {
 		System.out.println(items.size());
 
 		for (String x : items) {
-			if(x.contains("United States"))
-				System.out.println(x);
-			//db.addTerm(x.replace("Wikicat", "").trim(),x.replace(" ",""));
+			db.addTerm(x.replace("Wikicat", "").trim(),x.replace(" ",""));
 		}
 
-		//db.saveIndex();
+		db.saveIndex();
 
 		//db.search("German");
 	}

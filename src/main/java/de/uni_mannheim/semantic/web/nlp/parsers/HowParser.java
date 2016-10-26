@@ -48,7 +48,7 @@ public class HowParser extends GenericParser {
 //		String search;
 //
 //		if(subType == HowParserType.Property) {
-//			search = w1.getText();
+//			search = w1.getCleanedText();
 //		} else {
 //			search = _sentence.getVerbs().get(0).getStem();
 //		}

@@ -3,7 +3,7 @@ package de.uni_mannheim.semantic.web.query;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 
-import de.uni_mannheim.semantic.web.info.DBPedia;
+import de.uni_mannheim.semantic.web.crawl.DBPediaWrapper;
 
 public class QModel extends QVariable {
 
@@ -29,7 +29,7 @@ public class QModel extends QVariable {
 		text += "\r\n" + _appendOuter.toString();
 
 		System.out.println(text);
-		return DBPedia.query(text);
+		return DBPediaWrapper.query(text);
 	}
 
 	public static void main(String[] args) {

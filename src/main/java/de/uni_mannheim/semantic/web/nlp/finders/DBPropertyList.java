@@ -1,7 +1,7 @@
 package de.uni_mannheim.semantic.web.nlp.finders;
 
 import de.uni_mannheim.semantic.web.crawl.SynonymCrawler;
-import de.uni_mannheim.semantic.web.info.DBPedia;
+import de.uni_mannheim.semantic.web.crawl.DBPediaWrapper;
 import de.uni_mannheim.semantic.web.nlp.TextAnalyzer;
 import de.uni_mannheim.semantic.web.nlp.Word;
 
@@ -22,7 +22,7 @@ public class DBPropertyList {
     public Map<String,List<String>> fetchProperties() {
 
 
-        ResultSet s = DBPedia.query("SELECT ?p ?o WHERE {\n" +
+        ResultSet s = DBPediaWrapper.query("SELECT ?p ?o WHERE {\n" +
                 "{<"+this._resource+"> ?p ?o.}\n" +
                 "UNION {?o ?p <"+this._resource+"> .}\n" +
                 "}");

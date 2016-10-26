@@ -14,14 +14,14 @@ public class Levenshtein extends Function {
 
 		String t1 = value_text(0).toLowerCase();
 		String t2 = value_text(1).toLowerCase();
-		result(computeLevenshteinDistance(t1, t2));
+		result(distance(t1, t2));
 	}
 
 	private static int minimum(int a, int b, int c) {
 		return Math.min(Math.min(a, b), c);
 	}
 
-	public static int computeLevenshteinDistance(CharSequence lhs, CharSequence rhs) {
+	public static int distance(CharSequence lhs, CharSequence rhs) {
 		int[][] distance = new int[lhs.length() + 1][rhs.length() + 1];
 
 		for (int i = 0; i <= lhs.length(); i++)
@@ -35,5 +35,12 @@ public class Levenshtein extends Function {
 						distance[i - 1][j - 1] + ((lhs.charAt(i - 1) == rhs.charAt(j - 1)) ? 0 : 1));
 
 		return distance[lhs.length()][rhs.length()];
+	}
+
+	public static double normalized(CharSequence lhs, CharSequence rhs) {
+		int dist = distance(lhs,rhs);
+		int len = Math.max(lhs.length(),rhs.length());
+
+		return (double)dist / (double)len;
 	}
 }

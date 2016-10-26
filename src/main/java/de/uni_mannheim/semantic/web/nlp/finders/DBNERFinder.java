@@ -2,7 +2,7 @@ package de.uni_mannheim.semantic.web.nlp.finders;
 
 import java.util.List;
 
-import de.uni_mannheim.semantic.web.info.DBPedia;
+import de.uni_mannheim.semantic.web.crawl.DBPediaWrapper;
 import de.uni_mannheim.semantic.web.nlp.NGram;
 import de.uni_mannheim.semantic.web.nlp.Sentence;
 import de.uni_mannheim.semantic.web.nlp.Word;
@@ -53,7 +53,7 @@ public class DBNERFinder {
 		int s = ngram.size();
 
 
-		DBNERFinderResult dbTitle = DBPedia.checkTitleExists(title);
+		DBNERFinderResult dbTitle = DBPediaWrapper.sparqlSearch(title);
 
 		if (dbTitle != null) {
 			double probability = TextHelper.similarity(title, dbTitle.getSimilarityRelevantCleanedPage()) * s;

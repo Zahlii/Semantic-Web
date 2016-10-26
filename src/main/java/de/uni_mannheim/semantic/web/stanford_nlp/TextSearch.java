@@ -15,7 +15,7 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.*;
 
-public class Search {
+public class TextSearch {
 
     private String name;
     private StandardAnalyzer analyzer;
@@ -59,7 +59,7 @@ public class Search {
         return docs;
     }
 
-    public Search(String name) throws IOException, ParseException {
+    public TextSearch(String name) throws IOException, ParseException {
         this.name = name;
 
         analyzer = new StandardAnalyzer();

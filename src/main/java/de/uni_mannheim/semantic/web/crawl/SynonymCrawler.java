@@ -231,7 +231,7 @@ public class SynonymCrawler {
 		}
 		
 		public void run() {
-//			String posTag = getPOStag(link, w.getText());
+//			String posTag = getPOStag(link, w.getCleanedText());
 //			// pos tag "" if "text" is synonym of w but
 //			// w is no synonym of "text"
 //			if (!posTag.equals("")) {

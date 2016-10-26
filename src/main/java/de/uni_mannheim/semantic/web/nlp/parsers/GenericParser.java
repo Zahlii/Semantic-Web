@@ -2,8 +2,7 @@ package de.uni_mannheim.semantic.web.nlp.parsers;
 
 import java.util.ArrayList;
 
-import de.uni_mannheim.semantic.web.info.DBPedia;
-import de.uni_mannheim.semantic.web.nlp.QuestionType;
+import de.uni_mannheim.semantic.web.crawl.DBPediaWrapper;
 import de.uni_mannheim.semantic.web.nlp.Sentence;
 
 public abstract class GenericParser {
@@ -29,7 +28,7 @@ public abstract class GenericParser {
 		if(validTypes.size() == 0) return true;
 		
 		if(resource.matches("http:.*")){
-			ArrayList<String> types = DBPedia.getTypeOfResource(resource);
+			ArrayList<String> types = DBPediaWrapper.getTypeOfResource(resource);
 			
 			boolean validType = false;
 			for (String type : types) {

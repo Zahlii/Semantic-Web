@@ -31,7 +31,7 @@ public class TextHelper {
 		NormalizedLevenshtein l = new NormalizedLevenshtein();
 
 		return 1 - l.distance(s1, s2);
-		// int le = Levenshtein.computeLevenshteinDistance(s1,s2);
+		// int le = Levenshtein.distance(s1,s2);
 	}
 
 	public static String readFile(String path, Charset encoding) throws IOException {
