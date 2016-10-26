@@ -3368,7 +3368,7 @@ WHERE {
 <answers>
 <answer><![CDATA[http://dbpedia.org/resource/Nikken_Sekkei]]></answer>
 <!-- Also as correct counts:
-<answer><![CDATA[http://dbpedia.org/resource/César_Pelli]]></answer>
+<expectedAnswer><![CDATA[http://dbpedia.org/resource/César_Pelli]]></expectedAnswer>
 <-->
 </answers>
 </question>

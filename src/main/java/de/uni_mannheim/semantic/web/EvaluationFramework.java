@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import de.uni_mannheim.semantic.web.stanford_nlp.model.ExpectedAnswer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -18,7 +18,6 @@ import org.xml.sax.SAXException;
 
 import de.uni_mannheim.semantic.web.answerer.LinkedDataAnswerer;
 import de.uni_mannheim.semantic.web.answerer.Siri;
-import de.uni_mannheim.semantic.web.stanford_nlp.model.Answer;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.QASet;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.Question;
 
@@ -50,6 +49,11 @@ public class EvaluationFramework {
 						Element eElement = (Element) nNode;
 	
 						String id = eElement.getAttribute("id");
+
+						String onlyDbo = eElement.getAttribute("onlydbo");
+						if(onlyDbo.equals("false"))
+							continue;
+
 						String question = eElement.getElementsByTagName("string").item(0).getTextContent();
 						boolean answerable = true;
 						String query = "";
@@ -70,7 +74,7 @@ public class EvaluationFramework {
 						q.setId(Integer.parseInt(id));
 						q.setQuestion(question);
 						
-						Answer a = new Answer();
+						ExpectedAnswer a = new ExpectedAnswer();
 						a.setQuery(query);
 						a.setQueryResult(answerUris);
 						
@@ -101,12 +105,15 @@ public class EvaluationFramework {
 		return sum / values.size();
 	}
 
-	public static Double computeFMeasure(ArrayList<String> answers, ArrayList<String> expectedAnswers){
-		Double fmeasure = 0.0;
-		Double recall = 0.0;
-		Double precision = 0.0;
-		Double correct = 0.0;
-		Double expectedSize = (double) expectedAnswers.size();
+	public static double computeFMeasureForOneQuestion(ArrayList<String> answers, ArrayList<String> expectedAnswers){
+		System.out.println("Answers given: " + answers.size());
+		System.out.println("Answers expected: " + expectedAnswers.size());
+
+		double fmeasure = 0.0;
+		double recall = 0.0;
+		double precision = 0.0;
+		double correct = 0.0;
+		double expectedSize = (double) expectedAnswers.size();
 
 		for (int j = 0; j < answers.size(); j++) {
 			if(expectedAnswers.contains(answers.get(j))){
@@ -116,57 +123,54 @@ public class EvaluationFramework {
 
 		}
 
+		System.out.println("Correct answers: " + correct);
+
 		recall = correct / expectedSize;
 		precision = (answers.size() > 0) ? correct / answers.size() : 0.0;
 
+		System.out.println("Recall: " + recall);
+		System.out.println("Precision: " + precision);
+
 		fmeasure = (precision + recall > 0) ? (2 * precision * recall) / (precision + recall) : 0.0;
 
+		System.out.println("F1: " + fmeasure);
 		return fmeasure;
 	}
 
 	public static void evaluateParser(LinkedDataAnswerer answerer){
+
 		EvaluationFramework.loadDataSet();
+
 		ArrayList<Double> fmeasuresTraining = new ArrayList<>();
 		//ArrayList<Double> fmeasuresTest = new ArrayList<>();
 
 		System.out.println("Start training: ");
-		for (int i = 0; i < 1/*trainingSet.size()*/; i++) {
+		for (int i = 0; i < 10/*trainingSet.size()*/; i++) {
 
-			String q = trainingSet.get(i).getQuestion().getQuestion();
+			String q = trainingSet.get(i).getQuestion().getQuestionText();
 
-			if(q.contains("Who") || q.contains("Give me")){
-				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
-				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getAnswer().getQueryResult().toArray(new String[0])));
 
-				ArrayList<String> answers = answerer.train(trainingSet.get(i).getQuestion(), trainingSet.get(i).getAnswer());
+			System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
+			System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
 
-				if(answers != null){
-					System.out.println("Given Answer: " + Arrays.toString(answers.toArray(new String[0])));
+			ArrayList<String> answers = answerer.train(trainingSet.get(i).getQuestion(), trainingSet.get(i).getExpectedAnswer());
 
-					Double f = computeFMeasure(answers, trainingSet.get(i).getAnswer().getQueryResult());
-					System.out.println("F1: "+String.valueOf(f));
-					fmeasuresTraining.add(f);
-				} else {
-					fmeasuresTraining.add(new Double(0.0));
-					System.out.println("F1: 0.0");
-
-				}
-			}
+			fmeasuresTraining.add(computeFMeasureForOneQuestion(answers, trainingSet.get(i).getExpectedAnswer().getQueryResult()));
 		}
 
 		/*System.out.println("Start test: ");
 		for (int i = 0; i < testSet.size(); i++) {
 
-			if(testSet.get(i).getQuestion().getQuestion().contains("Who")){
-				System.out.println("Question: " + testSet.get(i).getQuestion().getQuestion());
-	//			System.out.println("Expected Answer: " + Arrays.toString(trainingSet.getWord(i).getAnswer().getQueryResult().toArray(new String[0])));
+			if(testSet.get(i).getQuestionText().getQuestionText().contains("Who")){
+				System.out.println("Question: " + testSet.get(i).getQuestionText().getQuestionText());
+	//			System.out.println("Expected ExpectedAnswer: " + Arrays.toString(trainingSet.getWord(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
 
-				answers = answerer.test(testSet.get(i).getQuestion());
+				answers = answerer.test(testSet.get(i).getQuestionText());
 
 				if(answers != null){
-					System.out.println("Given Answer: " + Arrays.toString(answers.toArray(new String[0])));
+					System.out.println("Given ExpectedAnswer: " + Arrays.toString(answers.toArray(new String[0])));
 
-					Double f = computeFMeasure(answers, testSet.get(i).getAnswer().getQueryResult());
+					Double f = computeFMeasureForOneQuestion(answers, testSet.get(i).getExpectedAnswer().getQueryResult());
 					System.out.println("F1: "+String.valueOf(f));
 					fmeasuresTest.add(f);
 				} else {

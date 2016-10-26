@@ -2,13 +2,13 @@ package de.uni_mannheim.semantic.web.stanford_nlp.model;
 
 import java.util.ArrayList;
 
-public class Answer {
+public class ExpectedAnswer {
 
 	private int questionId;
 	private String query;
 	private ArrayList<String> queryResult;
 	
-	public Answer(){
+	public ExpectedAnswer(){
 		
 	}
 	

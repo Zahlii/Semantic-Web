@@ -13,7 +13,7 @@ public class Question {
 		
 	}
 	
-	public String getQuestion() {
+	public String getQuestionText() {
 		return question;
 	}
 	public void setQuestion(String question) {

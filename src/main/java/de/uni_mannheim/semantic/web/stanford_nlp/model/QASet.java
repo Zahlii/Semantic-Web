@@ -2,12 +2,12 @@ package de.uni_mannheim.semantic.web.stanford_nlp.model;
 
 public class QASet {
 	private Question question;
-	private Answer answer;
+	private ExpectedAnswer expectedAnswer;
 	private boolean answerable;
 
-	public QASet(Question question, Answer answer, boolean answerable){
+	public QASet(Question question, ExpectedAnswer expectedAnswer, boolean answerable){
 		this.setQuestion(question);
-		this.setAnswer(answer);
+		this.setExpectedAnswer(expectedAnswer);
 		this.setAnswerable(answerable);
 	}
 
@@ -19,12 +19,12 @@ public class QASet {
 		this.question = question;
 	}
 
-	public Answer getAnswer() {
-		return answer;
+	public ExpectedAnswer getExpectedAnswer() {
+		return expectedAnswer;
 	}
 
-	public void setAnswer(Answer answer) {
-		this.answer = answer;
+	public void setExpectedAnswer(ExpectedAnswer expectedAnswer) {
+		this.expectedAnswer = expectedAnswer;
 	}
 
 	public boolean isAnswerable() {

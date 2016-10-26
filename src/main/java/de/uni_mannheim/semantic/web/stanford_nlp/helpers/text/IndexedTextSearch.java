@@ -66,7 +66,7 @@ public class IndexedTextSearch {
             LookupResult<String> r = new LookupResult<String>(term, d.get("title"), d.get("yago_name"));
             r.setCertainty(hits[i].score);
             results.add(r);
-            System.out.println((i + 1) + ". " + hits[i].score + "\t" + d.get("yago_name") + "\t" + d.get("title"));
+            //System.out.println((i + 1) + ". " + hits[i].score + "\t" + d.get("yago_name") + "\t" + d.get("title"));
         }
 
         return results;
