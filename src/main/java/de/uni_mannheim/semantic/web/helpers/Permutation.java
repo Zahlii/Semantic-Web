@@ -53,7 +53,7 @@ class Permutation<E> implements Iterator<List<E>> {
 			output.add(i, arr.get(ind[i]));
 		}
 
-		// get next permutation
+		// getWord next permutation
 		has_next = false;
 		for (int tail = ind.length - 1; tail > 0; tail--) {
 			if (ind[tail - 1] < ind[tail]) {// still increasing

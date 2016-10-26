@@ -51,7 +51,7 @@ public class DBPropertyList {
         List<String> res = new ArrayList<>();
 
 //        if(findingHints.containsKey(s))
-//            tries = new ArrayList<String>(Arrays.asList(findingHints.get(s)));
+//            tries = new ArrayList<String>(Arrays.asList(findingHints.getWord(s)));
 
         //crawls Synonyms
         tries = SynonymCrawler.findSynonyms(s);

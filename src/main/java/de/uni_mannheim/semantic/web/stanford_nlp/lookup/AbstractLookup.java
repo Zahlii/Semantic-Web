@@ -21,7 +21,8 @@ public abstract class AbstractLookup<E extends LookupResult> {
         constructTokens();
     }
 
-    protected void constructTokens() {
+    public void constructTokens() {
+        this.currentText = sentence.getCleanedText();
         this.currentTokens = Arrays.asList(this.currentText.split(" "));
     }
 
@@ -37,6 +38,9 @@ public abstract class AbstractLookup<E extends LookupResult> {
         String s = search.toString().trim();
         this.currentText = this.currentText.replace(s,varName);
         lookupResults.put(varName,result);
+
+        System.out.println("Setting " + search + " to " + result.toString());
+
         constructTokens();
     }
 

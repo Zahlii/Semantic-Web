@@ -79,8 +79,8 @@ public class SynonymCrawler {
 						
 //						for (int j= 0; j< threads.size(); j++){
 //							try {
-//								threads.get(j).join();
-//								Word syn = threads.get(j).getSyn();
+//								threads.getWord(j).join();
+//								Word syn = threads.getWord(j).getSyn();
 //								if(syn != null){
 //									synonyms.add(syn);
 //								}

@@ -163,7 +163,7 @@ public class EvaluationFramework {
 
 			if(testSet.get(i).getQuestion().getQuestion().contains("Who")){
 				System.out.println("Question: " + testSet.get(i).getQuestion().getQuestion());
-	//			System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getAnswer().getQueryResult().toArray(new String[0])));
+	//			System.out.println("Expected Answer: " + Arrays.toString(trainingSet.getWord(i).getAnswer().getQueryResult().toArray(new String[0])));
 
 				answers = answerer.test(testSet.get(i).getQuestion());
 

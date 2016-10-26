@@ -1,11 +1,8 @@
 package de.uni_mannheim.semantic.web.stanford_nlp;
 
-import de.uni_mannheim.semantic.web.helpers.Levenshtein;
-import de.uni_mannheim.semantic.web.crawl.DBPediaWrapper;
-import de.uni_mannheim.semantic.web.nlp.QuestionType;
-import de.uni_mannheim.semantic.web.nlp.finders.DBNERFinderResult;
-
+import de.uni_mannheim.semantic.web.nlp.Word;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.DBPediaResourceLookup;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 import edu.stanford.nlp.io.IOUtils;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
@@ -18,10 +15,7 @@ import edu.stanford.nlp.util.CoreMap;
 import edu.stanford.nlp.util.PropertiesUtils;
 
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * A demo illustrating how to call the OpenIE system programmatically. You can
@@ -41,7 +35,7 @@ public class StanfordSentence {
 	private List<CoreLabel> annotatedWords;
 	private SemanticGraph graph;
 	private QuestionType type;
-
+	private ArrayList<Word> words;
 	private DBPediaResourceLookup dbpedia;
 
 	private static StanfordCoreNLP pipelineBasic;
@@ -58,7 +52,11 @@ public class StanfordSentence {
 
 		pipelineBasic = new StanfordCoreNLP(props);
 
-		new StanfordSentence("Does Breaking Bad have more episodes than Game of Thrones?");
+		StanfordSentence s = new StanfordSentence("How tall is Michael Jordan?");
+		System.out.println(s.getAnswers());
+
+		s = new StanfordSentence("Who produces Orangina?");
+		System.out.println(s.getAnswers());
 
 		/*
 		int i=0;
@@ -70,18 +68,22 @@ public class StanfordSentence {
 	}
 
 
-	private StanfordSentence(String text) throws Exception {
+	public StanfordSentence(String text) throws Exception {
 		this.basicText = text;
 		this.cleanedText = basicText.replaceAll("(\\.|\\?)$","");
 
 		extractQuestionType();
 
 		dbpedia = new DBPediaResourceLookup(this);
-		dbpedia.findAll();
+
 
 		basicAnnotate();
 	}
 
+	public LookupResult<String> findEntity() {
+		LookupResult<String> res = dbpedia.findOneIn(0,words.size()-1);
+		return res;
+	}
 
 	private void extractQuestionType() throws Exception {
 		for(QuestionType t : QuestionType.values()) {
@@ -109,11 +111,63 @@ public class StanfordSentence {
 		annotatedSentence = annotatedDocument.get(CoreAnnotations.SentencesAnnotation.class).get(0);
 		annotatedWords = annotatedSentence.get(CoreAnnotations.TokensAnnotation.class);
 
+		words = new ArrayList<>(annotatedWords.size());
+		for(CoreLabel w : annotatedWords) {
+			String text = w.get(CoreAnnotations.TextAnnotation.class);
+			String pos = w.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+			words.add(new Word(text,pos));
+		}
 
 		graph = annotatedSentence.get(SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation.class);
 		System.out.println(graph.toString(SemanticGraph.OutputFormat.RECURSIVE));
 
 		transformGraph();
+	}
+
+	public List<Word> getWords() {
+		return words;
+	}
+
+	public List<Word> getVerbs() {
+		return getByPOSTag("VB");
+	}
+
+	private ArrayList<Word> getByPOSTag(String tag) {
+		ArrayList<Word> adjs = new ArrayList<Word>();
+
+		for(Word w : words) {
+			if(w.getPOSTag().matches(tag))
+				adjs.add(w);
+		}
+		return adjs;
+	}
+	public ArrayList<Word> getAdjectives() {
+		return getByPOSTag("JJ");
+	}
+
+	public ArrayList<Word> getAdverbs(){
+		return getByPOSTag("RB");
+	}
+
+	public ArrayList<Word> getNouns(){
+		return getByPOSTag("NNS?");
+	}
+
+	public ArrayList<Word> getProperNouns(){
+		return getByPOSTag("NNPS?");
+	}
+
+	public Word getWord(int index) {
+		return words.get(index);
+	}
+
+	public Word removeWord(int index) {
+		Word w = getWord(index);
+		cleanedText = cleanedText.replace(w.getText(),"").trim();
+		annotatedWords.remove(index);
+		words.remove(index);
+		dbpedia.constructTokens();
+		return w;
 	}
 
 	private void transformGraph() {
@@ -124,5 +178,9 @@ public class StanfordSentence {
 
 	public String getCleanedText() {
 		return this.cleanedText;
+	}
+
+	public ArrayList<String> getAnswers() throws Exception {
+		return type.startParsing(this);
 	}
 }

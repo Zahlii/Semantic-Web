@@ -19,11 +19,11 @@ public class OntologyClassCrawler {
 		System.out.println(list.get(0).getProperties().size());
 		// ArrayList<Property> list = crawlProperties(classLink+"owl%3AThing");
 		// for(int i=0; i<list.size(); i++){
-		// System.out.println(list.get(i).getName());
-		// System.out.println(list.get(i).getLabel());
-		// System.out.println(list.get(i).getDomain());
-		// System.out.println(list.get(i).getRange());
-		// System.out.println(list.get(i).getDescription());
+		// System.out.println(list.getWord(i).getName());
+		// System.out.println(list.getWord(i).getLabel());
+		// System.out.println(list.getWord(i).getDomain());
+		// System.out.println(list.getWord(i).getRange());
+		// System.out.println(list.getWord(i).getDescription());
 		// System.out.println();
 		//
 		// }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_mannheim.semantic.web.nlp.finders.DBNERFinder;
+import de.uni_mannheim.semantic.web.stanford_nlp.QuestionType;
 import opennlp.tools.util.Span;
 
 public class Sentence implements Comparable<Sentence> {
@@ -24,7 +25,7 @@ public class Sentence implements Comparable<Sentence> {
 			POSTagTokens();
 			lemmatizeTokens();
 			
-			this.setAnswers(type.startParsing(this));
+			//this.setAnswers(type.startParsing(this));
 
 		} catch(Exception e) {
 			e.printStackTrace();
