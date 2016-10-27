@@ -9,6 +9,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import de.uni_mannheim.semantic.web.crawl.model.DBPediaResource;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
+
 import org.jsoup.Jsoup;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -19,13 +21,13 @@ import org.xml.sax.SAXException;
 
 public class DBPediaResourceCrawler {
 
-	public static void main(String[] args) {
-		DBPediaResourceCrawler db = new DBPediaResourceCrawler();
-		ArrayList<DBPediaResource> r = db.findDBPediaResource("formula one racer");
-		for (int i = 0; i < r.size(); i++) {
-			System.out.println(r.get(i));
-		}
-	}
+//	public static void main(String[] args) {
+//		DBPediaResourceCrawler db = new DBPediaResourceCrawler();
+//		ArrayList<DBPediaResource> r = db.findDBPediaResource("formula one racer");
+//		for (int i = 0; i < r.size(); i++) {
+//			System.out.println(r.get(i));
+//		}
+//	}
 
 	/**
 	 * searches in dbpedia lookup for resources and returns them
@@ -33,8 +35,9 @@ public class DBPediaResourceCrawler {
 	 * @param charSeq
 	 * @return
 	 */
-	public static ArrayList<DBPediaResource> findDBPediaResource(String charSeq) {
-		ArrayList<DBPediaResource> dbpediaResources = new ArrayList<>();
+	public static ArrayList<LookupResult> findDBPediaResource(String charSeq) {
+//		ArrayList<DBPediaResource> dbpediaResources = new ArrayList<>();
+		ArrayList<LookupResult> results = new ArrayList<>();
 
 		charSeq = charSeq.replace(" ", "%20");
 		try {
@@ -80,22 +83,28 @@ public class DBPediaResourceCrawler {
 							}
 						}
 					}
-					DBPediaResource d = new DBPediaResource();
-					d.setLabel(label);
-					d.setUri(uri);
-					d.setDescription(desc);
-					d.setClassUris(classUris);
-					d.setCategoryUris(catUris);
-					dbpediaResources.add(d);
+//					DBPediaResource d = new DBPediaResource();
+//					d.setLabel(label);
+//					d.setUri(uri);
+//					d.setDescription(desc);
+//					d.setClassUris(classUris);
+//					d.setCategoryUris(catUris);
+//					dbpediaResources.add(d);
+
+					
+					LookupResult lr = new LookupResult(charSeq, label, uri);
+					results.add(lr);
 				}
 
 			}
 
 		} catch (IOException | ParserConfigurationException | SAXException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
+			System.out.println(e.getLocalizedMessage());
 		}
-		return dbpediaResources;
+//		return dbpediaResources;
+		return results;
 	}
 
 }

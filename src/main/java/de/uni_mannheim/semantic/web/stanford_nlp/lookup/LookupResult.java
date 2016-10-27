@@ -61,4 +61,8 @@ public class LookupResult<E> {
     public void setCertainty(double certainty) {
         this.certainty = certainty;
     }
+    
+    public String getSearchedTitle(){
+    	return searchedTitle;
+    }
 }
