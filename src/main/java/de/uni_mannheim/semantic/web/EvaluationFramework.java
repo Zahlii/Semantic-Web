@@ -154,6 +154,7 @@ public class EvaluationFramework {
 
 			String q = trainingSet.get(i).getQuestion().getQuestionText();
 
+			System.out.println("===============================");
 
 			System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
 			System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));

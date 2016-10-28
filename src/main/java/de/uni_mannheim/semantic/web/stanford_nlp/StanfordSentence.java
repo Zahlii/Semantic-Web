@@ -33,11 +33,11 @@ public class StanfordSentence {
 
 	public static void main(String[] args) throws Exception {
 
-		//StanfordSentence s = new StanfordSentence("Give me all cosmonauts.");
-		//System.out.println("Answers: " + s.getAnswers());
+		StanfordSentence s = new StanfordSentence("Who was John F. Kennedy's vice president");
+		System.out.println("Answers: " + s.getAnswers());
 
-		StanfordSentence s = new StanfordSentence("Who was John F. Kennedy 's vice president?");
-		//System.out.println(s.getAnswers());
+		s = new StanfordSentence("Who are the parents of the wife of Juan Carlos I?");
+		System.out.println("Answers: " + s.getAnswers());
 	}
 
 	public StanfordSentence(String text) throws Exception {
@@ -47,14 +47,14 @@ public class StanfordSentence {
 		extractQuestionType();
 
 		dbpediaResource = new DBPediaResourceLookup(this);
-		dbpediaResource.findAll();
 		dbpediaCategory = new DBPediaCategoryLookup(this);
 
 		basicAnnotate();
 	}
 
 	public LookupResult findEntity() {
-		List<LookupResult> res = dbpediaResource.findAllIn(0,words.size()-1);
+		List<LookupResult> res = dbpediaResource.findAllIn();
+		System.out.println("Found " + res);
 		return res.get(0);
 	}
 
@@ -75,7 +75,6 @@ public class StanfordSentence {
 
 		annotatedSentence = StanfordNLP.handle(cleanedText);
 
-		System.out.println("================================================");
 		System.out.println(basicText);
 		System.out.println("\t"+ dbpediaResource.getText());
 		System.out.println("\t"+ dbpediaResource.getResults());
@@ -151,5 +150,17 @@ public class StanfordSentence {
 
 	public ArrayList<String> getAnswers() throws Exception {
 		return type.startParsing(this);
+	}
+
+	public List<String> tokenize(String currentText) {
+		CoreMap s = StanfordNLP.handle(currentText);
+
+		ArrayList<String> words = new ArrayList<>();
+
+		for(CoreLabel w : s.get(CoreAnnotations.TokensAnnotation.class)) {
+			words.add(w.get(CoreAnnotations.TextAnnotation.class));
+		}
+
+		return words;
 	}
 }

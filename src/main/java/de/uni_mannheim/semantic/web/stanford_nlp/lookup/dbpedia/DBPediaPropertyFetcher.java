@@ -62,7 +62,9 @@ public class DBPediaPropertyFetcher {
             for(String search: tries) {
                 if(prop.contains(search) && !prop.contains("/wiki")) {
                     List<String> result = props.get(prop);
+                    System.out.println("Adding " + result + " to answers because of " + prop);
                     res.addAll(result);
+                    return res;
                 }
             }
         }

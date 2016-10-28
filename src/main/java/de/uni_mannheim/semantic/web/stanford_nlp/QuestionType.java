@@ -64,6 +64,7 @@ public enum QuestionType {
 		if(_parse != null) {
 			try {
 				GenericParser p = _parse.newInstance();
+				System.out.println("ANSWERING");
 				return p.parse(s);
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block

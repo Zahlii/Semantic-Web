@@ -3,6 +3,7 @@ package de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia;
 import de.uni_mannheim.semantic.web.crawl.DBPediaWrapper;
 import de.uni_mannheim.semantic.web.stanford_nlp.StanfordSentence;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupStatus;
 
 import java.util.*;
 
@@ -35,8 +36,8 @@ public class DBPediaResourceLookup {
     }
 
     public void constructTokens() {
-        this.currentText = sentence.getCleanedText();
-        this.currentTokens = Arrays.asList(this.currentText.split(" "));
+
+        this.currentTokens = sentence.tokenize(this.currentText);
     }
 
     private LookupResult findByTitle(String title) {
@@ -48,12 +49,25 @@ public class DBPediaResourceLookup {
         candidates.addAll(keywordLookup(title));
         candidates.addAll(spotlightLookup(title));
 
-        return voteFind(candidates);
+        LookupResult r = voteFind(candidates);
+
+        String varName = "Variable"+lookupResults.size();
+
+        this.currentText = this.currentText.replace(r.getSearchedTitle(),varName);
+
+        System.out.println("Mapped " + title +" to " + r.getResult());
+
+        lookupResults.put(varName,r);
+
+        return r;
     }
 
     private LookupResult voteFind(List<LookupResult> results) {
         HashMap<String,LookupResult> calc = new HashMap<>();
         for(LookupResult r : results) {
+            if(r == null || r.getStatus() != LookupStatus.FOUND)
+                continue;
+
             String resource = r.getResult();
             if(!calc.containsKey(resource)) {
                 calc.put(resource, r);
@@ -71,8 +85,11 @@ public class DBPediaResourceLookup {
     }
 
 
-    public List<LookupResult> findAllIn(int start, int end) {
+    public List<LookupResult> findAllIn() {
         int max = 5;
+
+        int start = 0;
+        int end = this.currentTokens.size()-1;
 
         List<LookupResult> candidates = new ArrayList<>();
         ArrayList<List<String>> ngrams = new ArrayList<>();
@@ -90,6 +107,9 @@ public class DBPediaResourceLookup {
             if(term != null) {
                 LookupResult r = findByTitle(term);
                 candidates.add(r);
+                constructTokens();
+                candidates.addAll(findAllIn());
+                break;
             }
         }
 
@@ -177,8 +197,4 @@ public class DBPediaResourceLookup {
         return lookupResults;
     }
 
-    public List<LookupResult> findAll() {
-
-        return findAllIn(0,this.currentTokens.size()-1);
-    }
 }
