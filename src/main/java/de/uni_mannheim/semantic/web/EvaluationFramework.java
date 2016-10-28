@@ -111,6 +111,7 @@ public class EvaluationFramework {
 
 	public static double computeFMeasureForOneQuestion(ArrayList<String> answers, ArrayList<String> expectedAnswers){
 		System.out.println("Answers given: " + answers.size());
+		System.out.println(answers);
 		System.out.println("Answers expected: " + expectedAnswers.size());
 
 		double fmeasure = 0.0;

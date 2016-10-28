@@ -122,6 +122,9 @@ public class DBPediaPropertyLookup {
             String search = property.substring(property.lastIndexOf("/")+1);
             double certainty = 1-Levenshtein.normalized(search,ngram);
 
+            if(property.contains("/property"))
+                certainty = certainty*0.8;
+
             if(certainty >= maxcertainty) {
                 res = new LookupResult(ngram,search,property);
                 maxcertainty = certainty;
