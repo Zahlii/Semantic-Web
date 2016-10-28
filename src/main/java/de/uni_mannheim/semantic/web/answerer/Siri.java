@@ -21,8 +21,12 @@ public class Siri extends LinkedDataAnswerer{
 
 	@Override
 	public ArrayList<String> test(Question q) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			StanfordSentence s = new StanfordSentence(q.getQuestionText());
+			return s.getAnswers();
+		} catch(Exception e) {
+			return new ArrayList<>();
+		}
 	}
 
 }

@@ -53,6 +53,10 @@ public class EvaluationFramework {
 						String onlyDbo = eElement.getAttribute("onlydbo");
 						if(onlyDbo.equals("false"))
 							continue;
+						
+						String hybrid = eElement.getAttribute("hybrid");
+						if(hybrid.equals("true"))
+							continue;
 
 						String question = eElement.getElementsByTagName("string").item(0).getTextContent();
 						boolean answerable = true;
@@ -142,7 +146,7 @@ public class EvaluationFramework {
 		EvaluationFramework.loadDataSet();
 
 		ArrayList<Double> fmeasuresTraining = new ArrayList<>();
-		//ArrayList<Double> fmeasuresTest = new ArrayList<>();
+		ArrayList<Double> fmeasuresTest = new ArrayList<>();
 
 		System.out.println("Start training: ");
 		for (int i = 0; i < trainingSet.size(); i++) {
@@ -162,30 +166,19 @@ public class EvaluationFramework {
 
 //		System.out.println("Start test: ");
 //		for (int i = 0; i < testSet.size(); i++) {
+//			String q = testSet.get(i).getQuestion().getQuestionText();
 //
-//			if(testSet.get(i).getQuestion().getQuestionText().contains("Where")){
-//				System.out.println("Question: " + testSet.get(i).getQuestion().getQuestionText());
-//	//			System.out.println("Expected ExpectedAnswer: " + Arrays.toString(trainingSet.getWord(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
 //
-//				ArrayList<String> answers = answerer.test(testSet.get(i).getQuestion());
+//			System.out.println("Question: " + q + " (answerable: " + testSet.get(i).isAnswerable()+")");
+//			System.out.println("Expected Answer: " + Arrays.toString(testSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
 //
-//				ArrayList<Double> fmeasuresTest = new ArrayList<>();
-//				if(answers != null){
-//					System.out.println("Given ExpectedAnswer: " + Arrays.toString(answers.toArray(new String[0])));
+//			ArrayList<String> answers = answerer.test(testSet.get(i).getQuestion());
 //
-//					Double f = computeFMeasureForOneQuestion(answers, testSet.get(i).getExpectedAnswer().getQueryResult());
-//					System.out.println("F1: "+String.valueOf(f));
-//					fmeasuresTest.add(f);
-//				} else {
-//					fmeasuresTest.add(new Double(0.0));
-//					System.out.println("F1: 0.0");
-//
-//				}
-//			}
+//			fmeasuresTraining.add(computeFMeasureForOneQuestion(answers, testSet.get(i).getExpectedAnswer().getQueryResult()));
 //		}
 		
 		System.out.println("Training F-Measure Avg: "+getAvg(fmeasuresTraining));
-		//System.out.println("Test F-Measure Avg: "+getAvg(fmeasuresTest));
+//		System.out.println("Test F-Measure Avg: "+getAvg(fmeasuresTest));
 	}
 
 	public static void main(String[] args){
