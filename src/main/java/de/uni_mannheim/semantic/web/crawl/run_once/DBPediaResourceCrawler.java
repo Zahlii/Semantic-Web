@@ -42,7 +42,7 @@ public class DBPediaResourceCrawler {
 		charSeq = charSeq.replace(" ", "%20");
 		try {
 			String xml = Jsoup.connect("http://lookup.dbpedia.org/api/search/KeywordSearch?QueryString=" + charSeq)
-					.get().toString();
+					.get().toString().replace("&nbsp", "&#160");
 
 
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -100,8 +100,8 @@ public class DBPediaResourceCrawler {
 
 		} catch (IOException | ParserConfigurationException | SAXException e) {
 			// TODO Auto-generated catch block
-//			e.printStackTrace();
-			System.out.println(e.getLocalizedMessage());
+			e.printStackTrace();
+//			System.out.println(e.getLocalizedMessage());
 		}
 //		return dbpediaResources;
 		return results;
