@@ -56,7 +56,6 @@ public class DBPediaResourceCrawler {
 				for (int i = 0; i < nl.getLength(); i++) {
 					Element el = (Element) nl.item(i);
 					String label = el.getElementsByTagName("label").item(0).getTextContent();
-					System.out.println(label);
 					String uri = el.getElementsByTagName("uri").item(0).getTextContent();
 					String desc = el.getElementsByTagName("description").item(0).getTextContent();
 
@@ -91,6 +90,15 @@ public class DBPediaResourceCrawler {
 //					d.setCategoryUris(catUris);
 //					dbpediaResources.add(d);
 
+					if(!charSeq.equals("")){
+						if(charSeq.charAt(0) == ' '){
+							charSeq = charSeq.substring(1);
+						}
+						
+						if(charSeq.charAt(charSeq.length()-1) == ' '){
+							charSeq = charSeq.substring(0, charSeq.length()-1);
+						}
+					}
 					
 					LookupResult lr = new LookupResult(charSeq, label, uri.replace("\n", "").replace(" ", ""));
 					results.add(lr);
