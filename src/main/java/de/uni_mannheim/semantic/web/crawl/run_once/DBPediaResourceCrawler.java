@@ -41,7 +41,7 @@ public class DBPediaResourceCrawler {
 
 		String charSeqTmp = charSeq.replace(" ", "%20");
 		try {
-			String xml = Jsoup.connect("http://lookup.dbpedia.org/api/search/KeywordSearch?QueryString=" + charSeqTmp)
+			String xml = Jsoup.connect("http://lookup.dbpedia.org/api/search/KeywordSearch?QueryString=" + charSeqTmp).timeout(1000*10)
 					.get().toString().replace("&nbsp", "&#160");
 
 
