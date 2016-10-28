@@ -39,9 +39,9 @@ public class DBPediaResourceCrawler {
 //		ArrayList<DBPediaResource> dbpediaResources = new ArrayList<>();
 		ArrayList<LookupResult> results = new ArrayList<>();
 
-		charSeq = charSeq.replace(" ", "%20");
+		String charSeqTmp = charSeq.replace(" ", "%20");
 		try {
-			String xml = Jsoup.connect("http://lookup.dbpedia.org/api/search/KeywordSearch?QueryString=" + charSeq)
+			String xml = Jsoup.connect("http://lookup.dbpedia.org/api/search/KeywordSearch?QueryString=" + charSeqTmp)
 					.get().toString().replace("&nbsp", "&#160");
 
 
@@ -92,7 +92,7 @@ public class DBPediaResourceCrawler {
 //					dbpediaResources.add(d);
 
 					
-					LookupResult lr = new LookupResult(charSeq, label, uri);
+					LookupResult lr = new LookupResult(charSeq, label, uri.replace("\n", "").replace(" ", ""));
 					results.add(lr);
 				}
 
