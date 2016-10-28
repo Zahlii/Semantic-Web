@@ -36,7 +36,6 @@ public class DBPediaResourceLookup {
     }
 
     public void constructTokens() {
-
         this.currentTokens = sentence.tokenize(this.currentText);
     }
 

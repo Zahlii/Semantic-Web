@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
-import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaPropertyFetcher;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaPropertyLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 
 public class WhereParser extends GenericParser {
@@ -23,54 +23,9 @@ public class WhereParser extends GenericParser {
 		ArrayList<String> answers = new ArrayList<>();
 		
 		if(w != null){
-			DBPediaPropertyFetcher pl = new DBPediaPropertyFetcher(w.getResult());
-			pl.fetchProperties();
-			
-//			if(_sentence.getVerbs().size() == 0)
-//				return answers;
-				
-			List<String> prop = new ArrayList<>();
-			
-			List<Word> verbs = _sentence.getVerbs();
-			List<Word> adjs = _sentence.getAdjectives();
-			List<Word> advs = _sentence.getAdverbs();
-			List<Word> nouns = _sentence.getNouns();
+			DBPediaPropertyLookup pl = new DBPediaPropertyLookup(_sentence,w.getResult());
 
-	
-//			for(int i = 0; i<verbs.size(); i++){
-//				prop.addAll(pl.findPropertyFor(verbs.getWord(i)));
-//			}
-//			
-
-			
-//			List<String> prop = pl.findPropertyFor(verbs.getWord(0));
-	
-			Word verb = null;
-
-			for(int i=0; i<verbs.size(); i++){
-				if(!auxilaryVerbs.contains(verbs.get(i).getText())){
-					verb = verbs.get(i);
-				}
-			}
-
-			if(verb == null){
-				
-				for(int i = 0; i<nouns.size(); i++){
-					prop.addAll(pl.findPropertyFor(nouns.get(i)));
-				}
-				
-				for(int i = 0; i<adjs.size(); i++){
-					prop.addAll(pl.findPropertyFor(adjs.get(i)));
-				}
-				
-				for(int i = 0; i<advs.size(); i++){
-					prop.addAll(pl.findPropertyFor(advs.get(i)));
-				}
-				
-			}else{
-				prop.addAll(pl.findPropertyFor(verb));
-			}
-			
+			List<String> prop = pl.findProperty();
 			
 			ArrayList<String> validTypes = new ArrayList<>();
 			validTypes.add("http://dbpedia.org/ontology/Location");

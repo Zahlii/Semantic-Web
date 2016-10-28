@@ -1,7 +1,7 @@
 package de.uni_mannheim.semantic.web.stanford_nlp.parsers;
 
 import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
-import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaPropertyFetcher;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaPropertyLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 
 import java.util.ArrayList;
@@ -41,9 +41,8 @@ public class HowParser extends GenericParser {
 		if(w == null)
 			throw new Exception("Unable to find entity.");
 
-		DBPediaPropertyFetcher pl = new DBPediaPropertyFetcher(w.getResult());
+		DBPediaPropertyLookup pl = new DBPediaPropertyLookup(_sentence,w.getResult());
 
-		pl.fetchProperties();
 
 //		String search;
 //
@@ -60,27 +59,9 @@ public class HowParser extends GenericParser {
 			search = _sentence.getVerbs().get(0);
 		}
 
-		List<String> prop = pl.findPropertyFor(search);
-		
-		ArrayList<String> answers = new ArrayList<>();
-		ArrayList<String> validTypes = new ArrayList<>();
-//		validTypes.add("http://dbpedia.org/ontology/Organisation");
-//		validTypes.add("http://dbpedia.org/ontology/Person");
+		ArrayList<String> prop = pl.findPropertyForName(search.getText());
 
-		for (int i = 0; i < prop.size(); i++) {
-			prop.set(i, prop.get(i).replaceAll("\\^\\^.*", ""));
-			if(!answers.contains(prop.get(i))){
-				if(isValidType(prop.get(i), validTypes))
-					answers.add(prop.get(i));
-			}
-		}
-		
-//		System.out.println(_sentence);
-
-//		System.out.print("\t");
-//		System.out.println(prop);
-
-		return answers;
+		return prop;
 	}
 
 

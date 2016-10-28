@@ -19,8 +19,12 @@ public class Word {
 		this._posTag = pos;
 	}
 
+    public Word(String w1) {
+		this._text = w1;
+    }
 
-	public String getText() {
+
+    public String getText() {
 		return _text;
 	}
 

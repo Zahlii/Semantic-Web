@@ -2,6 +2,7 @@ package de.uni_mannheim.semantic.web.stanford_nlp;
 
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.StanfordNLP;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaCategoryLookup;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaPropertyLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaResourceLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
@@ -33,10 +34,10 @@ public class StanfordSentence {
 
 	public static void main(String[] args) throws Exception {
 
-		StanfordSentence s = new StanfordSentence("Who was John F. Kennedy's vice president");
-		System.out.println("Answers: " + s.getAnswers());
+		//StanfordSentence s = new StanfordSentence("Who was John F. Kennedy's vice president?");
+		//System.out.println("Answers: " + s.getAnswers());
 
-		s = new StanfordSentence("Who are the parents of the wife of Juan Carlos I?");
+		StanfordSentence s = new StanfordSentence("Who is the mayor of Berlin?");
 		System.out.println("Answers: " + s.getAnswers());
 	}
 
@@ -49,13 +50,17 @@ public class StanfordSentence {
 		dbpediaResource = new DBPediaResourceLookup(this);
 		dbpediaCategory = new DBPediaCategoryLookup(this);
 
+
 		basicAnnotate();
 	}
 
 	public LookupResult findEntity() {
 		List<LookupResult> res = dbpediaResource.findAllIn();
-		System.out.println("Found " + res);
 		return res.get(0);
+	}
+
+	public String getTextWithoutEntities() {
+		return dbpediaResource.getText();
 	}
 
 	private void extractQuestionType() throws Exception {
