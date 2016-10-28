@@ -48,9 +48,26 @@ public class DBPediaResourceLookup {
         candidates.addAll(keywordLookup(title));
         candidates.addAll(spotlightLookup(title));
 
-        candidates.sort(comp);
+        return voteFind(candidates);
+    }
 
-        return candidates.get(0);
+    private LookupResult voteFind(List<LookupResult> results) {
+        HashMap<String,LookupResult> calc = new HashMap<>();
+        for(LookupResult r : results) {
+            String resource = r.getResult();
+            if(!calc.containsKey(resource)) {
+                calc.put(resource, r);
+            } else {
+                LookupResult sum = calc.get(resource);
+
+                sum.setCertainty(r.getCertainty()+sum.getCertainty());
+            }
+        }
+
+        List<LookupResult> all = new ArrayList<>(calc.values());
+        all.sort(comp);
+
+        return all.get(0);
     }
 
 
