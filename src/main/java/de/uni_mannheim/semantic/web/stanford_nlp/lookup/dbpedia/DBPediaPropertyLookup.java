@@ -127,8 +127,10 @@ public class DBPediaPropertyLookup {
                 maxcertainty = certainty;
             }
         }
+        if(maxcertainty>=0.7)
+            return res;
 
-        return res;
+        return new LookupResult(LookupStatus.NOT_FOUND);
     }
 
     private List<String> getPropertySearchTermsForNGram(List<String> ngram) {

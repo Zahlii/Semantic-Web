@@ -138,8 +138,12 @@ public class DBPediaResourceLookup {
 
         String first = words.get(0);
 
-        if(first.contains("Variable"))
-            return null;
+
+
+        for(String word : words) {
+            if(word.contains("Variable"))
+                return null;
+        }
 
         boolean startsWithThe = first.equals("the");
 
@@ -147,6 +151,9 @@ public class DBPediaResourceLookup {
         String append = "";
 
         if(startsWithThe && s==1)
+            return null;
+
+        if(first.contains("Variable"))
             return null;
 
         String last = words.get(s-1);
