@@ -175,11 +175,11 @@ public class EvaluationFramework {
 //
 //			ArrayList<String> answers = answerer.test(testSet.get(i).getQuestion());
 //
-//			fmeasuresTraining.add(computeFMeasureForOneQuestion(answers, testSet.get(i).getExpectedAnswer().getQueryResult()));
+//			fmeasuresTest.add(computeFMeasureForOneQuestion(answers, testSet.get(i).getExpectedAnswer().getQueryResult()));
 //		}
-		
+//
 		System.out.println("Training F-Measure Avg: "+getAvg(fmeasuresTraining));
-//		System.out.println("Test F-Measure Avg: "+getAvg(fmeasuresTest));
+		//System.out.println("Test F-Measure Avg: "+getAvg(fmeasuresTest));
 	}
 
 	public static void main(String[] args){

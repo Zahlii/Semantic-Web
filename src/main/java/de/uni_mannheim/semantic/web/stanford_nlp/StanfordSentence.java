@@ -37,7 +37,7 @@ public class StanfordSentence {
 		//StanfordSentence s = new StanfordSentence("Who was John F. Kennedy's vice president?");
 		//System.out.println("Answers: " + s.getAnswers());
 
-		StanfordSentence s = new StanfordSentence("Who is the mayor of Berlin?");
+		StanfordSentence s = new StanfordSentence("Who was influenced by Socrates?");
 		System.out.println("Answers: " + s.getAnswers());
 	}
 

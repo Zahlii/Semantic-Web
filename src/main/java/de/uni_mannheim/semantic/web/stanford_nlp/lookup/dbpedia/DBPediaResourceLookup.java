@@ -173,7 +173,7 @@ public class DBPediaResourceLookup {
     }
 
     private boolean isValidPart(String text) {
-        return text.matches("(of|in)") || isValidLastPart(text) || isValidFirstPart(text);
+        return text.matches("(of|in|and)") || isValidLastPart(text) || isValidFirstPart(text);
     }
 
     private boolean isValidLastPart(String text) {

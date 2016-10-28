@@ -20,7 +20,7 @@ public class DBPediaCategoryLookup  {
     public List<LookupResult> findAllByTitle(String title) {
         LookupResult r;
         try {
-            List<LookupResult> res = search.search(title);
+            List<LookupResult> res = search.search(title.replace(" ","~ ")+"~");
             return res;
         } catch(Exception e) {
             e.printStackTrace();

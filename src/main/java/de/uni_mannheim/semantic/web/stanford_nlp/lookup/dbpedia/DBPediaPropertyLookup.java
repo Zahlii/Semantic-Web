@@ -116,16 +116,19 @@ public class DBPediaPropertyLookup {
 
     private LookupResult findPropertyByName(String ngram) {
         double maxcertainty = 0.0;
+        LookupResult res = new LookupResult(LookupStatus.NOT_FOUND);
+
         for(String property : props.keySet()) {
             String search = property.substring(property.lastIndexOf("/")+1);
             double certainty = 1-Levenshtein.normalized(search,ngram);
 
-            if(certainty >= 0.8) {
-                return new LookupResult(ngram,search,property);
+            if(certainty >= maxcertainty) {
+                res = new LookupResult(ngram,search,property);
+                maxcertainty = certainty;
             }
         }
 
-        return new LookupResult(LookupStatus.NOT_FOUND);
+        return res;
     }
 
     private List<String> getPropertySearchTermsForNGram(List<String> ngram) {
@@ -137,6 +140,7 @@ public class DBPediaPropertyLookup {
         if(ngram.size() == 1) {
             String w1 = ngram.get(0);
             ret.add(w1);
+            ret.add(w1+"By");
             ret.addAll(SynonymCrawler.findSynonyms(new Word(w1)));
             if(findingHints.containsKey(w1))
                 ret.addAll(Arrays.asList(findingHints.get(w1)));
@@ -151,7 +155,12 @@ public class DBPediaPropertyLookup {
         findingHints.put("tall",new String[] {"elevation","height"});
         findingHints.put("high",new String[] {"altitude","elevation","height"});
         findingHints.put("marry",new String[] {"spouse","husband","wife"});
+        findingHints.put("married",new String[] {"spouse","husband","wife"});
         findingHints.put("parents",new String[] {"father","mother"});
         findingHints.put("mayor",new String[] { "leader","leaderName" });
+        findingHints.put("wrote",new String[] {"notableWork","author"});
+        findingHints.put("owner",new String[] {"founder"});
+        findingHints.put("created",new String[] {"author"});
+        findingHints.put("designed",new String[] {"architect"});
     }
 }
