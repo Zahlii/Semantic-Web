@@ -34,7 +34,7 @@ public class IndexedTextSearch {
     private IndexSearcher searcher;
     private QueryParser qp;
 
-    public List<LookupResult<String>> search(String term) throws IOException, ParseException {
+    public List<LookupResult> search(String term) throws IOException, ParseException {
 
         Query q = qp.parse(term);
 
@@ -57,13 +57,13 @@ public class IndexedTextSearch {
         // 4. display results
         System.out.println("Found " + hits.length + " hits ["+duration+"ms] for '"+term+"'");
 
-        List<LookupResult<String>> results = new ArrayList<>(hits.length);
+        List<LookupResult> results = new ArrayList<>(hits.length);
 
         for (int i = 0; i < hits.length; ++i) {
             int docId = hits[i].doc;
             Document d = searcher.doc(docId);
 
-            LookupResult<String> r = new LookupResult<String>(term, d.get("title"), d.get("yago_name"));
+            LookupResult r = new LookupResult(term, d.get("title"), d.get("yago_name"));
             r.setCertainty(hits[i].score);
             results.add(r);
             //System.out.println((i + 1) + ". " + hits[i].score + "\t" + d.get("yago_name") + "\t" + d.get("title"));

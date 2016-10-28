@@ -1,10 +1,12 @@
 package de.uni_mannheim.semantic.web.crawl;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 
-import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaSPARQLLookupResult;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QueryExecutionFactory;
@@ -18,6 +20,14 @@ import org.jsoup.select.Elements;
 import de.uni_mannheim.semantic.web.crawl.model.OntologyClass;
 import de.uni_mannheim.semantic.web.crawl.model.Property;
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.text.TextHelper;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 public class DBPediaWrapper {
 	private static final String endpoint = "http://dbpedia.org/sparql";
@@ -43,29 +53,60 @@ public class DBPediaWrapper {
 		return RS;
 	}
 
-	public static String lookupSearch(String title) {
+	private static ArrayList<LookupResult> lookupSearch(String URL, String charSeq) {
 
-		if (title.length() > 5 && title.endsWith("s"))
-			title = TextHelper.removeLast(title);
+		ArrayList<LookupResult> results = new ArrayList<>();
 
-		String url = "http://lookup.dbpedia.org/api/search.asmx/PrefixSearch?QueryClass=&MaxHits=1&QueryString="
-				+ title;
-		Document doc;
+		String charSeqTmp = charSeq.replace(" ", "%20");
 		try {
-			doc = Jsoup.connect(url).timeout(20000).get();
-			Elements s = doc.select("Result URI");
+			String xml = Jsoup.connect(URL + charSeqTmp).timeout(1000*10)
+					.get().toString().replace("&nbsp", "&#160");
 
-			if (s.size() > 1)
-				return s.get(0).html();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			InputSource is = new InputSource(new StringReader(xml));
+			org.w3c.dom.Document doc = builder.parse(is);
+
+			Element e = doc.getDocumentElement();
+			NodeList nl = e.getElementsByTagName("result");
+
+			if (nl != null) {
+				for (int i = 0; i < nl.getLength(); i++) {
+					Element el = (Element) nl.item(i);
+					String label = el.getElementsByTagName("label").item(0).getTextContent();
+					String uri = el.getElementsByTagName("uri").item(0).getTextContent();
+
+					if(!charSeq.equals("")){
+						if(charSeq.charAt(0) == ' '){
+							charSeq = charSeq.substring(1);
+						}
+
+						if(charSeq.charAt(charSeq.length()-1) == ' '){
+							charSeq = charSeq.substring(0, charSeq.length()-1);
+						}
+					}
+
+					LookupResult lr = new LookupResult(charSeq, label, uri.replace("\n", "").replace(" ", ""));
+					results.add(lr);
+				}
+
+			}
+
+		} catch (IOException | ParserConfigurationException | SAXException e) {
 			e.printStackTrace();
 		}
-
-		return null;
+		return results;
 	}
 
-	public static DBPediaSPARQLLookupResult sparqlSearch(String title) {
+	public static ArrayList<LookupResult> lookupKeywordSearch(String charSeq) {
+		return lookupSearch("http://lookup.dbpedia.org/api/search/KeywordSearch?QueryString=",charSeq);
+	}
+
+	public static ArrayList<LookupResult> lookupPrefixSearch(String charSeq) {
+		return lookupSearch("http://lookup.dbpedia.org/api/search/PrefixSearch?QueryString=",charSeq);
+	}
+
+	public static LookupResult sparqlSearch(String title) {
 
 		// we dont want categories, but we want possible redirection targets. we
 		// don't want disambiguations either!
@@ -80,10 +121,38 @@ public class DBPediaWrapper {
 			QuerySolution s = r.next();
 			String x = s.get("x").toString();
 			String y = s.contains("y") ? s.get("y").toString() : null;
-			return new DBPediaSPARQLLookupResult(x, y);
+			String match = y != null ? y : x;
+			match = match.replace("http://dbpedia.org/resource/","");
+			return new LookupResult(title,match,x);
 		}
 
 		return null;
+	}
+
+	private static String url_prefiller =  "http://spotlight.sztaki.hu:2222/rest/annotate?text=";
+	private static String url_postfiller = "&confidence=0.3";
+
+	public static ArrayList<LookupResult> spotlightLookupSearch(String sentence){
+		ArrayList<LookupResult> results = new ArrayList<>();
+		String sentenceTmp = sentence.replace(" ", "%20");
+		Document doc;
+		try {
+			doc = Jsoup.connect(url_prefiller+sentenceTmp+url_postfiller).get();
+
+			Elements nes = doc.select("a");
+
+			for(int i=0; i<nes.size(); i++){
+				String href = nes.get(i).attr("href");
+				String ne = nes.get(i).text();
+				LookupResult lr = new LookupResult(ne, ne, href);
+				results.add(lr);
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return results;
 	}
 
 	public static ArrayList<String> checkPropertyExists(String obj, Property prop) {

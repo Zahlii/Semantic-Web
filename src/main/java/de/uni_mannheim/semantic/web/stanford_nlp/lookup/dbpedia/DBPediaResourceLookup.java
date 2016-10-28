@@ -2,65 +2,105 @@ package de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia;
 
 import de.uni_mannheim.semantic.web.crawl.DBPediaWrapper;
 import de.uni_mannheim.semantic.web.stanford_nlp.StanfordSentence;
-import de.uni_mannheim.semantic.web.stanford_nlp.lookup.AbstractLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
-import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupStatus;
+
+import java.util.*;
 
 
-public class DBPediaResourceLookup extends AbstractLookup {
-    
+public class DBPediaResourceLookup {
+
+
+    private Comparator<LookupResult> comp;
+
+    private StanfordSentence sentence;
+    private List<String> currentTokens;
+    private HashMap<String, LookupResult> lookupResults = new HashMap<>();
+
+    private String currentText;
+
     public DBPediaResourceLookup(StanfordSentence sentence) {
-        super(sentence);
+        this.sentence = sentence;
+        this.currentText = sentence.getCleanedText();
+        this.comp = (o1, o2) -> {
+
+            double c1 = o1.getCertainty();
+            double c2 = o2.getCertainty();
+
+            if(c1==c2)
+                return 0;
+
+            return c1 > c2 ? -1 : 1;
+        };
+        constructTokens();
     }
 
-    @Override
-    protected LookupResult<String> findByTitle(String title) {
-        LookupResult<String> res = normalLookup(title);
+    public void constructTokens() {
+        this.currentText = sentence.getCleanedText();
+        this.currentTokens = Arrays.asList(this.currentText.split(" "));
+    }
 
-        if(res.getStatus() != LookupStatus.FOUND) {
-            return sparqlLookup(title);
+    private LookupResult findByTitle(String title) {
+
+        List<LookupResult> candidates = new ArrayList<>();
+
+        candidates.addAll(prefixLookup(title));
+        candidates.add(sparqlLookup(title));
+        candidates.addAll(keywordLookup(title));
+        candidates.addAll(spotlightLookup(title));
+
+        candidates.sort(comp);
+
+        return candidates.get(0);
+    }
+
+
+    public List<LookupResult> findAllIn(int start, int end) {
+        int max = 5;
+
+        List<LookupResult> candidates = new ArrayList<>();
+        ArrayList<List<String>> ngrams = new ArrayList<>();
+
+        for (int size = max; size >= 1; size--) {
+            for (int i = start; i <= end - size + 1; i++) {
+                List<String> ngramWords = currentTokens.subList(i, i + size);
+                ngrams.add(ngramWords);
+            }
         }
 
-        return res;
-    }
+        for(List<String> ngram : ngrams) {
+            String term = getSearchTermFromNGram(ngram);
 
-
-    private LookupResult<String> normalLookup(String title) {
-        String found = DBPediaWrapper.lookupSearch(title);
-
-        LookupResult<String> res;
-
-        if(found != null) {
-            String ownTitle = found.replace("_"," ").replace("http://dbpedia.org/resource/","");
-            if(ownTitle.contains("("))
-                ownTitle = ownTitle.substring(0,ownTitle.indexOf("(")-1);
-            res = new LookupResult<>(title, ownTitle , found);
-        } else {
-            res = new LookupResult<>(LookupStatus.NOT_FOUND);
+            if(term != null) {
+                LookupResult r = findByTitle(term);
+                candidates.add(r);
+            }
         }
 
-        return res;
+        candidates.sort(comp);
+
+        return candidates;
     }
 
-    private LookupResult<String> sparqlLookup(String title) {
-        DBPediaSPARQLLookupResult found = DBPediaWrapper.sparqlSearch(title);
-
-        LookupResult<String> res;
-
-        if(found != null) {
-            res = new LookupResult<>(title, found.getSimilarityRelevantCleanedPage(), found.getPage());
-        } else {
-            res = new LookupResult<>(LookupStatus.NOT_FOUND);
-        }
-
-        return res;
+    private List<LookupResult> prefixLookup(String title) {
+        return DBPediaWrapper.lookupPrefixSearch(title);
     }
 
-    @Override
-    protected String getSearchTermFromNGram(String[] words) {
-        int s = words.length;
+    private List<LookupResult> keywordLookup(String title) {
+        return DBPediaWrapper.lookupKeywordSearch(title);
+    }
 
-        String first = words[0];
+    private LookupResult sparqlLookup(String title) {
+        return DBPediaWrapper.sparqlSearch(title);
+    }
+
+    private List<LookupResult> spotlightLookup(String title) {
+        return DBPediaWrapper.spotlightLookupSearch(title);
+    }
+
+    private String getSearchTermFromNGram(List<String> words) {
+        int s = words.size();
+
+        String first = words.get(0);
 
         if(first.contains("Variable"))
             return null;
@@ -73,7 +113,7 @@ public class DBPediaResourceLookup extends AbstractLookup {
         if(startsWithThe && s==1)
             return null;
 
-        String last = words[s-1];
+        String last = words.get(s-1);
 
         for(String w : words) {
             if(!isValidPart(w)) {
@@ -110,5 +150,18 @@ public class DBPediaResourceLookup extends AbstractLookup {
 
     private boolean isValidFirstPart(String text) {
         return (text.matches("^[A-Z].*") || text.matches("the"));
+    }
+
+    public String getText() {
+        return currentText;
+    }
+
+    public HashMap<String, LookupResult> getResults() {
+        return lookupResults;
+    }
+
+    public List<LookupResult> findAll() {
+
+        return findAllIn(0,this.currentTokens.size()-1);
     }
 }

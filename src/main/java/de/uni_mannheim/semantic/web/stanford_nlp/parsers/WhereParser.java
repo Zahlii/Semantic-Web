@@ -18,7 +18,7 @@ public class WhereParser extends GenericParser {
 
 //		System.out.println("WhereParser");
 		
-		LookupResult<String> w = _sentence.findEntity();
+		LookupResult w = _sentence.findEntity();
 		
 		ArrayList<String> answers = new ArrayList<>();
 		

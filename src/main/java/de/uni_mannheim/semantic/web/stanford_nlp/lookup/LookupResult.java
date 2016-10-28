@@ -3,8 +3,8 @@ package de.uni_mannheim.semantic.web.stanford_nlp.lookup;
 
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.Levenshtein;
 
-public class LookupResult<E> {
-    private E result;
+public class LookupResult {
+    private String result;
     private LookupStatus status;
     private double certainty;
     private String resultTitle;
@@ -21,7 +21,7 @@ public class LookupResult<E> {
                 '}';
     }
 
-    public LookupResult(String searchedTitle, String resultTitle, E result) {
+    public LookupResult(String searchedTitle, String resultTitle, String result) {
         this.searchedTitle = searchedTitle;
         this.resultTitle = resultTitle;
         this.result = result;
@@ -35,13 +35,14 @@ public class LookupResult<E> {
 
     public LookupResult(LookupStatus status) {
         this.status = status;
+        this.certainty = -1;
     }
 
     public LookupStatus getStatus() {
         return status;
     }
 
-    public E getResult() {
+    public String getResult() {
         return result;
     }
 

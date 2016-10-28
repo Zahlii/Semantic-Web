@@ -36,7 +36,7 @@ public class HowParser extends GenericParser {
 			break;
 		}
 
-		LookupResult<String> w = _sentence.findEntity();
+		LookupResult w = _sentence.findEntity();
 
 		if(w == null)
 			throw new Exception("Unable to find entity.");

@@ -2,8 +2,8 @@ package de.uni_mannheim.semantic.web.stanford_nlp;
 
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.StanfordNLP;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaCategoryLookup;
-import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaResourceLookup;
+import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
@@ -33,10 +33,10 @@ public class StanfordSentence {
 
 	public static void main(String[] args) throws Exception {
 
-		StanfordSentence s = new StanfordSentence("Give me all cosmonauts.");
-		System.out.println("Answers: " + s.getAnswers());
+		//StanfordSentence s = new StanfordSentence("Give me all cosmonauts.");
+		//System.out.println("Answers: " + s.getAnswers());
 
-		//s = new StanfordSentence("Who produces Orangina?");
+		StanfordSentence s = new StanfordSentence("Was Aristotle influenced by Socrates?");
 		//System.out.println(s.getAnswers());
 	}
 
@@ -47,14 +47,15 @@ public class StanfordSentence {
 		extractQuestionType();
 
 		dbpediaResource = new DBPediaResourceLookup(this);
+		dbpediaResource.findAll();
 		dbpediaCategory = new DBPediaCategoryLookup(this);
 
 		basicAnnotate();
 	}
 
-	public LookupResult<String> findEntity() {
-		LookupResult<String> res = dbpediaResource.findOneIn(0,words.size()-1);
-		return res;
+	public LookupResult findEntity() {
+		List<LookupResult> res = dbpediaResource.findAllIn(0,words.size()-1);
+		return res.get(0);
 	}
 
 	private void extractQuestionType() throws Exception {

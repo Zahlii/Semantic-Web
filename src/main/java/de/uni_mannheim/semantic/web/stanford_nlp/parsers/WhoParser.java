@@ -17,7 +17,7 @@ public class WhoParser extends GenericParser {
 //			System.out.println(_sentence.removeWord(0));
 
 
-		LookupResult<String> w = _sentence.findEntity();
+		LookupResult w = _sentence.findEntity();
 		
 		ArrayList<String> answers = new ArrayList<>();
 		
