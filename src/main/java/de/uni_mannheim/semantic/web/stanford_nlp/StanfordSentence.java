@@ -168,4 +168,8 @@ public class StanfordSentence {
 
 		return words;
 	}
+	
+	public SemanticGraph getSemanticGraph(){
+		return this.graph;
+	}
 }

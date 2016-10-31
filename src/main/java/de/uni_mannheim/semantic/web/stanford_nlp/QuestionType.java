@@ -2,6 +2,7 @@ package de.uni_mannheim.semantic.web.stanford_nlp;
 
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.GiveMeParser;
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.HowParser;
+import de.uni_mannheim.semantic.web.stanford_nlp.parsers.WhenParser;
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.WhereParser;
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.WhoParser;
 
@@ -14,11 +15,11 @@ public enum QuestionType {
 	Give_me_all(GiveMeParser.class,"Give me all","Give me a list of all","Show me all","List the","List all"), // Followed by DESCRIPTION or CLASS
 	Give_me_the("Give me"), // Followed by OBJECT
 	Who_is(WhoParser.class,"Who is","Who was","Who were"), // followed by DESCRIPTION or RESOURCE
-	When_is("When is","When was","When were","When did"), // followed by RESOURCE
+	When_is(WhenParser.class, "When is","When was","When were","When did"), // followed by RESOURCE
 	What_is("What is","What was","What were","What are"), // followed by PREDICATE? 
 	Where_is(WhereParser.class,"Where is","Where was","Where were", "Where did", "Where do"), // followed by PREDICATE? 
 //	Who("Who"), // followed by predicate
-	When("When"), // Followed by 
+	When(WhenParser.class, "When"), // Followed by 
 	How_many("How many"), // followed by indicator for number
 	Does("Does","Is","Do","Was","Did","Are"), // followed by RESOURCE
 	How(HowParser.class, "How"),
