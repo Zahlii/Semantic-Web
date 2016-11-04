@@ -15,7 +15,7 @@ public class GiveMeParser extends GenericParser {
     @Override
     protected ArrayList<String> parseInternal() throws Exception {
 
-        List<LookupResult> results = _sentence.dbpediaCategory.findAllByTitle(_sentence.getCleanedText());
+        List<LookupResult> results = _sentence.dbpediaCategory.findAll();
 
 
         ArrayList<String> responses = new ArrayList<>();

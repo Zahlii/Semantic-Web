@@ -4,42 +4,37 @@ import de.uni_mannheim.semantic.web.stanford_nlp.StanfordSentence;
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.text.IndexedTextSearch;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupStatus;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.NGramLookup;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.lucene.queryparser.classic.ParseException;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class DBPediaCategoryLookup  {
+public class DBPediaCategoryLookup extends NGramLookup {
 
-    private StanfordSentence sentence;
     private static IndexedTextSearch search = new IndexedTextSearch("yago");
 
     public DBPediaCategoryLookup(StanfordSentence sentence) {
-        this.sentence = sentence;
+        super(sentence);
     }
 
-    public List<LookupResult> findAllByTitle(String title) {
-        LookupResult r;
-        try {
-            List<LookupResult> res = search.search(title.replace(" ","~ ")+"~");
-            return res;
-        } catch(Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    @Override
+    protected String getSearchTermFromNGram(List<String> words) {
+        return StringUtils.join(words,"~ ") + "~";
     }
 
-    protected LookupResult findByTitle(String title) {
-        LookupResult r;
+    @Override
+    protected List<LookupResult> performLookupInternal(List<String> words, String term) {
+        List<LookupResult> res = new ArrayList<>();
+
         try {
-            List<LookupResult> res = search.search(title);
-            r = res.size() > 0 ? res.get(0) : new LookupResult(LookupStatus.NOT_FOUND);
-        } catch(Exception e) {
+            res = search.search(term);
+        } catch (IOException | ParseException e) {
             e.printStackTrace();
-            return new LookupResult(LookupStatus.FAIL);
         }
-        return r;
-    }
-    protected String getSearchTermFromNGram(String[] words) {
-        return StringUtils.join(words,"~ ");
+
+        return res;
     }
 }

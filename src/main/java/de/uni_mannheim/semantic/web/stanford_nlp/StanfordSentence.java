@@ -2,7 +2,7 @@ package de.uni_mannheim.semantic.web.stanford_nlp;
 
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.StanfordNLP;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaCategoryLookup;
-import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaPropertyLookup;
+import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaCategoryLookupOld;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaResourceLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
@@ -37,8 +37,9 @@ public class StanfordSentence {
 		//StanfordSentence s = new StanfordSentence("Who was John F. Kennedy's vice president?");
 		//System.out.println("Answers: " + s.getAnswers());
 
-		StanfordSentence s = new StanfordSentence("Who developed Minecraft?");
-		System.out.println("Answers: " + s.getAnswers());
+		StanfordSentence s = new StanfordSentence("Is Namibia a CountriesInAfrica?");
+		s.findEntity();
+		s.findCategory();
 	}
 
 	public StanfordSentence(String text) throws Exception {
@@ -55,7 +56,12 @@ public class StanfordSentence {
 	}
 
 	public LookupResult findEntity() {
-		List<LookupResult> res = dbpediaResource.findAllIn();
+		List<LookupResult> res = dbpediaResource.findAll();
+		return res.get(0);
+	}
+
+	public LookupResult findCategory() {
+		List<LookupResult> res = dbpediaCategory.findAll();
 		return res.get(0);
 	}
 

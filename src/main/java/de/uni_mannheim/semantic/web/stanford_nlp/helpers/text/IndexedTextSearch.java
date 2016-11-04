@@ -2,6 +2,7 @@ package de.uni_mannheim.semantic.web.stanford_nlp.helpers.text;
 
 
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
+import org.apache.jena.tdb.index.Index;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -33,6 +34,12 @@ public class IndexedTextSearch {
     private IndexReader reader;
     private IndexSearcher searcher;
     private QueryParser qp;
+
+    public static void main(String[] args) throws IOException, ParseException {
+        IndexedTextSearch s = new IndexedTextSearch("yago");
+        List<LookupResult> r = s.search("countries~ in~ africa~");
+        return;
+    }
 
     public List<LookupResult> search(String term) throws IOException, ParseException {
 

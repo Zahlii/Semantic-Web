@@ -38,10 +38,6 @@ public class LookupResult {
         this.certainty = -1;
     }
 
-    public LookupStatus getStatus() {
-        return status;
-    }
-
     public String getResult() {
         return result;
     }
@@ -65,5 +61,9 @@ public class LookupResult {
     
     public String getSearchedTitle(){
     	return searchedTitle;
+    }
+
+    public boolean found() {
+        return this.status == LookupStatus.FOUND;
     }
 }

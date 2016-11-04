@@ -71,7 +71,7 @@ public class DBPediaPropertyLookup {
 
     public ArrayList<String> findPropertyForName(String search) {
         LookupResult r =  findPropertyByName(search);
-        if(r.getStatus() == LookupStatus.FOUND) {
+        if(r.found()) {
             return props.get(r.getResult());
         }
 
@@ -100,7 +100,7 @@ public class DBPediaPropertyLookup {
 
             for(String term : terms) {
                 LookupResult r =  findPropertyByName(term);
-                if(r.getStatus() == LookupStatus.FOUND) {
+                if(r.found()) {
                     System.out.println("Mapping " + term + " to " + r.getResult());
                     String propName = "Property" + propertyResults.size();
                     this.currentText = this.currentText.replace(term,propName);
