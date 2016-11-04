@@ -14,6 +14,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -33,11 +34,11 @@ public class IndexedTextSearch {
     private Directory index;
     private IndexReader reader;
     private IndexSearcher searcher;
-    private QueryParser qp;
+    private ComplexPhraseQueryParser qp;
 
     public static void main(String[] args) throws IOException, ParseException {
         IndexedTextSearch s = new IndexedTextSearch("yago");
-        List<LookupResult> r = s.search("countries~ in~ africa~");
+        List<LookupResult> r = s.search("countr* in africa");
         return;
     }
 
@@ -73,7 +74,7 @@ public class IndexedTextSearch {
             LookupResult r = new LookupResult(term, d.get("title"), d.get("yago_name"));
             r.setCertainty(hits[i].score);
             results.add(r);
-            //System.out.println((i + 1) + ". " + hits[i].score + "\t" + d.get("yago_name") + "\t" + d.get("title"));
+            System.out.println((i + 1) + ". " + hits[i].score + "\t" + d.get("yago_name") + "\t" + d.get("title"));
         }
 
         return results;
@@ -88,7 +89,7 @@ public class IndexedTextSearch {
         } catch(Exception e) {
             e.printStackTrace();
         }
-        qp = new QueryParser("title",analyzer);
+        qp = new ComplexPhraseQueryParser("title",analyzer);
         qp.setDefaultOperator(QueryParser.Operator.AND);
     }
 }
