@@ -38,7 +38,7 @@ public class IndexedTextSearch {
 
     public static void main(String[] args) throws IOException, ParseException {
         IndexedTextSearch s = new IndexedTextSearch("yago");
-        List<LookupResult> r = s.search("countr* in africa");
+        List<LookupResult> r = s.search("country~");
         return;
     }
 
@@ -47,7 +47,7 @@ public class IndexedTextSearch {
         Query q = qp.parse(term);
 
         // 3. search
-        int hitsPerPage = 100;
+        int hitsPerPage = 100000;
         reader = DirectoryReader.open(index);
         searcher = new IndexSearcher(reader);
 

@@ -1,6 +1,7 @@
 package de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia;
 
 import de.uni_mannheim.semantic.web.stanford_nlp.StanfordSentence;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.StanfordNLP;
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.text.IndexedTextSearch;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupStatus;
@@ -22,7 +23,12 @@ public class DBPediaCategoryLookup extends NGramLookup {
 
     @Override
     protected String getSearchTermFromNGram(List<String> words) {
-        return StringUtils.join(words,"~ ") + "~";
+
+        StringBuilder b = new StringBuilder();
+        for(String w : words) {
+            b.append(StanfordNLP.getStem(w)).append("* ");
+        }
+        return b.toString();
     }
 
     @Override
