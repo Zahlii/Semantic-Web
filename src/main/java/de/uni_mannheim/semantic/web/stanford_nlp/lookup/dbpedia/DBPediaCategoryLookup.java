@@ -29,14 +29,20 @@ public class DBPediaCategoryLookup extends NGramLookup {
             if(w.contains("ariable"))
                 return null;
 
+            if(w.length()<=3)
+                continue;
+
             String s = StanfordNLP.getStem(w);
-            if(s.length()>3) {
+            if(s.length()>3 && s.endsWith("y")) {
                 s = s.substring(0, s.length() - 1) + "* ";
             } else {
-                s= s +" ";
+                s = s +"* ";
             }
             b.append(s);
         }
+        if(b.length() == 0)
+            return null;
+
         return b.toString();
     }
 
@@ -46,6 +52,8 @@ public class DBPediaCategoryLookup extends NGramLookup {
 
         try {
             res = search.search(StringUtils.join(words," "),term);
+            for(LookupResult r : res)
+                r.setResult("http://dbpedia.org/class/yago/" + r.getResult());
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }

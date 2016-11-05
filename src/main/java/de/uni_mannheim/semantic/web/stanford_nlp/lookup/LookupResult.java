@@ -66,4 +66,8 @@ public class LookupResult {
     public boolean found() {
         return this.status == LookupStatus.FOUND;
     }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
 }

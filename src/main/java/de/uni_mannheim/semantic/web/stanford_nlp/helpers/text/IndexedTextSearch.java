@@ -2,6 +2,8 @@ package de.uni_mannheim.semantic.web.stanford_nlp.helpers.text;
 
 
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
+import info.debatty.java.stringsimilarity.Cosine;
+import info.debatty.java.stringsimilarity.QGram;
 import org.apache.jena.tdb.index.Index;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -21,6 +23,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
+
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -47,7 +50,7 @@ public class IndexedTextSearch {
         Query q = qp.parse(term);
 
         // 3. search
-        int hitsPerPage = 10;
+        int hitsPerPage = 100;
         reader = DirectoryReader.open(index);
         searcher = new IndexSearcher(reader);
 
@@ -62,10 +65,16 @@ public class IndexedTextSearch {
 
         ScoreDoc[] hits = docs.scoreDocs;
 
-        // 4. display results
-        System.out.println("Found " + hits.length + " hits ["+duration+"ms] for '"+term+"'");
+        List<LookupResult> results = new ArrayList<>();
 
-        List<LookupResult> results = new ArrayList<>(hits.length);
+
+
+        // 4. display results
+        System.out.println("Found " + hits.length + " hits ["+duration+"ms] for '"+term+"' / '"+originalText+"'");
+
+        if(hits.length<1)
+            return results;
+
 
         for (int i = 0; i < hits.length; ++i) {
             int docId = hits[i].doc;
@@ -73,8 +82,12 @@ public class IndexedTextSearch {
 
             LookupResult r = new LookupResult(originalText, d.get("title"), d.get("yago_name"));
             //r.setCertainty(hits[i].score);
+            double c = similarity(originalText,d.get("title"));
+            if(c<0.65)
+                continue;
+            r.setCertainty(c);
             results.add(r);
-            //System.out.println((i + 1) + ". " + r.getCertainty() + "\t" + d.get("yago_name") + "\t" + d.get("title"));
+            System.out.println((i + 1) + ". " + r.getCertainty() + "\t" + d.get("yago_name") + "\t" + d.get("title"));
         }
 
         return results;
@@ -91,5 +104,10 @@ public class IndexedTextSearch {
         }
         qp = new ComplexPhraseQueryParser("title",analyzer);
         qp.setDefaultOperator(QueryParser.Operator.AND);
+    }
+
+    private double similarity(String search, String found) {
+        Cosine cos = new Cosine();
+        return cos.similarity(search,found);
     }
 }
