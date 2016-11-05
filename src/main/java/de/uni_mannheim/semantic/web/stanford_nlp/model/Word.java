@@ -7,11 +7,13 @@ public class Word {
 
 	private String _text;
 	private String _posTag = "";
+	private String _stem;
 
 	
 	public Word(CoreLabel w){
 		this._text = w.get(CoreAnnotations.TextAnnotation.class);
 		this._posTag = w.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+		this._stem = w.get(CoreAnnotations.StemAnnotation.class);
 	}
 
 	public Word (String text,String pos) {
@@ -37,4 +39,7 @@ public class Word {
 		return _text + "(" + _posTag + ")";
 	}
 
+    public String getStem() {
+        return _stem;
+    }
 }

@@ -38,16 +38,16 @@ public class IndexedTextSearch {
 
     public static void main(String[] args) throws IOException, ParseException {
         IndexedTextSearch s = new IndexedTextSearch("yago");
-        List<LookupResult> r = s.search("country~");
+        //List<LookupResult> r = s.search("country*~ in africa");
         return;
     }
 
-    public List<LookupResult> search(String term) throws IOException, ParseException {
+    public List<LookupResult> search(String originalText, String term) throws IOException, ParseException {
 
         Query q = qp.parse(term);
 
         // 3. search
-        int hitsPerPage = 100000;
+        int hitsPerPage = 10;
         reader = DirectoryReader.open(index);
         searcher = new IndexSearcher(reader);
 
@@ -71,10 +71,10 @@ public class IndexedTextSearch {
             int docId = hits[i].doc;
             Document d = searcher.doc(docId);
 
-            LookupResult r = new LookupResult(term, d.get("title"), d.get("yago_name"));
-            r.setCertainty(hits[i].score);
+            LookupResult r = new LookupResult(originalText, d.get("title"), d.get("yago_name"));
+            //r.setCertainty(hits[i].score);
             results.add(r);
-            System.out.println((i + 1) + ". " + hits[i].score + "\t" + d.get("yago_name") + "\t" + d.get("title"));
+            //System.out.println((i + 1) + ". " + r.getCertainty() + "\t" + d.get("yago_name") + "\t" + d.get("title"));
         }
 
         return results;

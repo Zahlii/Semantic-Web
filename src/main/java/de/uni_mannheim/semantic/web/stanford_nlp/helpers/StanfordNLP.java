@@ -7,6 +7,7 @@ import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
 import edu.stanford.nlp.util.PropertiesUtils;
+import edu.stanford.nlp.process.*;
 
 import java.util.List;
 import java.util.Properties;
@@ -42,7 +43,7 @@ public class StanfordNLP {
 		CoreMap sentence = handle(word);
 		List<CoreLabel> l = sentence.get(CoreAnnotations.TokensAnnotation.class);
 
-		return new Word(l.get(0)).getPOSTag();
+		return l.get(0).getString(CoreAnnotations.LemmaAnnotation.class);
 	}
 
 

@@ -26,7 +26,16 @@ public class DBPediaCategoryLookup extends NGramLookup {
 
         StringBuilder b = new StringBuilder();
         for(String w : words) {
-            b.append(StanfordNLP.getStem(w)).append("* ");
+            if(w.contains("ariable"))
+                return null;
+
+            String s = StanfordNLP.getStem(w);
+            if(s.length()>3) {
+                s = s.substring(0, s.length() - 1) + "* ";
+            } else {
+                s= s +" ";
+            }
+            b.append(s);
         }
         return b.toString();
     }
@@ -36,7 +45,7 @@ public class DBPediaCategoryLookup extends NGramLookup {
         List<LookupResult> res = new ArrayList<>();
 
         try {
-            res = search.search(term);
+            res = search.search(StringUtils.join(words," "),term);
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
