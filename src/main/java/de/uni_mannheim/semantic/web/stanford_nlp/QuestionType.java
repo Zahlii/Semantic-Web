@@ -4,6 +4,7 @@ import de.uni_mannheim.semantic.web.stanford_nlp.parsers.GiveMeParser;
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.HowParser;
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.WhenParser;
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.WhereParser;
+import de.uni_mannheim.semantic.web.stanford_nlp.parsers.WhichParser;
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.WhoParser;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.GenericParser;
 
 public enum QuestionType {
-	Which("In which","To which","For which","Which","Through which"), // followed by CLASS
+	Which(WhichParser.class,"In which","To which","For which","Which","Through which"), // followed by CLASS
 	Give_me_all(GiveMeParser.class,"Give me all","Give me a list of all","Show me all","List the","List all"), // Followed by DESCRIPTION or CLASS
 	Give_me_the("Give me"), // Followed by OBJECT
 	Who_is(WhoParser.class,"Who is","Who was","Who were"), // followed by DESCRIPTION or RESOURCE

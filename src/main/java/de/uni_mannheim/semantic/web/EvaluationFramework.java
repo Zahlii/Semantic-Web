@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,6 +22,11 @@ import de.uni_mannheim.semantic.web.answerer.LinkedDataAnswerer;
 import de.uni_mannheim.semantic.web.answerer.Siri;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.QASet;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.Question;
+import de.uni_mannheim.semantic.web.stanford_nlp.parsers.GiveMeParser;
+import de.uni_mannheim.semantic.web.stanford_nlp.parsers.HowParser;
+import de.uni_mannheim.semantic.web.stanford_nlp.parsers.WhenParser;
+import de.uni_mannheim.semantic.web.stanford_nlp.parsers.WhereParser;
+import de.uni_mannheim.semantic.web.stanford_nlp.parsers.WhoParser;
 
 public class EvaluationFramework {
 	public static final String trainingFile = "/data/qald-5_train.xml";
@@ -146,35 +153,35 @@ public class EvaluationFramework {
 
 		System.out.println("Start training: ");
 		for (int i = 0; i < trainingSet.size(); i++) {
-//			if(trainingSet.get(i).getQuestion().getQuestionText().contains("Who") && trainingSet.get(i).isAnswerable()){
-
-			String q = trainingSet.get(i).getQuestion().getQuestionText();
-
-
-			System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
-			System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
-
-			ArrayList<String> answers = answerer.train(trainingSet.get(i).getQuestion(), trainingSet.get(i).getExpectedAnswer());
-
-			fmeasuresTraining.add(computeFMeasureForOneQuestion(answers, trainingSet.get(i).getExpectedAnswer().getQueryResult()));
-//			}
+			if(trainingSet.get(i).getQuestion().getQuestionText().contains("Which countries are connected by the Rhine?") && trainingSet.get(i).isAnswerable()){
+	
+				String q = trainingSet.get(i).getQuestion().getQuestionText();
+	
+	
+				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
+				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
+	
+				ArrayList<String> answers = answerer.train(trainingSet.get(i).getQuestion(), trainingSet.get(i).getExpectedAnswer());
+	
+				fmeasuresTraining.add(computeFMeasureForOneQuestion(answers, trainingSet.get(i).getExpectedAnswer().getQueryResult()));
+			}
 		}
 
-		System.out.println("Start test: ");
-		for (int i = 0; i < testSet.size(); i++) {
-//			if(trainingSet.get(i).getQuestion().getQuestionText().contains("Who") && trainingSet.get(i).isAnswerable()){
-
-			String q = testSet.get(i).getQuestion().getQuestionText();
-
-
-			System.out.println("Question: " + q + " (answerable: " + testSet.get(i).isAnswerable()+")");
-			System.out.println("Expected Answer: " + Arrays.toString(testSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
-
-			ArrayList<String> answers = answerer.train(trainingSet.get(i).getQuestion(), testSet.get(i).getExpectedAnswer());
-
-			fmeasuresTest.add(computeFMeasureForOneQuestion(answers, testSet.get(i).getExpectedAnswer().getQueryResult()));
-//			}
-		}
+//		System.out.println("Start test: ");
+//		for (int i = 0; i < testSet.size(); i++) {
+////			if(testSet.get(i).getQuestion().getQuestionText().contains("Who") && trainingSet.get(i).isAnswerable()){
+//
+//			String q = testSet.get(i).getQuestion().getQuestionText();
+//
+//
+//			System.out.println("Question: " + q + " (answerable: " + testSet.get(i).isAnswerable()+")");
+//			System.out.println("Expected Answer: " + Arrays.toString(testSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
+//
+//			ArrayList<String> answers = answerer.train(trainingSet.get(i).getQuestion(), testSet.get(i).getExpectedAnswer());
+//
+//			fmeasuresTest.add(computeFMeasureForOneQuestion(answers, testSet.get(i).getExpectedAnswer().getQueryResult()));
+////			}
+//		}
 		
 		System.out.println("Training F-Measure Avg: "+getAvg(fmeasuresTraining));
 		System.out.println("Test F-Measure Avg: "+getAvg(fmeasuresTest));
