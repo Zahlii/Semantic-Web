@@ -153,7 +153,7 @@ public class EvaluationFramework {
 
 		System.out.println("Start training: ");
 		for (int i = 0; i < trainingSet.size(); i++) {
-			if(trainingSet.get(i).getQuestion().getQuestionText().contains("Which countries are connected by the Rhine?") && trainingSet.get(i).isAnswerable()){
+			if(trainingSet.get(i).getQuestion().getQuestionText().contains("Which") && trainingSet.get(i).isAnswerable()){
 	
 				String q = trainingSet.get(i).getQuestion().getQuestionText();
 	

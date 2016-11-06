@@ -59,7 +59,7 @@ public class DBPediaWrapper {
 
 		String charSeqTmp = charSeq.replace(" ", "%20");
 		try {
-			String xml = Jsoup.connect(URL + charSeqTmp).timeout(1000*10)
+			String xml = Jsoup.connect(URL + charSeqTmp).timeout(1000*20)
 					.get().toString().replace("&nbsp", "&#160");
 
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -160,7 +160,7 @@ public class DBPediaWrapper {
 
 		String se = ("PREFIX obj:<OBJECT> \r\n" + " SELECT ?prop \r\n" + "	WHERE{  \r\n"
 		// + " obj: dbo:PROPERTY ?prop . \r\n"
-				+ "		obj: dbp:PROPERTY ?prop . \r\n"
+				+ "		obj: <PROPERTY> ?prop . \r\n"
 				// + " ganges: ?p dbr:India . \r\n"
 				+ "}").replaceAll("OBJECT", obj).replaceAll("PROPERTY", prop.getName());
 
