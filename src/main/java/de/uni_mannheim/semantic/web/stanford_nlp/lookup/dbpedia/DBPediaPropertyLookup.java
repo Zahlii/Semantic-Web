@@ -130,7 +130,7 @@ public class DBPediaPropertyLookup {
                 maxcertainty = certainty;
             }
         }
-        if(maxcertainty>=0.7)
+        if(maxcertainty>=0.6)
             return res;
 
         return new LookupResult(LookupStatus.NOT_FOUND);

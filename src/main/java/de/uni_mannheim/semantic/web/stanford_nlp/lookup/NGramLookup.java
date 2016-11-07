@@ -101,6 +101,12 @@ public abstract class NGramLookup {
         return res;
     }
 
+    public LookupResult findOneIn(String word) {
+        List<String> s = new ArrayList<String>();
+        s.add(word);
+        return findOneIn(s);
+    }
+
     private LookupResult findOneIn(List<String> words) {
         String term = getSearchTermFromNGram(words);
 

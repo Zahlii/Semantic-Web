@@ -36,9 +36,8 @@ public class StanfordSentence {
 		//StanfordSentence s = new StanfordSentence("Who was John F. Kennedy's vice president?");
 		//System.out.println("Answers: " + s.getAnswers());
 
-		StanfordSentence s = new StanfordSentence("Who is the youngest player in the Premier League?");
-		s.findEntity();
-		s.findCategory();
+		StanfordSentence s = new StanfordSentence("Which countries are connected by the Rhine?");
+		System.out.println("Answers: " + s.getAnswers());
 	}
 
 	public StanfordSentence(String text) throws Exception {
