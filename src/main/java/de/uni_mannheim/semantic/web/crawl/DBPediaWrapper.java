@@ -45,7 +45,7 @@ public class DBPediaWrapper {
 
 	public static ResultSet query(String strQuery) {
 		String x = prefix + "\r\n" + strQuery;
-		// System.out.println(x);
+//		 System.out.println(x);
 		Query q = QueryFactory.create(x);
 		QueryExecution qexec = QueryExecutionFactory.sparqlService(endpoint, q);
 		ResultSet RS = qexec.execSelect();
@@ -59,8 +59,7 @@ public class DBPediaWrapper {
 
 		String charSeqTmp = charSeq.replace(" ", "%20");
 		try {
-			String xml = Jsoup.connect(URL + charSeqTmp).timeout(1000*20)
-					.get().toString().replace("&nbsp", "&#160");
+			String xml = Jsoup.connect(URL + charSeqTmp).timeout(1000 * 20).get().toString().replace("&nbsp", "&#160");
 
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -76,13 +75,13 @@ public class DBPediaWrapper {
 					String label = el.getElementsByTagName("label").item(0).getTextContent();
 					String uri = el.getElementsByTagName("uri").item(0).getTextContent();
 
-					if(!charSeq.equals("")){
-						if(charSeq.charAt(0) == ' '){
+					if (!charSeq.equals("")) {
+						if (charSeq.charAt(0) == ' ') {
 							charSeq = charSeq.substring(1);
 						}
 
-						if(charSeq.charAt(charSeq.length()-1) == ' '){
-							charSeq = charSeq.substring(0, charSeq.length()-1);
+						if (charSeq.charAt(charSeq.length() - 1) == ' ') {
+							charSeq = charSeq.substring(0, charSeq.length() - 1);
 						}
 					}
 
@@ -99,11 +98,11 @@ public class DBPediaWrapper {
 	}
 
 	public static ArrayList<LookupResult> lookupKeywordSearch(String charSeq) {
-		return lookupSearch("http://lookup.dbpedia.org/api/search/KeywordSearch?QueryString=",charSeq);
+		return lookupSearch("http://lookup.dbpedia.org/api/search/KeywordSearch?QueryString=", charSeq);
 	}
 
 	public static ArrayList<LookupResult> lookupPrefixSearch(String charSeq) {
-		return lookupSearch("http://lookup.dbpedia.org/api/search/PrefixSearch?QueryString=",charSeq);
+		return lookupSearch("http://lookup.dbpedia.org/api/search/PrefixSearch?QueryString=", charSeq);
 	}
 
 	public static LookupResult sparqlSearch(String title) {
@@ -122,26 +121,26 @@ public class DBPediaWrapper {
 			String x = s.get("x").toString();
 			String y = s.contains("y") ? s.get("y").toString() : null;
 			String match = y != null ? y : x;
-			match = match.replace("http://dbpedia.org/resource/","");
-			return new LookupResult(title,match,x);
+			match = match.replace("http://dbpedia.org/resource/", "");
+			return new LookupResult(title, match, x);
 		}
 
 		return null;
 	}
 
-	private static String url_prefiller =  "http://spotlight.sztaki.hu:2222/rest/annotate?text=";
+	private static String url_prefiller = "http://spotlight.sztaki.hu:2222/rest/annotate?text=";
 	private static String url_postfiller = "&confidence=0.3";
 
-	public static ArrayList<LookupResult> spotlightLookupSearch(String sentence){
+	public static ArrayList<LookupResult> spotlightLookupSearch(String sentence) {
 		ArrayList<LookupResult> results = new ArrayList<>();
 		String sentenceTmp = sentence.replace(" ", "%20");
 		Document doc;
 		try {
-			doc = Jsoup.connect(url_prefiller+sentenceTmp+url_postfiller).get();
+			doc = Jsoup.connect(url_prefiller + sentenceTmp + url_postfiller).timeout(10*1000).get();
 
 			Elements nes = doc.select("a");
 
-			for(int i=0; i<nes.size(); i++){
+			for (int i = 0; i < nes.size(); i++) {
 				String href = nes.get(i).attr("href");
 				String ne = nes.get(i).text();
 				LookupResult lr = new LookupResult(ne, ne, href);
@@ -173,8 +172,8 @@ public class DBPediaWrapper {
 
 		return properties;
 	}
-	
-	public static ArrayList<String> getTypeOfResource(String resource){
+
+	public static ArrayList<String> getTypeOfResource(String resource) {
 		ArrayList<String> ret = new ArrayList<>();
 
 		String se = ("select ?type where{<RESOURCE> a ?type.}\r\n").replaceAll("RESOURCE", resource);
@@ -206,5 +205,33 @@ public class DBPediaWrapper {
 		}
 
 		return relations;
+	}
+
+	public static ArrayList<String> buildJJRQuery(String resource, String prop, String comparator, double numeric, String adj1){
+		ArrayList<String> properties = new ArrayList<>();
+		
+		String se = "SELECT DISTINCT ?obj \r\n" 
+				+ "	WHERE{  \r\n"
+				+ "?obj a dbo:<OBJECT> . \r\n"
+				+ "?obj <PROPERTY> ?prop . \r\n"
+				+ "FILTER(?prop <COMPARATOR> <NUMERIC>) . \r\n";
+		if(!adj1.equals("")){
+			se += "?obj ?p ?q . FILTER(regex(?q,\"<ADJECTIVE>\")) . \r\n";
+		}
+		
+		se += "}";
+		se = se.replaceAll("<OBJECT>", resource).replaceAll("PROPERTY", prop)
+					.replaceAll("<COMPARATOR>", comparator).replaceAll("<NUMERIC>", String.valueOf(numeric)).replaceAll("<ADJECTIVE>", adj1);
+		
+//		System.out.println(se);
+		
+		ResultSet r = DBPediaWrapper.query(se);
+		while (r.hasNext()) {
+			QuerySolution s = r.next();
+			String p = s.get("obj").toString();
+			properties.add(p);
+		}
+
+		return properties;
 	}
 }
