@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.jena.vocabulary.DB;
 
 import de.uni_mannheim.semantic.web.crawl.DBPediaWrapper;
+import de.uni_mannheim.semantic.web.crawl.SynonymCrawler;
 import de.uni_mannheim.semantic.web.crawl.model.OntologyClass;
 import de.uni_mannheim.semantic.web.crawl.model.Property;
 import de.uni_mannheim.semantic.web.crawl.run_once.DBPediaOntologyCrawler;
@@ -65,74 +66,163 @@ public class WhichParser extends GenericParser {
         }
         
         try {
-            boolean second = false;
-            for (int i = 0; i < _sentence.getWords().size(); i++) {            	
-                if (_sentence.getWords().get(i).getPOSTag().matches("JJ.*")) {
-                    if (!second) adj1 = _sentence.getWords().get(i);
-                    else adj2 = _sentence.getWords().get(i);
+            boolean afterVerb = false;
+            
+            //splitting sentence into words
+            for (int i = 0; i < _sentence.getWords().size(); i++) {    
+                if (_sentence.getWords().get(i).getPOSTag().matches("JJ")) {
+                    if (adj1.getText().equals("") && !afterVerb){
+                    	adj1 = _sentence.getWords().get(i);
+                    }
+                    if(afterVerb && adj2.getText().equals("")){
+                    	adj2 = _sentence.getWords().get(i);
+                    }
                 }
                 if (_sentence.getWords().get(i).getPOSTag().matches("NN.*")) {
-                    if (!second) noun1 = _sentence.getWords().get(i);
-                    else noun2 = _sentence.getWords().get(i);
-                    second = true;
+                    if (noun1.getText().equals("") && !afterVerb){
+                    	noun1 = _sentence.getWords().get(i);
+                    }
+                    if(afterVerb && noun2.getText().equals("")){
+                    	noun2 = _sentence.getWords().get(i);
+                    }
                 }
                 if (_sentence.getWords().get(i).getPOSTag().matches("VB.*")) {
                     verb = _sentence.getWords().get(i);
+                    afterVerb = true;
                 }
             }
+            
 
-            System.out.println("Found: " + adj1.getText() + "_JJ " + noun1.getText() + "_NN " + verb.getText() + "_VB " + adj2.getText() + "_JJ " + noun2.getText() + "_NN ");
-
-            LookupResult entity = _sentence.dbpediaResource.findOneIn(noun2.getText());
-
+            ArrayList<LookupResult> entities = new ArrayList<>();
+            entities.addAll(_sentence.findEntities());
+            
+            String entity1 = null;
+            if(!noun1.getText().equals("")){
+	            for (int i = 0; i < entities.size(); i++) {
+	            	if(entities.get(i).getSearchedTitle() == null) continue;
+					if(entities.get(i).getSearchedTitle().contains(noun1.getText())){
+						entity1 = entities.get(i).getSearchedTitle();
+						break;
+					}
+				}
+	            if(entity1 == null){
+	            	entity1 = noun1.getText();
+	            }
+            }
+            
+            LookupResult entity2 = null; 
+            if(!noun2.getText().equals("")){
+	            for (int i = 0; i < entities.size(); i++) {
+	            	if(entities.get(i).getSearchedTitle() == null) continue;
+					if(entities.get(i).getSearchedTitle().contains(noun2.getText())){
+						entity2 = entities.get(i);
+						break;
+					}
+				}
+            }
+            
+            if(entity2 == null)
+            	return new ArrayList<>();
+            
+            System.out.println("Found: " + adj1.getText() + "_JJ " + entity1 + "_NN " + verb.getText() + "_VB " + adj2.getText() + "_JJ " + entity2.getSearchedTitle() + "_NN ");
+            
+//            LookupResult entity = _sentence.dbpediaResource.findOneIn(noun2.getText());
 
             ArrayList<String> res = new ArrayList<>();
-            DBPediaPropertyLookup pl = new DBPediaPropertyLookup(_sentence, entity.getResult());
-            res.addAll(pl.findPropertyForName(verb.getText()));
-            res.addAll(pl.findPropertyForName(noun1.getText()));
+            ArrayList<String> usedResults = new ArrayList<>();
+            ArrayList<String> redirects = new ArrayList<>();
+            ArrayList<String> e1Syns = new ArrayList<>();
+            ArrayList<String> vbSyns = new ArrayList<>();
+            usedResults.add(entity2.getResult());
 
-
-            ArrayList<String> ontologies = new ArrayList<>();
-            ArrayList<String> properties = new ArrayList<>();
-
-            for (int i = 0; i < res.size(); i++) {
-                if (res.get(i).matches(".*property.*")) {
-                    properties.add(res.get(i));
-                } else if (res.get(i).matches(".*ontology.*")) {
-                    ontologies.add(res.get(i));
-                }
+            while(res.size() == 0){
+            	DBPediaPropertyLookup pl = new DBPediaPropertyLookup(_sentence, entity2.getResult());
+	            
+            	res.addAll(pl.findPropertyForName(verb.getText()));
+	            res.addAll(pl.findPropertyForName(noun1.getText()));
+	            
+	            if(res.size() == 0){
+	            	if(e1Syns.size() == 0)	e1Syns.addAll(SynonymCrawler.findSynonyms(new Word(entity1, "NN")));
+	            	if(vbSyns.size() == 0)	vbSyns.addAll(SynonymCrawler.findSynonyms(verb));
+	            
+	            	for (int i = 0; i < e1Syns.size(); i++) {
+	    	            res.addAll(pl.findPropertyForName(e1Syns.get(i)));
+					}
+	            	for (int i = 0; i < vbSyns.size(); i++) {
+	    	            res.addAll(pl.findPropertyForName(vbSyns.get(i)));
+					}
+	            }
+	            
+	            if(res.size() == 0){
+	            	redirects.addAll(pl.findPropertyForName("wikiPageRedirects"));
+	            	
+	            	for (int i = 0; i < usedResults.size(); i++) {
+						if(redirects.contains(usedResults.get(i))){
+							redirects.remove(usedResults.get(i));
+						}
+					}
+	            	
+	            	if(redirects.size() == 0){
+	            		break;
+	            	} else {
+	            		entity2.setResult(redirects.get(0));
+	            		usedResults.add(redirects.get(0));
+	            		redirects.remove(0);
+	            	}
+	            }
             }
             
-
-
-            /*Property p = new Property(properties.get(0), null, null, null, null, null);
-
-            ArrayList<String> finalRes = DBPediaWrapper.checkPropertyExists(results.get(0).getResult(), p);
-
-
-            ArrayList<LookupResult> lookupResults = new ArrayList<>();
-            for (int i = 0; i < finalRes.size(); i++) {
-                lookupResults.addAll(DBPediaWrapper.spotlightLookupSearch(finalRes.get(i)));
-            }
-
-            ArrayList<String> finalList = new ArrayList<>();
-            for (int i = 0; i < lookupResults.size(); i++) {
-                ArrayList<String> types = DBPediaWrapper.getTypeOfResource(lookupResults.get(i).getResult());
-                for (int j = 0; j < types.size(); j++) {
-                    types.set(j, types.get(j).toLowerCase());
-                }
-
-                for (int j = 0; j < ontologies.size(); j++) {
-                    String ont = ontologies.get(j).toLowerCase();
-                    if (types.contains(ont) && !finalList.contains(lookupResults.get(i).getResult())) {
-                        finalList.add(lookupResults.get(i).getResult());
-                    }
-                }
-            }
-
-            return finalList;*/
+//            ArrayList<String> ontologies = new ArrayList<>();
+//            ArrayList<String> properties = new ArrayList<>();
+//
+//            for (int i = 0; i < res.size(); i++) {
+//                if (res.get(i).matches(".*property.*")) {
+//                    properties.add(res.get(i));
+//                } else if (res.get(i).matches(".*ontology.*")) {
+//                    ontologies.add(res.get(i));
+//                }
+//            }
             
-            return res;
+//            Property p = new Property(properties.get(0), null, null, null, null, null);
+
+//            ArrayList<String> finalRes = DBPediaWrapper.checkPropertyExists(results.get(0).getResult(), p);
+
+
+//            ArrayList<LookupResult> lookupResults = new ArrayList<>();
+//            for (int i = 0; i < finalRes.size(); i++) {
+//                lookupResults.addAll(DBPediaWrapper.spotlightLookupSearch(finalRes.get(i)));
+//            }
+
+//            ArrayList<String> finalList = new ArrayList<>();
+//            for (int i = 0; i < lookupResults.size(); i++) {
+//                ArrayList<String> types = DBPediaWrapper.getTypeOfResource(lookupResults.get(i).getResult());
+//                for (int j = 0; j < types.size(); j++) {
+//                    types.set(j, types.get(j).toLowerCase());
+//                }
+//
+//                for (int j = 0; j < ontologies.size(); j++) {
+//                    String ont = ontologies.get(j).toLowerCase();
+//                    if (types.contains(ont) && !finalList.contains(lookupResults.get(i).getResult())) {
+//                        finalList.add(lookupResults.get(i).getResult());
+//                    }
+//                }
+//            }
+//            return prepareForReturn(finalList, validTypes);
+
+            ArrayList<String> validTypes = new ArrayList<>();
+            String type1 = null;
+            ArrayList<LookupResult> tmp = DBPediaWrapper.lookupKeywordSearch(entity1);
+            if(tmp.size() > 0){
+            	ArrayList<String> tmp2 = DBPediaWrapper.getTypeOfResource(tmp.get(0).getResult());
+
+            	if(tmp2.size() > 0)
+            		type1 = tmp2.get(0);
+            }
+        	if(type1 != null){
+            	validTypes.add(type1);
+            }
+            
+            return prepareForReturn(res, validTypes);
 
 //		DBPediaPropertyLookup prop = new DBPediaPropertyLookup(_sentence, results.get(0).getResult());		
 //		ArrayList<String> props = prop.findPropertyForName(verb.getStem());
@@ -259,19 +349,6 @@ public class WhichParser extends GenericParser {
     public static Property getBestProperty(ArrayList<Property> props, String search){
     	double best = Double.MAX_VALUE;
     	Property prop = null;
-    	for(int i=0; i<props.size(); i++){
-    		double d = Levenshtein.normalized(props.get(i).getName(), search);
-    		if(d<best){
-    			best = d;
-    			prop = props.get(i);
-    		}
-    	}
-    	return prop;
-    }
-    
-    public static OntologyClass getBestOntologyClass(ArrayList<OntologyClass> props, String search){
-    	double best = Double.MAX_VALUE;
-    	OntologyClass prop = null;
     	for(int i=0; i<props.size(); i++){
     		double d = Levenshtein.normalized(props.get(i).getName(), search);
     		if(d<best){

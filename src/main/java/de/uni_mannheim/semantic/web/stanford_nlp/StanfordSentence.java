@@ -53,6 +53,10 @@ public class StanfordSentence {
 		basicAnnotate();
 	}
 
+	public List<LookupResult> findEntities(){
+		return dbpediaResource.findAll();
+	}
+	
 	public LookupResult findEntity() {
 		List<LookupResult> res = dbpediaResource.findAll();
 		return res.get(0);

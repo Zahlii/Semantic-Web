@@ -126,10 +126,7 @@ public class EvaluationFramework {
 			if(expectedAnswers.contains(answers.get(j))){
 				expectedAnswers.remove(answers.get(j));
 				correct++;
-			}else{
-				System.out.println(answers.get(j));
 			}
-
 		}
 
 		System.out.println("Correct answers: " + correct);
@@ -153,10 +150,10 @@ public class EvaluationFramework {
 		ArrayList<Double> fmeasuresTraining = new ArrayList<>();
 		ArrayList<Double> fmeasuresTest = new ArrayList<>();
 
-		System.out.println("Start training: ");
+//		System.out.println("Start training: ");
 //		for (int i = 0; i < trainingSet.size(); i++) {
-//			if(trainingSet.get(i).getQuestion().getQuestionText().matches(".*[Ww]hich.*more.*") && trainingSet.get(i).isAnswerable()){
-////			if(trainingSet.get(i).getQuestion().getQuestionText().matches("Which countries have more than two official languages\\?") && trainingSet.get(i).isAnswerable()){
+////			if(trainingSet.get(i).getQuestion().getQuestionText().matches(".*[Ww]hich.*") && trainingSet.get(i).isAnswerable()){
+//			if(trainingSet.get(i).getQuestion().getQuestionText().matches("What.*") && trainingSet.get(i).isAnswerable()){
 //
 //				String q = trainingSet.get(i).getQuestion().getQuestionText();
 //	
@@ -174,7 +171,7 @@ public class EvaluationFramework {
 
 		System.out.println("Start test: ");
 		for (int i = 0; i < testSet.size(); i++) {
-			if(testSet.get(i).getQuestion().getQuestionText().matches(".*") && testSet.get(i).isAnswerable()){
+			if(testSet.get(i).getQuestion().getQuestionText().matches("What.*.*") && testSet.get(i).isAnswerable()){
 
 			String q = testSet.get(i).getQuestion().getQuestionText();
 
@@ -188,8 +185,8 @@ public class EvaluationFramework {
 			}
 		}
 		
-		System.out.println("Training F-Measure Avg: "+getAvg(fmeasuresTraining));
-		System.out.println("Test F-Measure Avg: "+getAvg(fmeasuresTest));
+		System.out.println(fmeasuresTraining.size()+" Training F-Measure Avg: "+getAvg(fmeasuresTraining));
+		System.out.println(fmeasuresTest.size()+" Test F-Measure Avg: "+getAvg(fmeasuresTest));
 	}
 
 	public static void main(String[] args){

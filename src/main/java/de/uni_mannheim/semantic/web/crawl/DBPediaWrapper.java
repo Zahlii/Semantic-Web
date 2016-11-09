@@ -234,4 +234,29 @@ public class DBPediaWrapper {
 
 		return properties;
 	}
+	
+	public static ArrayList<String> buildGiveMeQuery(String resource, String adj1){
+		ArrayList<String> properties = new ArrayList<>();
+		
+		String se = "SELECT DISTINCT ?obj \r\n" 
+				+ "	WHERE{  \r\n"
+				+ "?obj a dbo:<OBJECT> . \r\n";
+		if(!adj1.equals("")){
+			se += "?obj ?p ?q . FILTER(regex(?q,\"<ADJECTIVE>\")) . \r\n";
+		}
+		
+		se += "}";
+		se = se.replaceAll("<OBJECT>", resource).replaceAll("<ADJECTIVE>", adj1);
+		
+//		System.out.println(se);
+		
+		ResultSet r = DBPediaWrapper.query(se);
+		while (r.hasNext()) {
+			QuerySolution s = r.next();
+			String p = s.get("obj").toString();
+			properties.add(p);
+		}
+
+		return properties;
+	}
 }
