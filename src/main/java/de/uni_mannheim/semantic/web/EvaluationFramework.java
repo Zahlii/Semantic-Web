@@ -144,44 +144,44 @@ public class EvaluationFramework {
 	}
 
 	public static void evaluateParser(LinkedDataAnswerer answerer){
-
 		EvaluationFramework.loadDataSet();
 
 		ArrayList<Double> fmeasuresTraining = new ArrayList<>();
 		ArrayList<Double> fmeasuresTest = new ArrayList<>();
 
-//		System.out.println("Start training: ");
-//		for (int i = 0; i < trainingSet.size(); i++) {
-////			if(trainingSet.get(i).getQuestion().getQuestionText().matches(".*[Ww]hich.*") && trainingSet.get(i).isAnswerable()){
-//			if(trainingSet.get(i).getQuestion().getQuestionText().matches("What.*") && trainingSet.get(i).isAnswerable()){
-//
-//				String q = trainingSet.get(i).getQuestion().getQuestionText();
-//	
-//	
-//				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
-//				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
-//	
-//				ArrayList<String> answers = answerer.train(trainingSet.get(i).getQuestion(), trainingSet.get(i).getExpectedAnswer());
-//				System.out.println("Given Answer: " + Arrays.toString(answers.toArray(new String[0])));
-//
-//				fmeasuresTraining.add(computeFMeasureForOneQuestion(answers, trainingSet.get(i).getExpectedAnswer().getQueryResult()));
-//				
-//			}
-//		}
+		System.out.println("Start training: ");
+		for (int i = 0; i < trainingSet.size(); i++) {
+			if(trainingSet.get(i).getQuestion().getQuestionText().matches("Who.*") && trainingSet.get(i).isAnswerable()){
+//			if(trainingSet.get(i).getQuestion().getQuestionText().matches(".*Arabia.*") && trainingSet.get(i).isAnswerable()){
+
+				String q = trainingSet.get(i).getQuestion().getQuestionText();
+	
+	
+				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
+				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
+	
+				ArrayList<String> answers = answerer.train(trainingSet.get(i).getQuestion(), trainingSet.get(i).getExpectedAnswer());
+				System.out.println("Given Answer: " + Arrays.toString(answers.toArray(new String[0])));
+
+				fmeasuresTraining.add(computeFMeasureForOneQuestion(answers, trainingSet.get(i).getExpectedAnswer().getQueryResult()));
+//				fmeasuresTraining.add(computeFMeasureForOneQuestion(new ArrayList<>(), trainingSet.get(i).getExpectedAnswer().getQueryResult()));
+
+			}
+		}
 
 		System.out.println("Start test: ");
 		for (int i = 0; i < testSet.size(); i++) {
-			if(testSet.get(i).getQuestion().getQuestionText().matches("What.*.*") && testSet.get(i).isAnswerable()){
+			if(testSet.get(i).getQuestion().getQuestionText().matches("Who.*") && testSet.get(i).isAnswerable()){
 
 			String q = testSet.get(i).getQuestion().getQuestionText();
-
 
 			System.out.println("Question: " + q + " (answerable: " + testSet.get(i).isAnswerable()+")");
 			System.out.println("Expected Answer: " + Arrays.toString(testSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
 
-			ArrayList<String> answers = answerer.train(testSet.get(i).getQuestion(), testSet.get(i).getExpectedAnswer());
+			ArrayList<String> answers = answerer.test(testSet.get(i).getQuestion());
 
 			fmeasuresTest.add(computeFMeasureForOneQuestion(answers, testSet.get(i).getExpectedAnswer().getQueryResult()));
+//			fmeasuresTest.add(computeFMeasureForOneQuestion(new ArrayList<>(), testSet.get(i).getExpectedAnswer().getQueryResult()));
 			}
 		}
 		

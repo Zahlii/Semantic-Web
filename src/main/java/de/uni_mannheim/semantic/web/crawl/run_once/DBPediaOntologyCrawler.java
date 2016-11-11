@@ -152,10 +152,14 @@ public class DBPediaOntologyCrawler {
 	}
 
 	public static ArrayList<OntologyClass> getOntologyClassByName(String name) {
+		return getOntologyClassByName(name, 0.25);
+	}
+	
+	public static ArrayList<OntologyClass> getOntologyClassByName(String name, Double threshold) {
 		ArrayList<OntologyClass> classes = new ArrayList<>();
 
 		String query = "SELECT * FROM " + CLASS_TABLE + " WHERE " + "((Levenshtein(name, '" + name
-				+ "') * 1.0) / MIN(LENGTH(name), LENGTH('" + name + "'))) < 0.25" + ";";
+				+ "') * 1.0) / MIN(LENGTH(name), LENGTH('" + name + "'))) < " + threshold + ";";
 
 		try {
 			Statement stmt = _connection.createStatement();
@@ -176,10 +180,14 @@ public class DBPediaOntologyCrawler {
 	}
 
 	public static ArrayList<Property> getOntologyPropertyByName(String name) {
+		return getOntologyPropertyByName(name, 0.3);
+	}
+	
+	public static ArrayList<Property> getOntologyPropertyByName(String name, Double threshold) {
 		ArrayList<Property> properties = new ArrayList<>();
 
 		String query = "SELECT * FROM " + PROP_TABLE + " WHERE " + "((Levenshtein(name, '" + name
-				+ "') * 1.0) / MIN(LENGTH(name), LENGTH('" + name + "'))) < 0.3" + ";";
+				+ "') * 1.0) / MIN(LENGTH(name), LENGTH('" + name + "'))) < " + threshold + ";";
 
 		try {
 			Statement stmt = _connection.createStatement();

@@ -2,7 +2,7 @@ package de.uni_mannheim.semantic.web.stanford_nlp.helpers;
 
 import java.util.*;
 
-class Permutation<E> implements Iterator<List<E>> {
+public class Permutation<E> implements Iterator<List<E>> {
 
 	private List<E> arr;
 	private int[] ind;
@@ -32,6 +32,20 @@ class Permutation<E> implements Iterator<List<E>> {
 		has_next = true;
 	}
 
+	public static void GeneratePermutations(ArrayList<ArrayList<String>> Lists, ArrayList<String> result, int depth, String current)
+	{
+	    if(depth == Lists.size())
+	    {
+	       result.add(current);
+	       return;
+	     }
+
+	    for(int i = 0; i < Lists.get(depth).size(); ++i)
+	    {
+	        GeneratePermutations(Lists, result, depth + 1, current + Lists.get(depth).get(i));
+	    }
+	}
+	
 	@Override
 	public boolean hasNext() {
 		return has_next;

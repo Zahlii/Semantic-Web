@@ -12,6 +12,8 @@ public class Siri extends LinkedDataAnswerer{
 	public ArrayList<String> train(Question q, ExpectedAnswer a) {
 		try {
 			StanfordSentence s = new StanfordSentence(q.getQuestionText());
+			s.setQuestion(q);
+			s.setAnswer(a);
 			return s.getAnswers();
 		} catch(Exception e) {
 			return new ArrayList<>();

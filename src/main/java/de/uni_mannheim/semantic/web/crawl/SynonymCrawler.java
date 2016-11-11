@@ -69,7 +69,8 @@ public class SynonymCrawler {
 							final String link = syns.get(j).select("a").attr("href");
 							final String text = syns.get(j).select("a").text();
 
-							synonyms.add(text);
+							if(!synonyms.contains(text))
+								synonyms.add(text);
 //							SynonymCrawlerThread t = (new SynonymCrawler()).new SynonymCrawlerThread(text, link, w);
 //							t.run();
 //							threads.add(t);

@@ -53,6 +53,22 @@ public class DBPediaWrapper {
 		return RS;
 	}
 
+	public static ArrayList<String> queryWOPrefix(String strQuery) {
+//		 System.out.println(x);
+		Query q = QueryFactory.create(strQuery);
+		QueryExecution qexec = QueryExecutionFactory.sparqlService(endpoint, q);
+		ResultSet RS = qexec.execSelect();
+
+		ArrayList<String> res = new ArrayList<>();
+		while (RS.hasNext()) {
+			QuerySolution s = RS.next();
+			String p = s.get("uri").toString();
+			res.add(p);
+		}
+		
+		return res;
+	}
+	
 	private static ArrayList<LookupResult> lookupSearch(String URL, String charSeq) {
 
 		ArrayList<LookupResult> results = new ArrayList<>();

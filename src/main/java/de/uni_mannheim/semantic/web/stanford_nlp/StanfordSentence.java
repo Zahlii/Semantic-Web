@@ -3,6 +3,8 @@ package de.uni_mannheim.semantic.web.stanford_nlp;
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.StanfordNLP;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaCategoryLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaResourceLookup;
+import de.uni_mannheim.semantic.web.stanford_nlp.model.ExpectedAnswer;
+import de.uni_mannheim.semantic.web.stanford_nlp.model.Question;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 import edu.stanford.nlp.ling.CoreAnnotations;
@@ -25,6 +27,8 @@ public class StanfordSentence {
 	private SemanticGraph graph;
 	private QuestionType type;
 	private ArrayList<Word> words;
+	private Question question;
+	private ExpectedAnswer answer;
 
 	public DBPediaResourceLookup dbpediaResource;
 	public DBPediaCategoryLookup dbpediaCategory;
@@ -179,5 +183,21 @@ public class StanfordSentence {
 	
 	public SemanticGraph getSemanticGraph(){
 		return this.graph;
+	}
+
+	public Question getQuestion() {
+		return question;
+	}
+
+	public void setQuestion(Question question) {
+		this.question = question;
+	}
+
+	public ExpectedAnswer getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(ExpectedAnswer answer) {
+		this.answer = answer;
 	}
 }
