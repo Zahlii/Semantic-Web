@@ -97,7 +97,7 @@ public abstract class GenericParser {
 	        String[] query = answer.getQuery().split("\\s");
 	        for (int i = 0; i < query.length; i++) {
 	        	String prefix = "";
-	        	if(!query[i].contains("http")){
+	        	if(!query[i].contains("http") && query[i].contains(":")){
 	        		prefix = query[i].replaceAll(":.*", "")+":";
 	        		query[i] = query[i].replaceAll(".*:", "");
 	        	}
@@ -109,14 +109,15 @@ public abstract class GenericParser {
 	        	}
 	        	
 	        	for (int j = 0; j < words.size(); j++) {
-	        		if(Levenshtein.normalized(query[i], words.get(j).getText()) < 0.15d){
+	        		System.out.println(query[i]+" "+words.get(j).getText()+" "+Levenshtein.normalized(query[i], words.get(j).getText()));
+	        		if(Levenshtein.normalized(query[i], words.get(j).getText()) < 0.3d){
 	        			query[i] = prefix+"<"+words.get(j).getPOSTag()+String.valueOf(words.get(j).getTagPosition())+">";
 	        			generalQuery.addPrecondition(words.get(j).getPOSTag()+String.valueOf(words.get(j).getTagPosition()));
 //	        			System.out.println(query[i]+" "+words.get(j).getText());
 	        		}
 	        		if(words.get(j).getSynonyms() != null){
 		        		for (int k = 0; k < words.get(j).getSynonyms().size(); k++) {
-		        			if(Levenshtein.normalized(query[i], words.get(j).getSynonyms().get(k)) < 0.15d){
+		        			if(Levenshtein.normalized(query[i], words.get(j).getSynonyms().get(k)) < 0.3d){
 			        			query[i] = prefix+"<"+words.get(j).getPOSTag()+String.valueOf(words.get(j).getTagPosition())+">";
 			        			generalQuery.addPrecondition(words.get(j).getPOSTag()+String.valueOf(words.get(j).getTagPosition()));
 //		        				System.out.println(query[i]+" "+words.get(j).getSynonyms().get(k));
@@ -125,7 +126,7 @@ public abstract class GenericParser {
 	        		}
 	        		if(words.get(j).getAlias() != null){
 		        		for (int k = 0; k < words.get(j).getAlias().size(); k++) {
-		        			if(Levenshtein.normalized(query[i], words.get(j).getAlias().get(k)) < 0.15d){
+		        			if(Levenshtein.normalized(query[i], words.get(j).getAlias().get(k)) < 0.3d){
 			        			query[i] = prefix+"<"+words.get(j).getPOSTag()+String.valueOf(words.get(j).getTagPosition())+">";
 			        			generalQuery.addPrecondition(words.get(j).getPOSTag()+String.valueOf(words.get(j).getTagPosition()));
 //		        				System.out.println(query[i]+" "+words.get(j).getAlias().get(k));
@@ -312,10 +313,10 @@ public abstract class GenericParser {
 	public ArrayList<String> parse(StanfordSentence s) throws Exception {
 		this._sentence = s;
 		
-//		if(this._sentence.getAnswer() == null)	return this.answerQuestion();
-//		else 									this.analyzeQuestion();
-//		return new ArrayList<>();
-		return parseInternal();
+		if(this._sentence.getAnswer() == null)	return this.answerQuestion();
+		else 									this.analyzeQuestion();
+		return new ArrayList<>();
+//		return parseInternal();
 	}
 	
 	protected abstract ArrayList<String> parseInternal() throws Exception;

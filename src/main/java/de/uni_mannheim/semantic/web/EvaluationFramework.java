@@ -152,7 +152,7 @@ public class EvaluationFramework {
 		System.out.println("Start training: ");
 		for (int i = 0; i < trainingSet.size(); i++) {
 //			if(trainingSet.get(i).getQuestion().getQuestionText().matches("(Do|Did).*") && trainingSet.get(i).isAnswerable()){
-//			if(trainingSet.get(i).getQuestion().getQuestionText().matches(".*Arabia.*") && trainingSet.get(i).isAnswerable()){
+			if(trainingSet.get(i).getQuestion().getQuestionText().matches(".*German.*") && trainingSet.get(i).isAnswerable()){
 
 				String q = trainingSet.get(i).getQuestion().getQuestionText();
 	
@@ -166,7 +166,7 @@ public class EvaluationFramework {
 				fmeasuresTraining.add(computeFMeasureForOneQuestion(answers, trainingSet.get(i).getExpectedAnswer().getQueryResult()));
 //				fmeasuresTraining.add(computeFMeasureForOneQuestion(new ArrayList<>(), trainingSet.get(i).getExpectedAnswer().getQueryResult()));
 
-//			}
+			}
 		}
 
 		System.out.println("Start test: ");
