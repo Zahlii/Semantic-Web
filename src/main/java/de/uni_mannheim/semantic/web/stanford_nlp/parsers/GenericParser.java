@@ -337,7 +337,7 @@ public abstract class GenericParser {
 	
 	protected ArrayList<String> prepareForReturn(ArrayList<String> result, ArrayList<String> validTypes){
 		ArrayList<String> ret = new ArrayList<>();
-		for (int i = 0; i < result.size(); i++) {
+		for (int i = 0; i < Math.min(result.size(), 10); i++) {
 			result.set(i, result.get(i).replaceAll("\\^\\^http:.*", ""));
 			
 			if(!ret.contains(result.get(i))&& !result.get(i).matches("http:.*:.*")){

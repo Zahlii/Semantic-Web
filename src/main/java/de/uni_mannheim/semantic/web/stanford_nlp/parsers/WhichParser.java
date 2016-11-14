@@ -134,8 +134,10 @@ public class WhichParser extends GenericParser {
             ArrayList<String> e1Syns = new ArrayList<>();
             ArrayList<String> vbSyns = new ArrayList<>();
             usedResults.add(entity2.getResult());
+            int counter = 0;
 
-            while(res.size() == 0){
+            while(res.size() == 0 && counter < 5){
+            	counter++;
             	DBPediaPropertyLookup pl = new DBPediaPropertyLookup(_sentence, entity2.getResult());
 	            
             	res.addAll(pl.findPropertyForName(verb.getText()));

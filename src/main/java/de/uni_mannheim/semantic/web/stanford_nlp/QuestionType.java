@@ -10,12 +10,13 @@ import de.uni_mannheim.semantic.web.stanford_nlp.parsers.WhoParser;
 
 import java.util.ArrayList;
 
+import de.uni_mannheim.semantic.web.stanford_nlp.parsers.DoParser;
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.GenericParser;
 
 public enum QuestionType {
 	Which(WhichParser.class,"In which","To which","For which","Which","Through which"), // followed by CLASS
 	Give_me_all(GiveMeParser.class,"Give me all","Give me a list of all","Show me all","List the","List all"), // Followed by DESCRIPTION or CLASS
-	Give_me_the("Give me"), // Followed by OBJECT
+	Give_me_the(GiveMeParser.class,"Give me"), // Followed by OBJECT
 	Who_is(WhoParser.class,"Who is","Who was","Who were"), // followed by DESCRIPTION or RESOURCE
 	When_is(WhenParser.class, "When is","When was","When were","When did"), // followed by RESOURCE
 	What_is(WhatParser.class, "What is","What was","What were","What are", "What does"), // followed by PREDICATE? 
@@ -23,7 +24,7 @@ public enum QuestionType {
 //	Who("Who"), // followed by predicate
 	When(WhenParser.class, "When"), // Followed by 
 	How_many("How many"), // followed by indicator for number
-	Does("Does","Is","Do","Was","Did","Are"), // followed by RESOURCE
+	Does(DoParser.class, "Does","Is","Do","Was","Did","Are"), // followed by RESOURCE
 	How(HowParser.class, "How"),
 //	Who_is(WhoParser.class, "Who is","Who was","Who were"), // followed by DESCRIPTION or RESOURCE
 	Who(WhoParser.class, "Who"); 
