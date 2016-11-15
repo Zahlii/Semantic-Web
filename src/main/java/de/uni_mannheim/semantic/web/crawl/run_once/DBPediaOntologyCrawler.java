@@ -19,7 +19,7 @@ public class DBPediaOntologyCrawler {
 	public static final String CATEGORY_TABLE = "Category";
 	public static final String CLASS_TABLE = "Ontology_Class";
 	public static final String PROP_TABLE = "Property";
-
+	
 	private static Connection _connection;
 
 	static {
@@ -39,7 +39,7 @@ public class DBPediaOntologyCrawler {
 			System.out.println(rs.getString(1));
 		}
 	}
-
+	
 	public static void createTables() {
 
 		// SQL statement for creating the Ontology Class table
