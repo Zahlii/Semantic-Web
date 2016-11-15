@@ -7,6 +7,7 @@ import de.uni_mannheim.semantic.web.crawl.SynonymCrawler;
 import de.uni_mannheim.semantic.web.crawl.model.OntologyClass;
 import de.uni_mannheim.semantic.web.crawl.run_once.DBPediaOntologyCrawler;
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.StanfordNLP;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.SynonymFinder;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 
 import java.util.ArrayList;
@@ -144,7 +145,7 @@ public class HowParser extends GenericParser {
             	res.addAll(pl.findPropertyForName(adj.getText()));
 	            
 	            if(res.size() == 0){
-	            	if(vbSyns.size() == 0)	vbSyns.addAll(SynonymCrawler.findSynonyms(adj));
+	            	if(vbSyns.size() == 0)	vbSyns.addAll(SynonymFinder.findSynonyms(adj, true));
 	            
 	            	for (int i = 0; i < vbSyns.size(); i++) {
 	    	            res.addAll(pl.findPropertyForName(vbSyns.get(i)));

@@ -13,6 +13,7 @@ import de.uni_mannheim.semantic.web.crawl.model.Property;
 import de.uni_mannheim.semantic.web.crawl.run_once.DBPediaOntologyCrawler;
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.Levenshtein;
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.StanfordNLP;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.SynonymFinder;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.NGramLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaPropertyLookup;
@@ -144,8 +145,8 @@ public class WhichParser extends GenericParser {
 	            res.addAll(pl.findPropertyForName(noun1.getText()));
 	            
 	            if(res.size() == 0){
-	            	if(e1Syns.size() == 0)	e1Syns.addAll(SynonymCrawler.findSynonyms(new Word(entity1, "NN")));
-	            	if(vbSyns.size() == 0)	vbSyns.addAll(SynonymCrawler.findSynonyms(verb));
+	            	if(e1Syns.size() == 0)	e1Syns.addAll(SynonymFinder.findSynonyms(new Word(entity1, "NN"),true));
+	            	if(vbSyns.size() == 0)	vbSyns.addAll(SynonymFinder.findSynonyms(verb,true));
 	            
 	            	for (int i = 0; i < e1Syns.size(); i++) {
 	    	            res.addAll(pl.findPropertyForName(e1Syns.get(i)));

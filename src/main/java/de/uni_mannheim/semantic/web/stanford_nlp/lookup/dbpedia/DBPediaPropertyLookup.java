@@ -4,6 +4,7 @@ import de.uni_mannheim.semantic.web.crawl.SynonymCrawler;
 import de.uni_mannheim.semantic.web.crawl.DBPediaWrapper;
 import de.uni_mannheim.semantic.web.stanford_nlp.StanfordSentence;
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.Levenshtein;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.SynonymFinder;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupStatus;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
@@ -146,7 +147,7 @@ public class DBPediaPropertyLookup {
             String w1 = ngram.get(0);
             ret.add(w1);
             ret.add(w1+"By");
-            ret.addAll(SynonymCrawler.findSynonyms(new Word(w1)));
+            ret.addAll(SynonymFinder.findSynonyms(new Word(w1), true));
             if(findingHints.containsKey(w1))
                 ret.addAll(Arrays.asList(findingHints.get(w1)));
         } else {

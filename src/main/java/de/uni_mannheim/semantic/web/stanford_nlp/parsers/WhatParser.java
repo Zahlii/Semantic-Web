@@ -3,6 +3,7 @@ package de.uni_mannheim.semantic.web.stanford_nlp.parsers;
 import java.util.ArrayList;
 
 import de.uni_mannheim.semantic.web.crawl.SynonymCrawler;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.SynonymFinder;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaPropertyLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
@@ -84,7 +85,7 @@ public class WhatParser extends GenericParser{
 	            	res.addAll(pl.findPropertyForName(adj.getText()));
 		            
 		            if(res.size() == 0){
-		            	if(vbSyns.size() == 0)	vbSyns.addAll(SynonymCrawler.findSynonyms(adj));
+		            	if(vbSyns.size() == 0)	vbSyns.addAll(SynonymFinder.findSynonyms(adj,true));
 		            
 		            	for (int i = 0; i < vbSyns.size(); i++) {
 		    	            res.addAll(pl.findPropertyForName(vbSyns.get(i)));

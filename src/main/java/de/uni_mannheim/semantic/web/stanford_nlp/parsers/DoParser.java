@@ -13,6 +13,7 @@ import de.uni_mannheim.semantic.web.crawl.model.Property;
 import de.uni_mannheim.semantic.web.crawl.run_once.DBPediaOntologyCrawler;
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.Levenshtein;
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.StanfordNLP;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.SynonymFinder;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.NGramLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaPropertyLookup;
@@ -140,9 +141,9 @@ public class DoParser extends GenericParser {
 		            	return returnTrue();
 		            
 		            if(res.size() == 0){
-		            	if(e2Syns.size() == 0)	e2Syns.addAll(SynonymCrawler.findSynonyms(new Word(noun2.getText(), "NN")));
+		            	if(e2Syns.size() == 0)	e2Syns.addAll(SynonymFinder.findSynonyms(new Word(noun2.getText(), "NN"), true));
 		            	if(verb.getText().equals("")){
-		            		if(vbSyns.size() == 0)	vbSyns.addAll(SynonymCrawler.findSynonyms(verb));
+		            		if(vbSyns.size() == 0)	vbSyns.addAll(SynonymFinder.findSynonyms(verb, true));
 		            	}
 		            	for (int i = 0; i < e2Syns.size(); i++) {
 		            		if(pl.findPropertyForName(e2Syns.get(i)).size() > 0)
@@ -202,9 +203,9 @@ public class DoParser extends GenericParser {
 		            	return returnTrue();
 		            
 		            if(res.size() == 0){
-		            	if(e1Syns.size() == 0)	e1Syns.addAll(SynonymCrawler.findSynonyms(new Word(noun1.getText(), "NN")));
+		            	if(e1Syns.size() == 0)	e1Syns.addAll(SynonymFinder.findSynonyms(new Word(noun1.getText(), "NN"), true));
 		            	if(verb.getText().equals("")){
-		            		if(vbSyns.size() == 0)	vbSyns.addAll(SynonymCrawler.findSynonyms(verb));
+		            		if(vbSyns.size() == 0)	vbSyns.addAll(SynonymFinder.findSynonyms(verb, true));
 		            	}
 		            	
 		            	for (int i = 0; i < e1Syns.size(); i++) {

@@ -78,7 +78,6 @@ public class WordNet {
 		if (pos != null) {
 			try {
 				IndexWord wordTmp = Dictionary.getInstance().lookupIndexWord(pos, word);
-				System.out.println(wordTmp.toString());
 				if (wordTmp != null) {
 					Synset synset[] = wordTmp.getSenses();
 					for (int i = 0; i < synset.length; i++) {
@@ -96,7 +95,7 @@ public class WordNet {
 
 		}
 
-		System.out.println(Arrays.toString(synonyms.toArray()));
+//		System.out.println(Arrays.toString(synonyms.toArray()));
 
 		return synonyms;
 	}
@@ -141,7 +140,7 @@ public class WordNet {
 			}
 		}
 		
-		System.out.println(Arrays.toString(hypernyms.toArray()));
+//		System.out.println(Arrays.toString(hypernyms.toArray()));
 
 		return hypernyms;
 	}

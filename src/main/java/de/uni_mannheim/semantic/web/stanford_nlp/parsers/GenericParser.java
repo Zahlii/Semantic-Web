@@ -19,6 +19,7 @@ import de.uni_mannheim.semantic.web.crawl.run_once.DBPediaOntologyCrawler;
 import de.uni_mannheim.semantic.web.stanford_nlp.StanfordSentence;
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.Levenshtein;
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.Permutation;
+import de.uni_mannheim.semantic.web.stanford_nlp.helpers.SynonymFinder;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaPropertyLookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.dbpedia.DBPediaResourceLookup;
@@ -85,7 +86,7 @@ public abstract class GenericParser {
 				words.get(i).setTagPosition(positionMap.get(words.get(i).getPOSTag()));
 				positionMap.put(words.get(i).getPOSTag(), positionMap.get(words.get(i).getPOSTag()) + 1);
 			
-				words.get(i).setSynonyms(SynonymCrawler.findSynonyms(words.get(i)));
+				words.get(i).setSynonyms(SynonymFinder.findSynonyms(words.get(i),true));
 				
 	        	if(words.get(i).getPOSTag().matches("NN.*") && words.get(i).getResource() != null){
 	        		DBPediaPropertyLookup pl = new DBPediaPropertyLookup(_sentence, words.get(i).getResource());
@@ -194,7 +195,7 @@ public abstract class GenericParser {
 				words.get(i).setTagPosition(positionMap.get(words.get(i).getPOSTag()));
 				positionMap.put(words.get(i).getPOSTag(), positionMap.get(words.get(i).getPOSTag()) + 1);
 			
-				words.get(i).setSynonyms(SynonymCrawler.findSynonyms(words.get(i)));
+				words.get(i).setSynonyms(SynonymFinder.findSynonyms(words.get(i), true));
 				
 	        	if(words.get(i).getPOSTag().matches("NN.*") && words.get(i).getResource() != null){
 	        		DBPediaPropertyLookup pl = new DBPediaPropertyLookup(_sentence, words.get(i).getResource());
