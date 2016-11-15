@@ -152,7 +152,7 @@ public class StanfordSentence {
 	}
 
 	public Word getWord(int index) {
-		return words.get(index);
+		return words.size()>index ? words.get(index) : null;
 	}
 
 	public Word removeWord(int index) {

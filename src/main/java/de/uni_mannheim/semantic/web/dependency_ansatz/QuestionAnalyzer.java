@@ -6,6 +6,7 @@ import de.uni_mannheim.semantic.web.stanford_nlp.StanfordSentence;
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.text.TextHelper;
 import de.uni_mannheim.semantic.web.stanford_nlp.lookup.LookupResult;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
+import edu.stanford.nlp.semgraph.SemanticGraph;
 import utils.Util;
 
 import java.io.File;
@@ -20,11 +21,13 @@ public class QuestionAnalyzer {
     private StanfordSentence sentence;
     private String orderProperty = null; // verb/adjective for which property we are looking
     private String sortOrder = null; // asc or desc
-    private String filterComparator = null; // if we want to filter
-    private String limitAndOffset = null;
+    private String filterComparator = null; // if we want to filter, < > =
+    private String limitAndOffset = null; // LIMIT x offset x
+    private String filterValue = null; // > 250000
 
     private HashMap<String,LookupResult> allEntities;
     private HashMap<String,LookupResult> allCategories;
+
 
     private QuestionType type;
 
@@ -35,6 +38,8 @@ public class QuestionAnalyzer {
         System.out.println(question);
 
         this.sentence = new StanfordSentence(this.question);
+        hardcodedHints();
+
         this.type = this.sentence.getType();
 
 
@@ -44,43 +49,79 @@ public class QuestionAnalyzer {
         this.extractOrdering();
     }
 
+    private void hardcodedHints() {
+        sentence.replace("U.S.","United States");
+    }
+
     private void extractOrdering() {
         boolean found = false;
 
-        String orderProperty = null; // verb/adjective for which property we are looking
-        String orderType = null; // asc or desc
-        String comparator = null; // if we want to filter
-        String quantifier = null;
+        orderProperty = null; // verb/adjective for which property we are looking
+        sortOrder = null; // asc or desc
+        filterComparator = null; // if we want to filter
+        limitAndOffset = null;
 
         for(int i=0;i<sentence.length();i++) {
             Word w = sentence.getWord(i);
+            String t = w.getText();
             boolean isFirst = i==0;
-            boolean isLast = i==sentence.length()-1;
+            boolean isLast = i>=sentence.length()-1;
+            boolean isSecondLast = i>=sentence.length()-2;
+            boolean isThirdLast = i>=sentence.length()-3;
+            boolean isSame =  w.getText().equals("same");
 
             String tag = w.getPOSTag();
-            if(tag.matches("(RB|JJ)(R|S)")) {
+            if(tag.matches("(RB|JJ)(R|S)") && !TextHelper.isCapitalized(t)|| isSame) {
                 found = true;
 
                 Word wnext = !isLast ? sentence.getWord(i+1) : null;
+                Word wnnext = !isSecondLast ? sentence.getWord(i+2) : null;
+                Word wnnnext = !isThirdLast ? sentence.getWord(i+3) : null;
                 Word wprev = !isFirst ? sentence.getWord(i-1) : null;
 
-                String t = w.getText();
+
                 if(tag.matches("(RB|JJ)R")) { // more, younger, blabla
                     if (t.equals("more")) {
-                        comparator = ">";
+                        filterComparator = ">";
                         sentence.replace("(more|than)\\s", "");
-                        if(!isLast)
-                            orderProperty = wnext.getText();
+                        if(!isLast) {
+                            orderProperty = wnext.getText(); // more episodes than ...
+                            sentence.replace(orderProperty+"\\s", "");
+                            if(orderProperty.equals("than")) {
+                                if (!isSecondLast) {
+                                    filterValue = Util.replaceNumbers(wnnext.getText()); // more than xxxx
+                                    sentence.replace(wnnext.getText()+"\\s", "");
+                                    if(!isThirdLast) {
+                                        orderProperty = wnnnext.getText(); // more than xxx caves
+                                        sentence.replace(orderProperty+"\\s", "");
+                                    }
+                                }
+                            }
+                        }
                     } else if (t.equals("less")) {
-                        comparator = "<";
-                        sentence.replace("(less|than)\\s", "");
-                        if(!isLast)
-                            orderProperty = wnext.getText();
+                        filterComparator = "<";
+                        sentence.replace("(more|than)\\s", "");
+                        if(!isLast) {
+                            orderProperty = wnext.getText(); // more episodes than ...
+                            sentence.replace(orderProperty+"\\s", "");
+                            if(orderProperty.equals("than")) {
+                                if (!isSecondLast) {
+                                    filterValue = Util.replaceNumbers(wnnext.getText()); // more than xxxx
+                                    sentence.replace(wnnext.getText()+"\\s", "");
+                                    if(!isThirdLast) {
+                                        orderProperty = wnnnext.getText(); // more than xxx caves
+                                        sentence.replace(orderProperty+"\\s", "");
+                                    }
+                                }
+                            }
+                        }
                     } else if (t.equals("same")) {
-                        comparator = "=";
+                        filterComparator = "=";
                         sentence.replace("(same|as)\\s", "");
-                        if(!isLast)
+                        if(!isLast) {
                             orderProperty = wnext.getText();
+                            sentence.replace(orderProperty+"\\s", "");
+                        }
                     } else {
                         orderProperty = t;
                         sentence.replace(t + "\\s", "");
@@ -94,36 +135,40 @@ public class QuestionAnalyzer {
                         if(wprev.getPOSTag().equals("JJ")) {
                             switch(t1) {
                                 case "first":
-                                    quantifier = "LIMIT 1";
+                                    limitAndOffset = "LIMIT 1";
                                     break;
                                 case "second":
-                                    quantifier = "LIMIT 1 OFFSET 1";
+                                    limitAndOffset = "LIMIT 1 OFFSET 1";
                                     break;
                                 case "third":
-                                    quantifier = "LIMIT 1 OFFSET 2";
+                                    limitAndOffset = "LIMIT 1 OFFSET 2";
                                     break;
                                 case "fifth":
-                                    quantifier = "LIMIT 1 OFFSET 4";
+                                    limitAndOffset = "LIMIT 1 OFFSET 4";
                                     break;
                                 default:
                                     String q = t1.replaceAll("th","");
                                     int n = Integer.parseInt(Util.replaceNumbers(q),10);
-                                    quantifier = "LIMIT 1 OFFSET "+(n-1);
+                                    limitAndOffset = "LIMIT 1 OFFSET "+(n-1);
                                     break;
                             }
                         }
                     }
 
                     if (t.equals("most")) {
-                        orderType = "DESC";
+                        sortOrder = "DESC";
                         sentence.replace("(most)\\s", "");
-                        if(!isLast)
-                            orderProperty = wnext.getText();
+                        if(!isLast) {
+                            orderProperty = wnext.getText(); // more episodes than ...
+                            sentence.replace(orderProperty+"\\s", "");
+                        }
                     } else if (t.equals("least")) {
-                        orderType = "ASC";
+                        sortOrder = "ASC";
                         sentence.replace("(least)\\s", "");
-                        if(!isLast)
-                            orderProperty = wnext.getText();
+                        if(!isLast) {
+                            orderProperty = wnext.getText(); // more episodes than ...
+                            sentence.replace(orderProperty+"\\s", "");
+                        }
                     }  else {
                         orderProperty = t;
                         sentence.replace(t + "\\s", "");
@@ -137,40 +182,57 @@ public class QuestionAnalyzer {
                 switch (orderProperty) {
                     case "oldest":
                         orderProperty = "birthDate";
-                        orderType = "ASC";
+                        sortOrder = "ASC";
                         break;
                     case "youngest":
                         orderProperty = "birthDate";
-                        orderType = "DESC";
+                        sortOrder = "DESC";
                         break;
                     case "highest":
                         orderProperty = "height";
-                        orderType = "DESC";
+                        sortOrder = "DESC";
                         break;
                     case "tallest":
                         orderProperty = "height";
-                        orderType = "DESC";
+                        sortOrder = "DESC";
                         break;
                     case "smallest":
                         orderProperty = "height";
-                        orderType = "DESC";
+                        sortOrder = "DESC";
                         break;
                     case "latest":
                         orderProperty = "date";
-                        orderType = "DESC";
+                        sortOrder = "DESC";
                         break;
                     case "first":
                         orderProperty = "date";
-                        orderType = "ASC";
+                        sortOrder = "ASC";
                         break;
                 }
             }
-            System.out.println(orderProperty +" | "+orderType + " | "+ comparator + " | "+quantifier);
+
+            System.out.println(this.getOrderByAndFilterClause());
 
 
         }
 
         this.findAndMergeEntitiesAndCategories();
+    }
+
+    private String getOrderByAndFilterClause() {
+        StringBuilder b = new StringBuilder();
+
+        if(orderProperty != null && sortOrder != null)
+            b.append("ORDER BY ").append(sortOrder).append("(").append(orderProperty).append(")");
+
+        if(limitAndOffset != null)
+            b.append(limitAndOffset);
+
+        if(filterComparator != null && filterValue != null && orderProperty != null) {
+            b.append("FILTER(").append(orderProperty).append(filterComparator).append(filterValue).append(")");
+        }
+
+        return b.toString();
     }
 
     private void findAndMergeEntitiesAndCategories() {
@@ -191,12 +253,17 @@ public class QuestionAnalyzer {
             String s = now.getSearchedTitle();
             this.sentence.replace(s,now.getVarName());
         }
-        sentence.basicAnnotate();
-
-        System.out.println("Final cleaned text: " + sentence.getCleanedText());
+        //sentence.basicAnnotate();
 
 
         this.removeUnneededPOSTags();
+
+        sentence.basicAnnotate();
+
+        SemanticGraph g = this.sentence.getSemanticGraph();
+        System.out.println(g.toString());
+        System.out.println("Final cleaned text: " + sentence.getCleanedText());
+
     }
 
     private void removeUnneededPOSTags() {
@@ -206,7 +273,7 @@ public class QuestionAnalyzer {
             String tag = w.getPOSTag();
 
             // TODO
-            if(tag.matches("DET"))
+            if(tag.matches("(DT|IN)"))
                 sentence.replace(w.getText()+"\\s","");
         }
     }
@@ -217,12 +284,15 @@ public class QuestionAnalyzer {
 
         String[] questions = f.split("\r\n");
 
-        /*for(String quest : questions) {
-            new QuestionAnalyzer(quest);
-        }*/
+        int i=0;
+        for(String quest : questions) {
+            if(i++>20) break;
+            //new QuestionAnalyzer(quest);
+        }
 
         new QuestionAnalyzer("Who is the Formula 1 race driver with the most races?");
         new QuestionAnalyzer("What is the second highest mountain on Earth?");
         new QuestionAnalyzer("Does Breaking Bad have more episodes than Game of Thrones?");
+        new QuestionAnalyzer("Which U.S. states are in the same time zone as Utah?");
     }
 }
