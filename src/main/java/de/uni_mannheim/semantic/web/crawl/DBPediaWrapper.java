@@ -70,40 +70,46 @@ public class DBPediaWrapper {
 	}
 	
 	public static ArrayList<String> queryAnswerResults(String strQuery) {
+		try{
 //		 System.out.println(x);
-		String[] split = strQuery.split("\n");
-		ArrayList<String> search = new ArrayList<>();
-		for (int i = 0; i < split.length; i++) {
-			if(split[i].contains("SELECT")){
-				String[] split2 = split[i].split("\\s");
-				for (int j = 0; j < split2.length; j++) {
-					if(split2[j].contains("?"))
-						search.add(split2[j]);
+			String[] split = strQuery.split("\n");
+			ArrayList<String> search = new ArrayList<>();
+			for (int i = 0; i < split.length; i++) {
+				if(split[i].contains("SELECT")){
+					String[] split2 = split[i].split("\\s");
+					for (int j = 0; j < split2.length; j++) {
+						if(split2[j].contains("?"))
+							search.add(split2[j]);
+					}
 				}
 			}
-		}
-		
-		if(search.size() == 0)
-			return new ArrayList<>();
-		
-		Query q = QueryFactory.create(strQuery);
-		QueryExecution qexec = QueryExecutionFactory.sparqlService(endpoint, q);
-		ResultSet RS = qexec.execSelect();
-
-		ArrayList<String> res = new ArrayList<>();
-		while (RS.hasNext()) {
-			QuerySolution s = RS.next();
-			for (int i = 0; i < search.size(); i++) {
-				String p = s.get(search.get(i)).toString();
-				res.add(p);
+			
+			if(search.size() == 0)
+				return new ArrayList<>();
+			
+			strQuery = prefix + strQuery;
+			Query q = QueryFactory.create(strQuery);
+			QueryExecution qexec = QueryExecutionFactory.sparqlService(endpoint, q);
+			ResultSet RS = qexec.execSelect();
+	
+			ArrayList<String> res = new ArrayList<>();
+			while (RS.hasNext()) {
+				QuerySolution s = RS.next();
+				for (int i = 0; i < search.size(); i++) {
+					String p = s.get(search.get(i)).toString();
+					res.add(p);
+				}
 			}
+			
+			for (int i = 0; i < res.size(); i++) {
+				res.set(i, res.get(i).replaceAll("\\^\\^http:.*", ""));
+			}
+			
+			return res;
+		}catch(Exception e){
+//			e.printStackTrace();
 		}
-		
-		for (int i = 0; i < res.size(); i++) {
-			res.set(i, res.get(i).replaceAll("\\^\\^http:.*", ""));
-		}
-		
-		return res;
+		return new ArrayList<>();
 	}
 	
 	private static ArrayList<LookupResult> lookupSearch(String URL, String charSeq) {

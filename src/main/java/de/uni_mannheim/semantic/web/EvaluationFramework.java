@@ -180,7 +180,7 @@ public class EvaluationFramework {
 
 		System.out.println("Start test: ");
 		for (int i = 0; i < testSet.size(); i++) {
-//			if(testSet.get(i).getQuestion().getQuestionText().matches(".*Apple.*") && testSet.get(i).isAnswerable()){
+//			if(testSet.get(i).getQuestion().getQuestionText().matches(".*Ivy League university.*") && testSet.get(i).isAnswerable()){
 
 			String q = testSet.get(i).getQuestion().getQuestionText();
 
