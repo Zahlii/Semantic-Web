@@ -174,10 +174,10 @@ public class QuestionAnalyzer {
     }
 
     private void findAndMergeEntitiesAndCategories() {
-        //this.sentence.findEntities();
-        //allEntities = this.sentence.dbpediaResource.getResults();
+        this.sentence.findEntities();
+        allEntities = this.sentence.dbpediaResource.getResults();
 
-        allEntities = new HashMap<>();
+        //allEntities = new HashMap<>();
 
         this.sentence.findCategory();
         allCategories = this.sentence.dbpediaCategory.getResults();
@@ -192,6 +192,8 @@ public class QuestionAnalyzer {
             this.sentence.replace(s,now.getVarName());
         }
         sentence.basicAnnotate();
+
+        System.out.println("Final cleaned text: " + sentence.getCleanedText());
 
 
         this.removeUnneededPOSTags();

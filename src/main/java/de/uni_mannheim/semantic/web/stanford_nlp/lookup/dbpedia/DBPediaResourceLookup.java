@@ -71,7 +71,7 @@ public class DBPediaResourceLookup extends NGramLookup {
         List<LookupResult> candidates = new ArrayList<>();
 
         candidates.addAll(prefixLookup(title));
-        candidates.add(sparqlLookup(title));
+        //candidates.add(sparqlLookup(title));
         candidates.addAll(keywordLookup(title));
         candidates.addAll(spotlightLookup(title));
 

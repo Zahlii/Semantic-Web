@@ -70,7 +70,7 @@ public class IndexedTextSearch {
 
 
         // 4. display results
-        System.out.println("Found " + hits.length + " hits ["+duration+"ms] for '"+term+"' / '"+originalText+"'");
+        //System.out.println("Found " + hits.length + " hits ["+duration+"ms] for '"+term+"' / '"+originalText+"'");
 
         if(hits.length<1)
             return results;
@@ -89,7 +89,7 @@ public class IndexedTextSearch {
                 continue;
             r.setCertainty(c);
             results.add(r);
-            System.out.println((i + 1) + ". " + r.getCertainty() + "\t" + d.get("yago_name") + "\t" + d.get("title"));
+            //System.out.println((i + 1) + ". " + r.getCertainty() + "\t" + d.get("yago_name") + "\t" + d.get("title"));
         }
 
         return results;
