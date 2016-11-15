@@ -80,6 +80,10 @@ public class StanfordSentence {
 		return dbpediaResource.getText();
 	}
 
+	public String getTextWithoutCategories() {
+		return dbpediaCategory.getText();
+	}
+
 	private void extractQuestionType() throws Exception {
 		for(QuestionType t : QuestionType.values()) {
 			if(t.matches(cleanedText)) {
@@ -97,7 +101,7 @@ public class StanfordSentence {
 
 		annotatedSentence = StanfordNLP.handle(cleanedText);
 
-		System.out.println(basicText);
+		//System.out.println(basicText);
 		//System.out.println("\t"+ dbpediaResource.getText());
 		//System.out.println("\t"+ dbpediaResource.getResults());
 
@@ -109,9 +113,9 @@ public class StanfordSentence {
 		}
 
 		graph = annotatedSentence.get(SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation.class);
-		System.out.println(graph.toString(SemanticGraph.OutputFormat.RECURSIVE));
+		//System.out.println(graph.toString(SemanticGraph.OutputFormat.RECURSIVE));
 
-		transformGraph();
+		//transformGraph();
 	}
 
 	public List<Word> getWords() {
@@ -176,6 +180,9 @@ public class StanfordSentence {
 
 	public void replace(String search, String replace) {
 		this.cleanedText = this.cleanedText.replaceAll(search,replace);
+
+		dbpediaResource = new DBPediaResourceLookup(this);
+		dbpediaCategory = new DBPediaCategoryLookup(this);
 	}
 
 	public List<String> tokenize(String currentText) {
@@ -214,4 +221,8 @@ public class StanfordSentence {
         return type;
 
     }
+
+	public int length() {
+		return this.words.size();
+	}
 }

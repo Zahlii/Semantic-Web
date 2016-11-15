@@ -24,7 +24,7 @@ public enum QuestionType {
 //	Who("Who"), // followed by predicate
 	When(WhenParser.class, "When"), // Followed by 
 	How_many("How many"), // followed by indicator for number
-	Does(DoParser.class, "Does","Is","Do","Was","Did","Are"), // followed by RESOURCE
+	Does(DoParser.class, "Does","Is","Do","Was","Did","Are","have"), // followed by RESOURCE
 	How(HowParser.class, "How"),
 //	Who_is(WhoParser.class, "Who is","Who was","Who were"), // followed by DESCRIPTION or RESOURCE
 	Who(WhoParser.class, "Who"); 

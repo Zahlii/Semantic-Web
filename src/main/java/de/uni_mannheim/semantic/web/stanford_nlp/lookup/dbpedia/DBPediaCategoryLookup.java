@@ -18,7 +18,7 @@ public class DBPediaCategoryLookup extends NGramLookup {
     private static IndexedTextSearch search = new IndexedTextSearch("yago");
 
     public DBPediaCategoryLookup(StanfordSentence sentence) {
-        super(sentence);
+        super(sentence,"Category");
     }
 
     @Override
@@ -26,7 +26,7 @@ public class DBPediaCategoryLookup extends NGramLookup {
 
         StringBuilder b = new StringBuilder();
         for(String w : words) {
-            if(w.contains("ariable"))
+            if(w.contains("Resource") || w.contains("Category"))
                 return null;
 
             if(w.length()<=3)

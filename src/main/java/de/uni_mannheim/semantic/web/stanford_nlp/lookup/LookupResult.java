@@ -4,6 +4,7 @@ package de.uni_mannheim.semantic.web.stanford_nlp.lookup;
 import de.uni_mannheim.semantic.web.stanford_nlp.helpers.Levenshtein;
 
 public class LookupResult {
+    private String varName;
     private String result;
     private LookupStatus status;
     private double certainty;
@@ -30,7 +31,7 @@ public class LookupResult {
     }
 
     protected double calculateCertainty() {
-        return 1-Levenshtein.normalized(this.searchedTitle,this.resultTitle);
+        return 1-Levenshtein.normalized(this.searchedTitle,this.resultTitle.replaceAll("\\(.*\\)",""));
     }
 
     public LookupResult(LookupStatus status) {
@@ -69,5 +70,13 @@ public class LookupResult {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getVarName() {
+        return varName;
+    }
+
+    public void setVarName(String varName) {
+        this.varName = varName;
     }
 }

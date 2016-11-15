@@ -16,7 +16,7 @@ public class DBPediaResourceLookup extends NGramLookup {
 
 
     public DBPediaResourceLookup(StanfordSentence sentence) {
-        super(sentence);
+        super(sentence,"Resource");
     }
 
     @Override
@@ -28,7 +28,7 @@ public class DBPediaResourceLookup extends NGramLookup {
 
 
         for(String word : words) {
-            if(word.contains("Variable"))
+            if(word.contains("Resource"))
                 return null;
         }
 
@@ -40,7 +40,7 @@ public class DBPediaResourceLookup extends NGramLookup {
         if(startsWithThe && s==1)
             return null;
 
-        if(first.contains("Variable"))
+        if(first.contains("Resource"))
             return null;
 
         String last = words.get(s-1);

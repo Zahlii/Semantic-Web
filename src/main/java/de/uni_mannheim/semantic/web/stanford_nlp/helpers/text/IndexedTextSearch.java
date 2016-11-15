@@ -50,7 +50,7 @@ public class IndexedTextSearch {
         Query q = qp.parse(term);
 
         // 3. search
-        int hitsPerPage = 100;
+        int hitsPerPage = 10000;
         reader = DirectoryReader.open(index);
         searcher = new IndexSearcher(reader);
 
@@ -83,6 +83,8 @@ public class IndexedTextSearch {
             LookupResult r = new LookupResult(originalText, d.get("title"), d.get("yago_name"));
             //r.setCertainty(hits[i].score);
             double c = similarity(originalText,d.get("title"));
+            //System.out.println((i + 1) + ". " + r.getCertainty() + "\t" + d.get("yago_name") + "\t" + d.get("title"));
+
             if(c<0.65)
                 continue;
             r.setCertainty(c);

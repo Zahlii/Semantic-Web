@@ -10,14 +10,18 @@ import java.util.List;
 
 public abstract class NGramLookup {
 
-    private Comparator<LookupResult> lookupResultComparator;
+    public final Comparator<LookupResult> lookupResultComparator;
     private StanfordSentence sentence;
     private List<String> currentTokens;
     private HashMap<String, LookupResult> lookupResults = new HashMap<>();
 
     private String currentText;
 
-    public NGramLookup(StanfordSentence sentence) {
+    private String varPrefix;
+
+    public NGramLookup(StanfordSentence sentence, String varPrefix) {
+        this.varPrefix = varPrefix;
+
         this.lookupResultComparator = (o1, o2) -> {
 
             double c1 = o1.getCertainty();
@@ -130,10 +134,11 @@ public abstract class NGramLookup {
         if(!result.found())
             return;
 
-        String varName = "Variable"+lookupResults.size();
+        String varName = varPrefix+lookupResults.size();
         this.currentText = this.currentText.replace(result.getSearchedTitle(),varName);
         System.out.println(this.getClass().getSimpleName() + " - Mapped " + result.getSearchedTitle() +" to " + result.getResult());
 
+        result.setVarName(varName);
         lookupResults.put(varName,result);
     }
 
