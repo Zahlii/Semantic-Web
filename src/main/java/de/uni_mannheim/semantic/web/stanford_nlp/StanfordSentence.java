@@ -21,6 +21,11 @@ import java.util.*;
 public class StanfordSentence {
 
 	private String basicText;
+
+	public void setCleanedText(String cleanedText) {
+		this.cleanedText = cleanedText;
+	}
+
 	private String cleanedText;
 	private CoreMap annotatedSentence;
 	private List<CoreLabel> annotatedWords;
@@ -87,14 +92,14 @@ public class StanfordSentence {
 		throw new Exception("Malformed or unknown question " + this.cleanedText);
 	}
 
-	private void basicAnnotate() {
+	public void basicAnnotate() {
 		//basicText = basicText.replaceAll("(Who|What|Which|How|Where|When)","").trim();
 
 		annotatedSentence = StanfordNLP.handle(cleanedText);
 
 		System.out.println(basicText);
-		System.out.println("\t"+ dbpediaResource.getText());
-		System.out.println("\t"+ dbpediaResource.getResults());
+		//System.out.println("\t"+ dbpediaResource.getText());
+		//System.out.println("\t"+ dbpediaResource.getResults());
 
 		annotatedWords = annotatedSentence.get(CoreAnnotations.TokensAnnotation.class);
 
@@ -121,7 +126,7 @@ public class StanfordSentence {
 		ArrayList<Word> adjs = new ArrayList<Word>();
 
 		for(Word w : words) {
-			if(w.getPOSTag().matches(tag))
+			if(w.getPOSTag().matches(".*"+tag+".*"))
 				adjs.add(w);
 		}
 		return adjs;
@@ -169,6 +174,10 @@ public class StanfordSentence {
 		return type.startParsing(this);
 	}
 
+	public void replace(String search, String replace) {
+		this.cleanedText = this.cleanedText.replaceAll(search,replace);
+	}
+
 	public List<String> tokenize(String currentText) {
 		CoreMap s = StanfordNLP.handle(currentText);
 
@@ -200,4 +209,9 @@ public class StanfordSentence {
 	public void setAnswer(ExpectedAnswer answer) {
 		this.answer = answer;
 	}
+
+    public QuestionType getType() {
+        return type;
+
+    }
 }
