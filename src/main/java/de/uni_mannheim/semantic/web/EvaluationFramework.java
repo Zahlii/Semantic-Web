@@ -20,6 +20,8 @@ import org.xml.sax.SAXException;
 
 import de.uni_mannheim.semantic.web.answerer.LinkedDataAnswerer;
 import de.uni_mannheim.semantic.web.answerer.Siri;
+import de.uni_mannheim.semantic.web.crawl.DBPediaWrapper;
+import de.uni_mannheim.semantic.web.crawl.model.EvaluationResult;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.QASet;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.Question;
 import de.uni_mannheim.semantic.web.stanford_nlp.parsers.GiveMeParser;
@@ -112,7 +114,14 @@ public class EvaluationFramework {
 		return sum / values.size();
 	}
 
-	public static double computeFMeasureForOneQuestion(ArrayList<String> answers, ArrayList<String> expectedAnswers){
+	public static EvaluationResult computeFMeasureForOneQuestion(ArrayList<String> answers, ExpectedAnswer expectedAnswer){
+		ArrayList<String> expectedAnswers = new ArrayList<>();
+		
+		expectedAnswers = DBPediaWrapper.queryAnswerResults(expectedAnswer.getQuery());
+		
+		if(expectedAnswers.size() == 0)
+			expectedAnswers = expectedAnswer.getQueryResult();
+		
 		System.out.println("Answers given: " + answers.size());
 		System.out.println("Answers expected: " + expectedAnswers.size());
 
@@ -140,38 +149,38 @@ public class EvaluationFramework {
 		fmeasure = (precision + recall > 0) ? (2 * precision * recall) / (precision + recall) : 0.0;
 
 		System.out.println("F1: " + fmeasure);
-		return fmeasure;
+		return new EvaluationResult(fmeasure, precision, recall, (answers.size() > 0));
 	}
 
 	public static void evaluateParser(LinkedDataAnswerer answerer){
 		EvaluationFramework.loadDataSet();
 
-		ArrayList<Double> fmeasuresTraining = new ArrayList<>();
-		ArrayList<Double> fmeasuresTest = new ArrayList<>();
+		ArrayList<EvaluationResult> fmeasuresTraining = new ArrayList<>();
+		ArrayList<EvaluationResult> fmeasuresTest = new ArrayList<>();
 
-		System.out.println("Start training: ");
-		for (int i = 0; i < trainingSet.size(); i++) {
-//			if(trainingSet.get(i).getQuestion().getQuestionText().matches("(Do|Did).*") && trainingSet.get(i).isAnswerable()){
-			if(trainingSet.get(i).getQuestion().getQuestionText().matches(".*German.*") && trainingSet.get(i).isAnswerable()){
-
-				String q = trainingSet.get(i).getQuestion().getQuestionText();
-	
-	
-				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
-				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
-	
-				ArrayList<String> answers = answerer.train(trainingSet.get(i).getQuestion(), trainingSet.get(i).getExpectedAnswer());
-				System.out.println("Given Answer: " + Arrays.toString(answers.toArray(new String[0])));
-
-				fmeasuresTraining.add(computeFMeasureForOneQuestion(answers, trainingSet.get(i).getExpectedAnswer().getQueryResult()));
-//				fmeasuresTraining.add(computeFMeasureForOneQuestion(new ArrayList<>(), trainingSet.get(i).getExpectedAnswer().getQueryResult()));
-
-			}
-		}
+//		System.out.println("Start training: ");
+//		for (int i = 0; i < trainingSet.size(); i++) {
+////			if(trainingSet.get(i).getQuestion().getQuestionText().matches("(Do|Did).*") && trainingSet.get(i).isAnswerable()){
+//			if(trainingSet.get(i).getQuestion().getQuestionText().matches(".*German.*") && trainingSet.get(i).isAnswerable()){
+//
+//				String q = trainingSet.get(i).getQuestion().getQuestionText();
+//	
+//	
+//				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
+//				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
+//	
+//				ArrayList<String> answers = answerer.train(trainingSet.get(i).getQuestion(), trainingSet.get(i).getExpectedAnswer());
+//				System.out.println("Given Answer: " + Arrays.toString(answers.toArray(new String[0])));
+//
+//				fmeasuresTraining.add(computeFMeasureForOneQuestion(answers, trainingSet.get(i).getExpectedAnswer().getQueryResult()));
+////				fmeasuresTraining.add(computeFMeasureForOneQuestion(new ArrayList<>(), trainingSet.get(i).getExpectedAnswer().getQueryResult()));
+//
+//			}
+//		}
 
 		System.out.println("Start test: ");
 		for (int i = 0; i < testSet.size(); i++) {
-//			if(testSet.get(i).getQuestion().getQuestionText().matches("Which.*") && testSet.get(i).isAnswerable()){
+//			if(testSet.get(i).getQuestion().getQuestionText().matches(".*Apple.*") && testSet.get(i).isAnswerable()){
 
 			String q = testSet.get(i).getQuestion().getQuestionText();
 
@@ -180,15 +189,52 @@ public class EvaluationFramework {
 
 			ArrayList<String> answers = answerer.test(testSet.get(i).getQuestion());
 
-			fmeasuresTest.add(computeFMeasureForOneQuestion(answers, testSet.get(i).getExpectedAnswer().getQueryResult()));
+			fmeasuresTest.add(computeFMeasureForOneQuestion(answers, testSet.get(i).getExpectedAnswer()));
 //			fmeasuresTest.add(computeFMeasureForOneQuestion(new ArrayList<>(), testSet.get(i).getExpectedAnswer().getQueryResult()));
 //			}
 		}
 		
-		System.out.println(fmeasuresTraining.size()+" Training F-Measure Avg: "+getAvg(fmeasuresTraining));
-		System.out.println(fmeasuresTest.size()+" Test F-Measure Avg: "+getAvg(fmeasuresTest));
+		System.out.println("Training:");
+		printResults(fmeasuresTraining);
+		System.out.println("Test:");
+		printResults(fmeasuresTest);
+//		System.out.println(fmeasuresTraining.size()+" Training F-Measure Avg: "+getAvg(fmeasuresTraining));
+//		System.out.println(fmeasuresTest.size()+" Test F-Measure Avg: "+getAvg(fmeasuresTest));
 	}
 
+	public static void printResults(ArrayList<EvaluationResult> results){
+		ArrayList<Double> localMeasures = new ArrayList<>();
+		ArrayList<Double> localPrecisions = new ArrayList<>();
+		ArrayList<Double> localRecalls = new ArrayList<>();
+		ArrayList<Double> globalMeasures = new ArrayList<>();
+		ArrayList<Double> globalPrecisions = new ArrayList<>();
+		ArrayList<Double> globalRecalls = new ArrayList<>();
+		
+		int countCorrect = 0;
+		int countPartial = 0;
+		int answered = 0;
+		for (int i = 0; i < results.size(); i++) {
+			globalMeasures.add(results.get(i).getFmeasure());
+			globalPrecisions.add(results.get(i).getPrecision());
+			globalRecalls.add(results.get(i).getRecall());
+			
+			if(results.get(i).isAnswered()){
+				answered++;
+				localMeasures.add(results.get(i).getFmeasure());
+				localPrecisions.add(results.get(i).getPrecision());
+				localRecalls.add(results.get(i).getRecall());
+			}
+			
+			if(results.get(i).getFmeasure() == 1.0)		countCorrect++;
+			else if(results.get(i).getFmeasure() > 0.0)	countPartial++;
+
+		}
+		
+		System.out.printf("Questions: %d, Answered: %d, Correct: %d, PartialCorrect: %d\n", results.size(), answered, countCorrect, countPartial);
+		System.out.printf("Global: F-M: %.3f, P: %.3f, R: %.3f\n", getAvg(globalMeasures), getAvg(globalPrecisions), getAvg(globalRecalls));
+		System.out.printf("Local: F-M: %.3f, P: %.3f, R: %.3f\n", getAvg(localMeasures), getAvg(localPrecisions), getAvg(localRecalls));
+	}
+	
 	public static void main(String[] args){
 		EvaluationFramework.evaluateParser(new Siri());
 	}
