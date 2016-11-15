@@ -313,10 +313,10 @@ public abstract class GenericParser {
 	public ArrayList<String> parse(StanfordSentence s) throws Exception {
 		this._sentence = s;
 		
-		if(this._sentence.getAnswer() == null)	return this.answerQuestion();
-		else 									this.analyzeQuestion();
-		return new ArrayList<>();
-//		return parseInternal();
+//		if(this._sentence.getAnswer() == null)	return this.answerQuestion();
+//		else 									this.analyzeQuestion();
+//		return new ArrayList<>();
+		return parseInternal();
 	}
 	
 	protected abstract ArrayList<String> parseInternal() throws Exception;
