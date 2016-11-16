@@ -144,7 +144,7 @@ public class EvaluationFramework {
 
 		System.out.println("Correct answers: " + correct);
 
-		recall = correct / expectedSize;
+		recall = (expectedSize > 0) ? correct / expectedSize : 0.0;
 		precision = (answers.size() > 0) ? correct / answers.size() : 0.0;
 
 		System.out.println("Recall: " + recall);
@@ -220,7 +220,7 @@ public class EvaluationFramework {
 		System.out.println("Test All:");
 		printResults(fmeasuresTest);
 		for (Map.Entry<QuestionType, ArrayList<EvaluationResult>> e : fmeasureMapTest.entrySet()) {
-			System.out.println("Training "+e.getKey()+":");
+			System.out.println("Test "+e.getKey()+":");
 			printResults(e.getValue());
 		}
 	}

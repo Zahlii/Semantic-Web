@@ -1,0 +1,71 @@
+Questions: 238, Answered: 121, Correct: 29, PartialCorrect: 23
+Global: F-M: 0,157, P: 0,166, R: 0,169
+Local: F-M: 0,309, P: 0,327, R: 0,333
+Training Which:
+Questions: 73, Answered: 29, Correct: 7, PartialCorrect: 10
+Global: F-M: 0,163, P: 0,175, R: 0,183
+Local: F-M: 0,410, P: 0,440, R: 0,460
+Training Does:
+Questions: 22, Answered: 22, Correct: 7, PartialCorrect: 0
+Global: F-M: 0,318, P: 0,318, R: 0,318
+Local: F-M: 0,318, P: 0,318, R: 0,318
+Training Where:
+Questions: 5, Answered: 0, Correct: 0, PartialCorrect: 0
+Global: F-M: 0,000, P: 0,000, R: 0,000
+Local: F-M: NaN, P: NaN, R: NaN
+Training GiveMe:
+Questions: 46, Answered: 19, Correct: 0, PartialCorrect: 8
+Global: F-M: 0,020, P: 0,060, R: 0,015
+Local: F-M: 0,048, P: 0,145, R: 0,037
+Training Who:
+Questions: 38, Answered: 22, Correct: 11, PartialCorrect: 3
+Global: F-M: 0,344, P: 0,332, R: 0,368
+Local: F-M: 0,595, P: 0,573, R: 0,636
+Training What:
+Questions: 20, Answered: 12, Correct: 2, PartialCorrect: 2
+Global: F-M: 0,127, P: 0,124, R: 0,163
+Local: F-M: 0,211, P: 0,206, R: 0,271
+Training How:
+Questions: 28, Answered: 17, Correct: 2, PartialCorrect: 0
+Global: F-M: 0,071, P: 0,071, R: 0,071
+Local: F-M: 0,118, P: 0,118, R: 0,118
+Training When:
+Questions: 6, Answered: 0, Correct: 0, PartialCorrect: 0
+Global: F-M: 0,000, P: 0,000, R: 0,000
+Local: F-M: NaN, P: NaN, R: NaN
+Test All:
+Questions: 47, Answered: 21, Correct: 4, PartialCorrect: 6
+Global: F-M: 0,132, P: 0,135, R: 0,176
+Local: F-M: 0,296, P: 0,302, R: 0,395
+Test Which:
+Questions: 19, Answered: 3, Correct: 1, PartialCorrect: 1
+Global: F-M: 0,090, P: 0,105, R: 0,082
+Local: F-M: 0,571, P: 0,667, R: 0,519
+Test Does:
+Questions: 4, Answered: 4, Correct: 0, PartialCorrect: 0
+Global: F-M: 0,000, P: 0,000, R: 0,000
+Local: F-M: 0,000, P: 0,000, R: 0,000
+Test Where:
+Questions: 1, Answered: 0, Correct: 0, PartialCorrect: 0
+Global: F-M: 0,000, P: 0,000, R: 0,000
+Local: F-M: NaN, P: NaN, R: NaN
+Test GiveMe:
+Questions: 4, Answered: 3, Correct: 0, PartialCorrect: 3
+Global: F-M: 0,200, P: 0,225, R: 0,433
+Local: F-M: 0,267, P: 0,300, R: 0,577
+Test Who:
+Questions: 8, Answered: 3, Correct: 1, PartialCorrect: 2
+Global: F-M: 0,213, P: 0,179, R: 0,375
+Local: F-M: 0,569, P: 0,477, R: 1,000
+Test What:
+Questions: 5, Answered: 4, Correct: 1, PartialCorrect: 0
+Global: F-M: 0,200, P: 0,200, R: 0,200
+Local: F-M: 0,250, P: 0,250, R: 0,250
+Test How:
+Questions: 5, Answered: 4, Correct: 1, PartialCorrect: 0
+Global: F-M: 0,200, P: 0,200, R: 0,200
+Local: F-M: 0,250, P: 0,250, R: 0,250
+Test When:
+Questions: 1, Answered: 0, Correct: 0, PartialCorrect: 0
+Global: F-M: 0,000, P: 0,000, R: 0,000
+Local: F-M: NaN, P: NaN, R: NaN

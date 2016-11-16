@@ -8,8 +8,8 @@ import de.uni_mannheim.semantic.web.stanford_nlp.model.Word;
 public class SynonymFinder {
 
 	public static ArrayList<String> findSynonyms(Word w, boolean includeHypernyms) {
-//		ArrayList<String> syns = new ArrayList<String>();
-		 ArrayList<String> syns = WordNet.getSynonyms(w.getText(),w.getPOSTag());
+		ArrayList<String> syns = new ArrayList<String>();
+//		 ArrayList<String> syns = WordNet.getSynonyms(w.getText(),w.getPOSTag());
 
 		ArrayList<String> syns2 = SynonymCrawler.findSynonyms(w);
 
