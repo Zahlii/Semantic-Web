@@ -151,7 +151,7 @@ public class DBPediaWrapper {
 			}
 
 		} catch (IOException | ParserConfigurationException | SAXException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 		return results;
 	}
