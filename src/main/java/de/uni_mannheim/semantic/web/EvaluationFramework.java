@@ -177,12 +177,12 @@ public class EvaluationFramework {
 
 				String q = trainingSet.get(i).getQuestion().getQuestionText();
 	
-				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
-				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
+//				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
+//				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
 	
 				QuestionType t = answerer.getQuestionType(qtext);
-//				if(t.name().equals("Whe"))
-//					System.out.println(qtext);
+				if(t.name().equals("UNDEFINED"))
+					System.out.println(qtext);
 				
 //				ArrayList<String> answers = answerer.train(qa.getQuestion(), qa.getExpectedAnswer());
 				ArrayList<String> answers = new ArrayList<>();
@@ -205,11 +205,11 @@ public class EvaluationFramework {
 
 			String qtext = q.getQuestion().getQuestionText();
 
-			System.out.println("Question: " + qtext + " (answerable: " + q.isAnswerable()+")");
-			System.out.println("Expected Answer: " + Arrays.toString(q.getExpectedAnswer().getQueryResult().toArray(new String[0])));
+//			System.out.println("Question: " + qtext + " (answerable: " + q.isAnswerable()+")");
+//			System.out.println("Expected Answer: " + Arrays.toString(q.getExpectedAnswer().getQueryResult().toArray(new String[0])));
 
 			QuestionType t = answerer.getQuestionType(qtext);
-			if(t.name().equals("Whe"))
+			if(t.name().equals("UNDEFINED"))
 				System.out.println(qtext);
 //			ArrayList<String> answers = answerer.test(q.getQuestion());
 			ArrayList<String> answers = new ArrayList<>();
