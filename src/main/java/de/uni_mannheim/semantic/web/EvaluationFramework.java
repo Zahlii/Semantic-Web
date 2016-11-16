@@ -168,60 +168,46 @@ public class EvaluationFramework {
 		
 		System.out.println("Start training: ");
 		for (int i = 0; i < trainingSet.size(); i++) {
-//			if(trainingSet.get(i).getQuestion().getQuestionText().matches("(Do|Did).*") && trainingSet.get(i).isAnswerable()){
-//			if(trainingSet.get(i).getQuestion().getQuestionText().matches(".*German.*") && trainingSet.get(i).isAnswerable()){
-
 				QASet qa =  trainingSet.get(i);
 
 				String qtext = qa.getQuestion().getQuestionText();
 
 				String q = trainingSet.get(i).getQuestion().getQuestionText();
 	
-//				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
-//				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
+				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
+				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
 	
 				QuestionType t = answerer.getQuestionType(qtext);
-				if(t.name().equals("UNDEFINED"))
-					System.out.println(qtext);
 				
-//				ArrayList<String> answers = answerer.train(qa.getQuestion(), qa.getExpectedAnswer());
-				ArrayList<String> answers = new ArrayList<>();
-//				EvaluationResult result = computeFMeasureForOneQuestion(answers, qa.getExpectedAnswer());
-				EvaluationResult result = new EvaluationResult(0.0, 0.0, 0.0, true);
+				ArrayList<String> answers = answerer.train(qa.getQuestion(), qa.getExpectedAnswer());
+				EvaluationResult result = computeFMeasureForOneQuestion(answers, qa.getExpectedAnswer());
 				fmeasuresTraining.add(result);
 				
 				if(!fmeasureMapTraining.containsKey(t))
 					fmeasureMapTraining.put(t, new ArrayList<>());
 				
 				fmeasureMapTraining.get(t).add(result);
-//			}
 		}
 
 		System.out.println("Start test: ");
 		for (int i = 0; i < testSet.size(); i++) {
-//			if(testSet.get(i).getQuestion().getQuestionText().matches(".*Ivy League university.*") && testSet.get(i).isAnswerable()){
-
 			QASet q =  testSet.get(i);
 
 			String qtext = q.getQuestion().getQuestionText();
 
-//			System.out.println("Question: " + qtext + " (answerable: " + q.isAnswerable()+")");
-//			System.out.println("Expected Answer: " + Arrays.toString(q.getExpectedAnswer().getQueryResult().toArray(new String[0])));
+			System.out.println("Question: " + qtext + " (answerable: " + q.isAnswerable()+")");
+			System.out.println("Expected Answer: " + Arrays.toString(q.getExpectedAnswer().getQueryResult().toArray(new String[0])));
 
 			QuestionType t = answerer.getQuestionType(qtext);
-			if(t.name().equals("UNDEFINED"))
-				System.out.println(qtext);
-//			ArrayList<String> answers = answerer.test(q.getQuestion());
-			ArrayList<String> answers = new ArrayList<>();
-//			EvaluationResult result = computeFMeasureForOneQuestion(answers, q.getExpectedAnswer());
-			EvaluationResult result = new EvaluationResult(0.0, 0.0, 0.0, true);
+			ArrayList<String> answers = answerer.test(q.getQuestion());
+			EvaluationResult result = computeFMeasureForOneQuestion(answers, q.getExpectedAnswer());
+
 			fmeasuresTest.add(result);
 			
 			if(!fmeasureMapTest.containsKey(t))
 				fmeasureMapTest.put(t, new ArrayList<>());
 			
 			fmeasureMapTest.get(t).add(result);
-//			}
 		}
 		
 		System.out.println("Training All:");
