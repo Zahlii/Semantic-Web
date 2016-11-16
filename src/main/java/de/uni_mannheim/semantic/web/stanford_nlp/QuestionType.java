@@ -17,7 +17,7 @@ public enum QuestionType {
 	Which(WhichParser.class,"In which","To which","For which","Which","Through which"), // followed by CLASS
 	GiveMe(GiveMeParser.class,"Give me all","Give me a list of all","Show me all","List the","List all","Give me"), // Followed by DESCRIPTION or CLASS
 	Who(WhoParser.class,"Who is","Who was","Who were","Who"), // followed by DESCRIPTION or RESOURCE
-	Whe(WhenParser.class, "When is","When was","When were","When did","When"), // followed by RESOURCE
+	When(WhenParser.class, "When is","When was","When were","When did","When"), // followed by RESOURCE
 	What(WhatParser.class, "What is","What was","What were","What are", "What does"), // followed by PREDICATE?
 	Where(WhereParser.class,"Where is","Where was","Where were", "Where did", "Where do"), // followed by PREDICATE?
 	Does(DoParser.class, "Does","Is","Do","Was","Did","Are"), // followed by RESOURCE

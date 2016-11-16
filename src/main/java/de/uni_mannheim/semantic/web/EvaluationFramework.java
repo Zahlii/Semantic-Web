@@ -14,6 +14,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import de.uni_mannheim.semantic.web.stanford_nlp.QuestionType;
 import de.uni_mannheim.semantic.web.stanford_nlp.StanfordSentence;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.ExpectedAnswer;
+
+import org.apache.jena.base.Sys;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -160,25 +162,40 @@ public class EvaluationFramework {
 		ArrayList<EvaluationResult> fmeasuresTraining = new ArrayList<>();
 		ArrayList<EvaluationResult> fmeasuresTest = new ArrayList<>();
 
-//		System.out.println("Start training: ");
-//		for (int i = 0; i < trainingSet.size(); i++) {
-////			if(trainingSet.get(i).getQuestion().getQuestionText().matches("(Do|Did).*") && trainingSet.get(i).isAnswerable()){
+		HashMap<QuestionType, ArrayList<EvaluationResult>> fmeasureMapTraining = new HashMap<>();
+		HashMap<QuestionType, ArrayList<EvaluationResult>> fmeasureMapTest = new HashMap<>();
+
+		
+		System.out.println("Start training: ");
+		for (int i = 0; i < trainingSet.size(); i++) {
+//			if(trainingSet.get(i).getQuestion().getQuestionText().matches("(Do|Did).*") && trainingSet.get(i).isAnswerable()){
 //			if(trainingSet.get(i).getQuestion().getQuestionText().matches(".*German.*") && trainingSet.get(i).isAnswerable()){
-//
-//				String q = trainingSet.get(i).getQuestion().getQuestionText();
-//	
-//	
-//				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
-//				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
-//	
-//				ArrayList<String> answers = answerer.train(trainingSet.get(i).getQuestion(), trainingSet.get(i).getExpectedAnswer());
-//				System.out.println("Given Answer: " + Arrays.toString(answers.toArray(new String[0])));
-//
-//				fmeasuresTraining.add(computeFMeasureForOneQuestion(answers, trainingSet.get(i).getExpectedAnswer().getQueryResult()));
-////				fmeasuresTraining.add(computeFMeasureForOneQuestion(new ArrayList<>(), trainingSet.get(i).getExpectedAnswer().getQueryResult()));
-//
+
+				QASet qa =  trainingSet.get(i);
+
+				String qtext = qa.getQuestion().getQuestionText();
+
+				String q = trainingSet.get(i).getQuestion().getQuestionText();
+	
+				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
+				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
+	
+				QuestionType t = answerer.getQuestionType(qtext);
+//				if(t.name().equals("Whe"))
+//					System.out.println(qtext);
+				
+//				ArrayList<String> answers = answerer.train(qa.getQuestion(), qa.getExpectedAnswer());
+				ArrayList<String> answers = new ArrayList<>();
+//				EvaluationResult result = computeFMeasureForOneQuestion(answers, qa.getExpectedAnswer());
+				EvaluationResult result = new EvaluationResult(0.0, 0.0, 0.0, true);
+				fmeasuresTraining.add(result);
+				
+				if(!fmeasureMapTraining.containsKey(t))
+					fmeasureMapTraining.put(t, new ArrayList<>());
+				
+				fmeasureMapTraining.get(t).add(result);
 //			}
-//		}
+		}
 
 		System.out.println("Start test: ");
 		for (int i = 0; i < testSet.size(); i++) {
@@ -192,20 +209,32 @@ public class EvaluationFramework {
 			System.out.println("Expected Answer: " + Arrays.toString(q.getExpectedAnswer().getQueryResult().toArray(new String[0])));
 
 			QuestionType t = answerer.getQuestionType(qtext);
-
-			ArrayList<String> answers = answerer.test(q.getQuestion());
-
-			fmeasuresTest.add(computeFMeasureForOneQuestion(answers, q.getExpectedAnswer()));
-//			fmeasuresTest.add(computeFMeasureForOneQuestion(new ArrayList<>(), testSet.get(i).getExpectedAnswer().getQueryResult()));
+			if(t.name().equals("Whe"))
+				System.out.println(qtext);
+//			ArrayList<String> answers = answerer.test(q.getQuestion());
+			ArrayList<String> answers = new ArrayList<>();
+//			EvaluationResult result = computeFMeasureForOneQuestion(answers, q.getExpectedAnswer());
+			EvaluationResult result = new EvaluationResult(0.0, 0.0, 0.0, true);
+			fmeasuresTest.add(result);
+			
+			if(!fmeasureMapTest.containsKey(t))
+				fmeasureMapTest.put(t, new ArrayList<>());
+			
+			fmeasureMapTest.get(t).add(result);
 //			}
 		}
 		
-		System.out.println("Training:");
+		System.out.println("Training All:");
 		printResults(fmeasuresTraining);
-		System.out.println("Test:");
+		for (Map.Entry<QuestionType, ArrayList<EvaluationResult>> e : fmeasureMapTraining.entrySet()) {
+			System.out.println(e.getKey()+" "+e.getValue().size());
+		}
+		
+		System.out.println("Test All:");
 		printResults(fmeasuresTest);
-//		System.out.println(fmeasuresTraining.size()+" Training F-Measure Avg: "+getAvg(fmeasuresTraining));
-//		System.out.println(fmeasuresTest.size()+" Test F-Measure Avg: "+getAvg(fmeasuresTest));
+		for (Map.Entry<QuestionType, ArrayList<EvaluationResult>> e : fmeasureMapTest.entrySet()) {
+			System.out.println(e.getKey()+" "+e.getValue().size());
+		}
 	}
 
 	public static void printResults(ArrayList<EvaluationResult> results){
