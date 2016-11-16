@@ -227,13 +227,15 @@ public class EvaluationFramework {
 		System.out.println("Training All:");
 		printResults(fmeasuresTraining);
 		for (Map.Entry<QuestionType, ArrayList<EvaluationResult>> e : fmeasureMapTraining.entrySet()) {
-			System.out.println(e.getKey()+" "+e.getValue().size());
+			System.out.println("Training "+e.getKey()+":");
+			printResults(e.getValue());
 		}
 		
 		System.out.println("Test All:");
 		printResults(fmeasuresTest);
 		for (Map.Entry<QuestionType, ArrayList<EvaluationResult>> e : fmeasureMapTest.entrySet()) {
-			System.out.println(e.getKey()+" "+e.getValue().size());
+			System.out.println("Training "+e.getKey()+":");
+			printResults(e.getValue());
 		}
 	}
 
