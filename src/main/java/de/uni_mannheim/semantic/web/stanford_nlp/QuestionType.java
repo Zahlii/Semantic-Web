@@ -15,19 +15,14 @@ import de.uni_mannheim.semantic.web.stanford_nlp.parsers.GenericParser;
 
 public enum QuestionType {
 	Which(WhichParser.class,"In which","To which","For which","Which","Through which"), // followed by CLASS
-	Give_me_all(GiveMeParser.class,"Give me all","Give me a list of all","Show me all","List the","List all"), // Followed by DESCRIPTION or CLASS
-	Give_me_the(GiveMeParser.class,"Give me"), // Followed by OBJECT
-	Who_is(WhoParser.class,"Who is","Who was","Who were"), // followed by DESCRIPTION or RESOURCE
-	When_is(WhenParser.class, "When is","When was","When were","When did"), // followed by RESOURCE
-	What_is(WhatParser.class, "What is","What was","What were","What are", "What does"), // followed by PREDICATE? 
-	Where_is(WhereParser.class,"Where is","Where was","Where were", "Where did", "Where do"), // followed by PREDICATE? 
-//	Who("Who"), // followed by predicate
-	When(WhenParser.class, "When"), // Followed by 
-	How_many("How many"), // followed by indicator for number
-	Does(DoParser.class, "Does","Is","Do","Was","Did","Are","have"), // followed by RESOURCE
-	How(HowParser.class, "How"),
-//	Who_is(WhoParser.class, "Who is","Who was","Who were"), // followed by DESCRIPTION or RESOURCE
-	Who(WhoParser.class, "Who"); 
+	GiveMe(GiveMeParser.class,"Give me all","Give me a list of all","Show me all","List the","List all","Give me"), // Followed by DESCRIPTION or CLASS
+	Who(WhoParser.class,"Who is","Who was","Who were","Who"), // followed by DESCRIPTION or RESOURCE
+	Whe(WhenParser.class, "When is","When was","When were","When did","When"), // followed by RESOURCE
+	What(WhatParser.class, "What is","What was","What were","What are", "What does"), // followed by PREDICATE?
+	Where(WhereParser.class,"Where is","Where was","Where were", "Where did", "Where do"), // followed by PREDICATE?
+	Does(DoParser.class, "Does","Is","Do","Was","Did","Are"), // followed by RESOURCE
+	How(HowParser.class, "How many","How"),
+	UNDEFINED();
 	
 	private final String[] _alternatives;
 	private final Class<? extends GenericParser> _parse;

@@ -11,6 +11,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import de.uni_mannheim.semantic.web.stanford_nlp.QuestionType;
+import de.uni_mannheim.semantic.web.stanford_nlp.StanfordSentence;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.ExpectedAnswer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -182,14 +184,18 @@ public class EvaluationFramework {
 		for (int i = 0; i < testSet.size(); i++) {
 //			if(testSet.get(i).getQuestion().getQuestionText().matches(".*Ivy League university.*") && testSet.get(i).isAnswerable()){
 
-			String q = testSet.get(i).getQuestion().getQuestionText();
+			QASet q =  testSet.get(i);
 
-			System.out.println("Question: " + q + " (answerable: " + testSet.get(i).isAnswerable()+")");
-			System.out.println("Expected Answer: " + Arrays.toString(testSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
+			String qtext = q.getQuestion().getQuestionText();
 
-			ArrayList<String> answers = answerer.test(testSet.get(i).getQuestion());
+			System.out.println("Question: " + qtext + " (answerable: " + q.isAnswerable()+")");
+			System.out.println("Expected Answer: " + Arrays.toString(q.getExpectedAnswer().getQueryResult().toArray(new String[0])));
 
-			fmeasuresTest.add(computeFMeasureForOneQuestion(answers, testSet.get(i).getExpectedAnswer()));
+			QuestionType t = answerer.getQuestionType(qtext);
+
+			ArrayList<String> answers = answerer.test(q.getQuestion());
+
+			fmeasuresTest.add(computeFMeasureForOneQuestion(answers, q.getExpectedAnswer()));
 //			fmeasuresTest.add(computeFMeasureForOneQuestion(new ArrayList<>(), testSet.get(i).getExpectedAnswer().getQueryResult()));
 //			}
 		}

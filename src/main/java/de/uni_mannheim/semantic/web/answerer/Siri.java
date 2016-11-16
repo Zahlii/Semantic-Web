@@ -2,6 +2,7 @@ package de.uni_mannheim.semantic.web.answerer;
 
 import java.util.ArrayList;
 
+import de.uni_mannheim.semantic.web.stanford_nlp.QuestionType;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.ExpectedAnswer;
 import de.uni_mannheim.semantic.web.stanford_nlp.model.Question;
 import de.uni_mannheim.semantic.web.stanford_nlp.StanfordSentence;
@@ -28,6 +29,16 @@ public class Siri extends LinkedDataAnswerer{
 			return s.getAnswers();
 		} catch(Exception e) {
 			return new ArrayList<>();
+		}
+	}
+
+	@Override
+	public QuestionType getQuestionType(String qtext) {
+		try {
+			StanfordSentence s = new StanfordSentence(qtext);
+			return s.getType();
+		} catch(Exception e) {
+			return QuestionType.UNDEFINED;
 		}
 	}
 
