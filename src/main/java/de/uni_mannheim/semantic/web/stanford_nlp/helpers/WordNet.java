@@ -119,18 +119,23 @@ public class WordNet {
 				if (wordTmp != null) {
 					for (int i = 1; i <= wordTmp.getSenseCount(); i++) {
 
-						// Get all of the hypernyms (parents) of the first sense
-						PointerTargetNodeList hyp = PointerUtils.getInstance().getDirectHypernyms(wordTmp.getSense(i));
+						// Get all of the hypernyms (parents) of the first sense						
+						try{
+							PointerTargetNodeList hyp = PointerUtils.getInstance().getDirectHypernyms(wordTmp.getSense(i));
 
-						for (Iterator<?> iter = hyp.listIterator(); iter.hasNext();) {
-							PointerTargetNode ptn = ((PointerTargetNode) iter.next());
-							Synset s = ptn.getSynset();
-							for (int j = 0; j < s.getWordsSize(); j++) {
-								String lemma = s.getWord(j).getLemma();
-								if (!hypernyms.contains(lemma)) {
-									hypernyms.add(lemma);
+							for (Iterator<?> iter = hyp.listIterator(); iter.hasNext();) {
+								PointerTargetNode ptn = ((PointerTargetNode) iter.next());
+								Synset s = ptn.getSynset();
+								for (int j = 0; j < s.getWordsSize(); j++) {
+									String lemma = s.getWord(j).getLemma();
+									if (!hypernyms.contains(lemma)) {
+										hypernyms.add(lemma);
+									}
 								}
 							}
+						
+						}catch(NumberFormatException e){
+							continue;
 						}
 					}
 				}
