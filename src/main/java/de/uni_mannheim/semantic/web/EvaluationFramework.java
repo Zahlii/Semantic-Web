@@ -63,8 +63,8 @@ public class EvaluationFramework {
 	
 						String id = eElement.getAttribute("id");
 
-						String onlyDbo = eElement.getAttribute("onlydbo");
-						if(onlyDbo.equals("false"))
+						String onlyDbo = eElement.getAttribute("hybrid");
+						if(onlyDbo.equals("true"))
 							continue;
 
 						String question = eElement.getElementsByTagName("string").item(0).getTextContent();
@@ -166,28 +166,28 @@ public class EvaluationFramework {
 		HashMap<QuestionType, ArrayList<EvaluationResult>> fmeasureMapTest = new HashMap<>();
 
 		
-		System.out.println("Start training: ");
-		for (int i = 0; i < trainingSet.size(); i++) {
-				QASet qa =  trainingSet.get(i);
-
-				String qtext = qa.getQuestion().getQuestionText();
-
-				String q = trainingSet.get(i).getQuestion().getQuestionText();
-	
-				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
-				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
-	
-				QuestionType t = answerer.getQuestionType(qtext);
-				
-				ArrayList<String> answers = answerer.train(qa.getQuestion(), qa.getExpectedAnswer());
-				EvaluationResult result = computeFMeasureForOneQuestion(answers, qa.getExpectedAnswer());
-				fmeasuresTraining.add(result);
-				
-				if(!fmeasureMapTraining.containsKey(t))
-					fmeasureMapTraining.put(t, new ArrayList<>());
-				
-				fmeasureMapTraining.get(t).add(result);
-		}
+//		System.out.println("Start training: ");
+//		for (int i = 0; i < trainingSet.size(); i++) {
+//				QASet qa =  trainingSet.get(i);
+//
+//				String qtext = qa.getQuestion().getQuestionText();
+//
+//				String q = trainingSet.get(i).getQuestion().getQuestionText();
+//	
+//				System.out.println("Question: " + q + " (answerable: " + trainingSet.get(i).isAnswerable()+")");
+//				System.out.println("Expected Answer: " + Arrays.toString(trainingSet.get(i).getExpectedAnswer().getQueryResult().toArray(new String[0])));
+//	
+//				QuestionType t = answerer.getQuestionType(qtext);
+//				
+//				ArrayList<String> answers = answerer.train(qa.getQuestion(), qa.getExpectedAnswer());
+//				EvaluationResult result = computeFMeasureForOneQuestion(answers, qa.getExpectedAnswer());
+//				fmeasuresTraining.add(result);
+//				
+//				if(!fmeasureMapTraining.containsKey(t))
+//					fmeasureMapTraining.put(t, new ArrayList<>());
+//				
+//				fmeasureMapTraining.get(t).add(result);
+//		}
 
 		System.out.println("Start test: ");
 		for (int i = 0; i < testSet.size(); i++) {
@@ -199,6 +199,9 @@ public class EvaluationFramework {
 			System.out.println("Expected Answer: " + Arrays.toString(q.getExpectedAnswer().getQueryResult().toArray(new String[0])));
 
 			QuestionType t = answerer.getQuestionType(qtext);
+			if(!t.name().equals("How"))
+				continue;
+			
 			ArrayList<String> answers = answerer.test(q.getQuestion());
 			EvaluationResult result = computeFMeasureForOneQuestion(answers, q.getExpectedAnswer());
 
